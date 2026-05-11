@@ -1,0 +1,1 @@
+cd /mnt/c/code/c2 && rm -rf apps/api/dist && pnpm install && pnpm dev
