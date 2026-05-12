@@ -1,0 +1,56 @@
+{
+  "email": "testuser@example.com",
+  "phone": "+21620123456",
+  "fullName": "Test User",
+  "passwordHash": "$2a$12$7vFYYc9VdfyMQlmpab2t1.JrOP3eUBPyon/iK5kh7sd9xY1qJoIiW",
+  "authProvider": "local",
+  "state": "active",
+  "kycState": "approved",
+  "roles": [
+    "customer"
+  ],
+  "creditLimit": {
+    "amount": 100,
+    "currency": "TND"
+  },
+  "availableCredit": {
+    "amount": 100,
+    "currency": "TND"
+  },
+  "riskFlags": [],
+  "id": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49",
+  "version": 4,
+  "createdAt": "2026-05-12T16:23:14.944Z",
+  "updatedAt": "2026-05-12T16:23:15.596Z",
+  "deletedAt": null,
+  "username": "testuser1",
+  "usernameSet": true,
+  "latestKycApplicationId": "kyc_case_5d266e78-262c-4636-b785-24b9fd7cefe1",
+  "employmentStatus": "unemployed",
+  "documents": [
+    {
+      "type": "cin_front",
+      "fileName": "cin_front.jpg",
+      "storagePath": "clients/test-user/kyc/cin_front.jpg",
+      "uploadedAt": "2026-05-12T16:23:15.555Z"
+    },
+    {
+      "type": "cin_back",
+      "fileName": "cin_back.jpg",
+      "storagePath": "clients/test-user/kyc/cin_back.jpg",
+      "uploadedAt": "2026-05-12T16:23:15.555Z"
+    },
+    {
+      "type": "selfie",
+      "fileName": "selfie.jpg",
+      "storagePath": "clients/test-user/kyc/selfie.jpg",
+      "uploadedAt": "2026-05-12T16:23:15.555Z"
+    },
+    {
+      "type": "proof_of_address",
+      "fileName": "addr.jpg",
+      "storagePath": "clients/test-user/kyc/addr.jpg",
+      "uploadedAt": "2026-05-12T16:23:15.555Z"
+    }
+  ]
+}

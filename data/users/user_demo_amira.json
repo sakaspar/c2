@@ -1,14 +1,9 @@
 {
-  "id": "client_amira_ben_youssef",
-  "version": 2,
-  "createdAt": "2026-05-01T09:00:00.000Z",
-  "updatedAt": "2026-05-12T01:50:33.436Z",
-  "deletedAt": null,
+  "id": "user_demo_amira",
   "email": "amira@example.tn",
   "phone": "+21620111222",
-  "passwordHash": "",
-  "authProvider": "local",
   "fullName": "Amira Ben Youssef",
+  "passwordHash": "$2a$12$ytspEqWk0fEL7hmexQ7Z1.uiQvqHM4XmBK9OoqlpohyLY8cDf/2Ha",
   "state": "active",
   "kycState": "approved",
   "roles": [
@@ -19,8 +14,12 @@
     "currency": "TND"
   },
   "availableCredit": {
-    "amount": 1,
+    "amount": 612.5,
     "currency": "TND"
   },
-  "riskFlags": []
+  "riskFlags": [],
+  "version": 1,
+  "createdAt": "2026-05-12T16:28:44.206Z",
+  "updatedAt": "2026-05-12T16:28:44.206Z",
+  "deletedAt": null
 }

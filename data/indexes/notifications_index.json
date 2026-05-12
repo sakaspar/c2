@@ -1,1 +1,20 @@
-{}
+{
+  "notification_6696bafb-29ae-4beb-ad58-8ee7c806e5d5": {
+    "path": "notifications/notification_6696bafb-29ae-4beb-ad58-8ee7c806e5d5.json",
+    "updatedAt": "2026-05-12T16:23:14.460Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_demo_amira",
+      "channel": "in_app"
+    }
+  },
+  "notification_3b0b384f-defb-4987-89df-ee6e0a66e885": {
+    "path": "notifications/notification_3b0b384f-defb-4987-89df-ee6e0a66e885.json",
+    "updatedAt": "2026-05-12T16:28:44.228Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_demo_amira",
+      "channel": "in_app"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 {
-  "client_amira_ben_youssef": {
-    "path": "users/client_amira_ben_youssef.json",
-    "updatedAt": "2026-05-12T01:50:33.436Z",
+  "user_demo_amira": {
+    "path": "users/user_demo_amira.json",
+    "updatedAt": "2026-05-12T16:28:44.206Z",
     "deletedAt": null,
     "fields": {
       "email": "amira@example.tn",
@@ -10,24 +10,16 @@
       "kycState": "approved"
     }
   },
-  "user_c98561df-d705-4c45-8555-cd64166c974e": {
-    "path": "users/user_c98561df-d705-4c45-8555-cd64166c974e.json",
-    "updatedAt": "2026-05-12T03:17:10.626Z",
+  "user_a0ba97b3-91f6-4a53-9322-86a39941cb49": {
+    "path": "users/user_a0ba97b3-91f6-4a53-9322-86a39941cb49.json",
+    "updatedAt": "2026-05-12T16:23:15.921Z",
     "deletedAt": null,
     "fields": {
-      "email": "hamza.saadi.xo@gmail.com",
-      "state": "pending_kyc",
-      "kycState": "under_review"
-    }
-  },
-  "user_46112f96-ebe6-48fd-ab1c-c2b64b5eb8bd": {
-    "path": "users/user_46112f96-ebe6-48fd-ab1c-c2b64b5eb8bd.json",
-    "updatedAt": "2026-05-12T02:53:22.106Z",
-    "deletedAt": null,
-    "fields": {
-      "email": "hamza.saadi@esprit.tn",
-      "state": "pending_kyc",
-      "kycState": "not_started"
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved",
+      "username": "testuser1"
     }
   }
 }

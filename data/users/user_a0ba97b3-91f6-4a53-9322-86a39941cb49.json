@@ -1,0 +1,28 @@
+{
+  "email": "testuser@example.com",
+  "phone": "+21620123456",
+  "fullName": "Test User",
+  "passwordHash": "$2a$12$7vFYYc9VdfyMQlmpab2t1.JrOP3eUBPyon/iK5kh7sd9xY1qJoIiW",
+  "authProvider": "local",
+  "state": "active",
+  "kycState": "approved",
+  "roles": [
+    "customer"
+  ],
+  "creditLimit": {
+    "amount": 1000,
+    "currency": "TND"
+  },
+  "availableCredit": {
+    "amount": 1000,
+    "currency": "TND"
+  },
+  "riskFlags": [],
+  "id": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49",
+  "version": 10,
+  "createdAt": "2026-05-12T16:23:14.944Z",
+  "updatedAt": "2026-05-12T16:23:15.921Z",
+  "deletedAt": null,
+  "username": "testuser1",
+  "usernameSet": true
+}

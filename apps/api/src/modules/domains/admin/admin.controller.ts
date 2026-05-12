@@ -18,6 +18,7 @@ export class AdminController {
     const issued = loans.items.reduce((sum, loan) => sum + loan.principal.amount, 0);
     const outstanding = loans.items.reduce((sum, loan) => sum + loan.outstanding.amount, 0);
     const paid = loans.items.filter((loan) => loan.state === 'paid').length;
+    const collected = issued - outstanding;
     return {
       activeUsers: users.items.filter((user) => user.state === 'active').length,
       totalUsers: users.total,
@@ -25,6 +26,8 @@ export class AdminController {
       approvedMerchants: merchants.items.filter((merchant) => merchant.state === 'approved').length,
       totalIssuedLoansTnd: issued,
       outstandingExposureTnd: outstanding,
+      totalCollectedTnd: Number(collected.toFixed(3)),
+      collectionRate: issued ? Math.round((collected / issued) * 100) : 0,
       repaymentRate: loans.total ? Math.round((paid / loans.total) * 100) : 0,
       defaultRate: loans.total ? Math.round((loans.items.filter((loan) => loan.state === 'defaulted').length / loans.total) * 100) : 0
     };

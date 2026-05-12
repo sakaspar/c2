@@ -1,12 +1,32 @@
 {
-  "loan_aad2db4c-3a03-47a0-a716-4889473f926d": {
-    "path": "loans/loan_aad2db4c-3a03-47a0-a716-4889473f926d.json",
-    "updatedAt": "2026-05-12T01:50:33.402Z",
+  "loan_demo_001": {
+    "path": "loans/loan_demo_001.json",
+    "updatedAt": "2026-05-12T16:28:44.222Z",
     "deletedAt": null,
     "fields": {
       "state": "active",
-      "userId": "client_amira_ben_youssef",
-      "merchantId": "merchant_techstore_tunis"
+      "userId": "user_demo_amira",
+      "merchantId": "merchant_tunistech"
+    }
+  },
+  "loan_998d600d-9b4e-4986-b5ad-4dd0da810d8b": {
+    "path": "loans/loan_998d600d-9b4e-4986-b5ad-4dd0da810d8b.json",
+    "updatedAt": "2026-05-12T16:23:15.886Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49",
+      "merchantId": "merchant_80745629-ba53-4751-9f82-625826c0883d"
+    }
+  },
+  "loan_054e7053-d6b6-4fb7-9f0a-af993a0e5129": {
+    "path": "loans/loan_054e7053-d6b6-4fb7-9f0a-af993a0e5129.json",
+    "updatedAt": "2026-05-12T16:23:15.851Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49",
+      "merchantId": "merchant_80745629-ba53-4751-9f82-625826c0883d"
     }
   }
 }

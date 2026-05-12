@@ -1,1 +1,26 @@
-{}
+{
+  "credit_score_9e6c12f3-e65b-4d25-aa2c-6817a0e4202a": {
+    "path": "credit_scores/credit_score_9e6c12f3-e65b-4d25-aa2c-6817a0e4202a.json",
+    "updatedAt": "2026-05-12T16:23:15.599Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49"
+    }
+  },
+  "credit_score_6f94270c-9c1a-4403-aac5-22c2705b9aae": {
+    "path": "credit_scores/credit_score_6f94270c-9c1a-4403-aac5-22c2705b9aae.json",
+    "updatedAt": "2026-05-12T16:23:15.827Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49"
+    }
+  },
+  "credit_score_bdff6a55-fd18-4b1e-9111-85c19548b55b": {
+    "path": "credit_scores/credit_score_bdff6a55-fd18-4b1e-9111-85c19548b55b.json",
+    "updatedAt": "2026-05-12T16:23:15.914Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49"
+    }
+  }
+}

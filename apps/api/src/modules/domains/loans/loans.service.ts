@@ -33,7 +33,24 @@ export class LoansService {
   async repay(id: string, amount: number) {
     const loan = await this.storage.findById<LoanRecord>('loans', id);
     if (!loan) throw new Error('Loan not found');
-    const remaining = Math.max(0, loan.outstanding.amount - amount);
-    return this.storage.update<LoanRecord>('loans', id, { outstanding: { amount: remaining, currency: 'TND' }, state: remaining === 0 ? 'paid' : loan.state });
+    const user = await this.storage.findById<UserRecord>('users', loan.userId);
+    if (!user) throw new Error('User not found');
+
+    const actualRepaid = Math.min(amount, loan.outstanding.amount);
+    const remaining = loan.outstanding.amount - actualRepaid;
+
+    const updatedLoan = await this.storage.update<LoanRecord>('loans', id, {
+      outstanding: { amount: remaining, currency: 'TND' },
+      state: remaining === 0 ? 'paid' : loan.state
+    });
+
+    await this.storage.update<UserRecord>('users', user.id, {
+      availableCredit: {
+        amount: Math.min(user.availableCredit.amount + actualRepaid, user.creditLimit.amount),
+        currency: 'TND'
+      }
+    });
+
+    return updatedLoan;
   }
 }

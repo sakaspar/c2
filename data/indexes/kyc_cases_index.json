@@ -1,11 +1,11 @@
 {
-  "kyc_case_03b71ea4-b978-4946-b093-77dd83b915f7": {
-    "path": "kyc_cases/kyc_case_03b71ea4-b978-4946-b093-77dd83b915f7.json",
-    "updatedAt": "2026-05-12T03:17:10.593Z",
+  "kyc_case_5d266e78-262c-4636-b785-24b9fd7cefe1": {
+    "path": "kyc_cases/kyc_case_5d266e78-262c-4636-b785-24b9fd7cefe1.json",
+    "updatedAt": "2026-05-12T16:23:15.592Z",
     "deletedAt": null,
     "fields": {
-      "state": "under_review",
-      "userId": "user_c98561df-d705-4c45-8555-cd64166c974e"
+      "state": "approved",
+      "userId": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49"
     }
   }
 }

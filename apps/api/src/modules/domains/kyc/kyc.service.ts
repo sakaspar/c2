@@ -1,11 +1,15 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { KycApplicationRecord, KycDocumentType, UserRecord } from '@bnpl/shared';
 import { JsonDataLakeService } from '../../storage/json-data-lake.service';
+import { CreditService } from '../credit/credit.service';
 import { SubmitKycDto } from './dto';
 
 @Injectable()
 export class KycService {
-  constructor(private readonly storage: JsonDataLakeService) {}
+  constructor(
+    private readonly storage: JsonDataLakeService,
+    private readonly creditService: CreditService
+  ) {}
 
   async submit(userId: string, dto: SubmitKycDto) {
     const user = await this.storage.findById<UserRecord>('users', userId);
@@ -49,6 +53,7 @@ export class KycService {
     const reviewedAt = new Date().toISOString();
     const updated = await this.storage.update<KycApplicationRecord>('kyc_cases', applicationId, { state: 'approved', reviewedAt, reviewedBy });
     const user = await this.storage.update<UserRecord>('users', application.userId, { kycState: 'approved', state: 'active' });
+    await this.creditService.calculate(application.userId);
     await this.storage.writeClientProfile(user.fullName, { ...user, latestKycApplicationId: application.id, employmentStatus: application.employmentStatus, documents: application.documents });
     return updated;
   }
