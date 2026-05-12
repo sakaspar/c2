@@ -120,17 +120,6 @@
       "username": "testuser2"
     }
   },
-  "user_4d81d4a0-5725-4a8a-9399-a66213f770fa": {
-    "path": "users/user_4d81d4a0-5725-4a8a-9399-a66213f770fa.json",
-    "updatedAt": "2026-05-12T17:30:43.352Z",
-    "deletedAt": null,
-    "fields": {
-      "email": "testuser@example.com",
-      "phone": "+21620123456",
-      "state": "active",
-      "kycState": "approved"
-    }
-  },
   "user_204120e8-3050-4c6f-b815-92ea97139a42": {
     "path": "users/user_204120e8-3050-4c6f-b815-92ea97139a42.json",
     "updatedAt": "2026-05-12T17:31:32.912Z",
@@ -145,17 +134,6 @@
   "user_59ac15b0-2279-4c9f-9403-071f29e87ac7": {
     "path": "users/user_59ac15b0-2279-4c9f-9403-071f29e87ac7.json",
     "updatedAt": "2026-05-12T17:32:38.927Z",
-    "deletedAt": null,
-    "fields": {
-      "email": "testuser@example.com",
-      "phone": "+21620123456",
-      "state": "active",
-      "kycState": "approved"
-    }
-  },
-  "user_da4b3251-0593-4bfd-b924-c13a98c5122a": {
-    "path": "users/user_da4b3251-0593-4bfd-b924-c13a98c5122a.json",
-    "updatedAt": "2026-05-12T17:33:47.365Z",
     "deletedAt": null,
     "fields": {
       "email": "testuser@example.com",
@@ -182,6 +160,16 @@
     "fields": {
       "email": "testuser@example.com",
       "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561": {
+    "path": "users/user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561.json",
+    "updatedAt": "2026-05-12T20:48:07.078Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "hamza.saadi.xo@gmail.com",
       "state": "active",
       "kycState": "approved"
     }

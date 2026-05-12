@@ -57,7 +57,7 @@ export class AdminController {
     const fileName = filePath.split('/').pop() ?? '';
     const ext = fileName.split('.').pop()?.toLowerCase();
     const mime = ext === 'pdf' ? 'application/pdf' : ext === 'png' ? 'image/png' : ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : 'application/octet-stream';
-    res.set({ 'Content-Type': mime, 'Cache-Control': 'max-age=3600' });
+    res.set({ 'Content-Type': mime, 'Cache-Control': 'max-age=3600', 'Cross-Origin-Resource-Policy': 'cross-origin', 'Access-Control-Allow-Origin': '*' });
     return new StreamableFile(this.storage.getFileStream(path));
   }
 }

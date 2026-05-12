@@ -1,36 +1,54 @@
 {
-  "id": "user_c98561df-d705-4c45-8555-cd64166c974e",
-  "fullName": "Hamza Saadi",
   "email": "hamza.saadi.xo@gmail.com",
-  "state": "pending_kyc",
-  "kycState": "under_review",
+  "fullName": "Hamza Saadi",
+  "passwordHash": "",
+  "authProvider": "google",
+  "googleSub": "107835523629597705486",
+  "state": "active",
+  "kycState": "approved",
+  "roles": [
+    "customer"
+  ],
+  "creditLimit": {
+    "amount": 300,
+    "currency": "TND"
+  },
+  "availableCredit": {
+    "amount": 300,
+    "currency": "TND"
+  },
+  "riskFlags": [],
+  "id": "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561",
+  "version": 4,
+  "createdAt": "2026-05-12T20:40:17.916Z",
+  "updatedAt": "2026-05-12T20:48:07.078Z",
+  "deletedAt": null,
+  "latestKycApplicationId": "kyc_case_78f4ca45-c6f7-4028-b439-ba829cf5b130",
   "employmentStatus": "unemployed",
-  "latestKycApplicationId": "kyc_case_03b71ea4-b978-4946-b093-77dd83b915f7",
   "documents": [
     {
       "type": "cin_front",
-      "fileName": "backgroundDefault.jpg",
-      "storagePath": "clients/hamza-saadi/kyc/backgroundDefault.jpg",
-      "uploadedAt": "2026-05-12T03:17:10.592Z"
+      "fileName": "133850774347389914.jpg",
+      "storagePath": "clients/hamza-saadi/kyc/133850774347389914.jpg",
+      "uploadedAt": "2026-05-12T20:43:01.795Z"
     },
     {
       "type": "cin_back",
-      "fileName": "133850774347389914.jpg",
-      "storagePath": "clients/hamza-saadi/kyc/133850774347389914.jpg",
-      "uploadedAt": "2026-05-12T03:17:10.592Z"
+      "fileName": "133857801683649366.jpg",
+      "storagePath": "clients/hamza-saadi/kyc/133857801683649366.jpg",
+      "uploadedAt": "2026-05-12T20:43:01.795Z"
     },
     {
       "type": "selfie",
-      "fileName": "133850774347389914.jpg",
-      "storagePath": "clients/hamza-saadi/kyc/133850774347389914.jpg",
-      "uploadedAt": "2026-05-12T03:17:10.592Z"
+      "fileName": "133865337310820252.jpg",
+      "storagePath": "clients/hamza-saadi/kyc/133865337310820252.jpg",
+      "uploadedAt": "2026-05-12T20:43:01.795Z"
     },
     {
       "type": "proof_of_address",
-      "fileName": "133865337310820252.jpg",
-      "storagePath": "clients/hamza-saadi/kyc/133865337310820252.jpg",
-      "uploadedAt": "2026-05-12T03:17:10.592Z"
+      "fileName": "backgroundDefault.jpg",
+      "storagePath": "clients/hamza-saadi/kyc/backgroundDefault.jpg",
+      "uploadedAt": "2026-05-12T20:43:01.795Z"
     }
-  ],
-  "updatedAt": "2026-05-12T03:17:10.626Z"
+  ]
 }

@@ -41,9 +41,17 @@ export class JsonDataLakeService implements OnModuleInit {
     const index = await this.readIndex(collection);
     const entry = index[id];
     if (!entry || entry.deletedAt) return null;
-    const record = await this.readJson<T>(join(this.root, entry.path));
-    this.cache.set(key, record);
-    return record;
+    try {
+      const record = await this.readJson<T>(join(this.root, entry.path));
+      this.cache.set(key, record);
+      return record;
+    } catch (err: any) {
+      if (err?.code === 'ENOENT') {
+        this.logger.warn(`Record file missing for ${collection}:${id} at ${entry.path}`);
+        return null;
+      }
+      throw err;
+    }
   }
 
   async query<T extends StorageRecord>(collection: CollectionName, options: QueryOptions<T> = {}): Promise<PaginatedResult<T>> {
@@ -158,6 +166,9 @@ export class JsonDataLakeService implements OnModuleInit {
     const absolutePath = join(this.root, relativePath);
     this.logger.debug(`Writing ${action} record to ${relativePath}`);
     await this.atomicWriteJson(absolutePath, record);
+    if (!existsSync(absolutePath)) {
+      this.logger.error(`File was NOT persisted after write: ${absolutePath}`);
+    }
     const index = await this.readIndex(collection);
     index[record.id] = { path: relativePath, updatedAt: record.updatedAt, deletedAt: record.deletedAt, fields: this.indexFields(record as StorageRecord & Record<string, unknown>) };
     await this.atomicWriteJson(this.indexFile(collection), index);
@@ -193,7 +204,8 @@ export class JsonDataLakeService implements OnModuleInit {
   }
 
   private async readJson<T>(path: string): Promise<T> {
-    return JSON.parse(await readFile(path, 'utf8')) as T;
+    const raw = await readFile(path, 'utf8');
+    return JSON.parse(raw.replace(/^\uFEFF/, '')) as T;
   }
 
   private async atomicWriteJson(path: string, value: unknown) {
@@ -202,8 +214,8 @@ export class JsonDataLakeService implements OnModuleInit {
 
   private async atomicWriteText(path: string, value: string) {
     await mkdir(dirname(path), { recursive: true });
-    const tempPath = `${path}.${process.pid}.${Date.now()}.tmp`;
-    await writeFile(tempPath, value, { encoding: 'utf8', flag: 'wx' });
+    const tempPath = `${path}.${process.pid}.${Date.now()}.${randomUUID().slice(0, 8)}.tmp`;
+    await writeFile(tempPath, value, { encoding: 'utf8' });
     await rename(tempPath, path);
   }
 

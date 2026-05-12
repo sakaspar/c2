@@ -382,5 +382,13 @@
     "fields": {
       "userId": "user_b2f6c7d6-33cb-43a5-8480-6b1749d07a01"
     }
+  },
+  "credit_score_002d75f1-adc1-4149-84aa-67f2fa5f3e74": {
+    "path": "credit_scores/credit_score_002d75f1-adc1-4149-84aa-67f2fa5f3e74.json",
+    "updatedAt": "2026-05-12T20:48:07.044Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561"
+    }
   }
 }

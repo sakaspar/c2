@@ -12,7 +12,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
   app.enableCors({ origin: true, credentials: true });
-  app.use(helmet());
+  app.use(helmet({ crossOriginResourcePolicy: false }));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
 
   const swaggerConfig = new DocumentBuilder()

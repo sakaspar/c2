@@ -124,5 +124,14 @@
       "state": "approved",
       "userId": "user_b2f6c7d6-33cb-43a5-8480-6b1749d07a01"
     }
+  },
+  "kyc_case_78f4ca45-c6f7-4028-b439-ba829cf5b130": {
+    "path": "kyc_cases/kyc_case_78f4ca45-c6f7-4028-b439-ba829cf5b130.json",
+    "updatedAt": "2026-05-12T20:48:06.977Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "userId": "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561"
+    }
   }
 }
