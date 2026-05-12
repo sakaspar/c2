@@ -18,6 +18,7 @@ const bankDocs = [
 
 export default function KycPage() {
   const [userId, setUserId] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [employmentStatus, setEmploymentStatus] = useState<'employed' | 'unemployed'>('unemployed');
   const [employerName, setEmployerName] = useState('');
   const [monthlyIncomeTnd, setMonthlyIncomeTnd] = useState('');
@@ -30,8 +31,9 @@ export default function KycPage() {
     try {
       const stored = localStorage.getItem('bnpl_user');
       if (stored) {
-        const user = JSON.parse(stored) as { id: string };
+        const user = JSON.parse(stored) as { id: string; username?: string; fullName?: string };
         if (user.id) setUserId(user.id);
+        setDisplayName(user.username ?? user.fullName ?? user.id);
       }
     } catch {}
   }, []);
@@ -72,7 +74,7 @@ export default function KycPage() {
 
   return <main className="min-h-screen bg-slate-950 p-6 text-white"><div className="mx-auto max-w-6xl">
     <header className="flex flex-col justify-between gap-4 md:flex-row md:items-center"><div><p className="text-teal-300">Client onboarding</p><h1 className="text-4xl font-black">Complete your KYC application</h1><p className="mt-3 max-w-2xl text-slate-300">Choose your employment status. If you are employed, you must upload KYC documents plus three months of bank statements.</p></div><a className="rounded-full border border-white/15 px-5 py-3" href="/dashboard">Dashboard</a></header>
-    {!userId ? <section className="glass mt-8 rounded-3xl p-6"><label className="text-sm text-slate-300">Your user ID</label><input className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none" placeholder="Enter your user ID" value={userId} onChange={(e) => setUserId(e.target.value)} /></section> : <section className="glass mt-8 rounded-3xl p-6"><p className="text-sm text-slate-300">User ID</p><p className="mt-2 text-teal-200 font-mono">{userId}</p></section>}
+    {!userId ? <section className="glass mt-8 rounded-3xl p-6"><label className="text-sm text-slate-300">Your user ID</label><input className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none" placeholder="Enter your user ID" value={userId} onChange={(e) => setUserId(e.target.value)} /></section> : <section className="glass mt-8 rounded-3xl p-6"><p className="text-sm text-slate-300">Logged in as</p><p className="mt-2 text-teal-200 font-mono">{displayName}</p></section>}
     <section className="glass mt-8 rounded-3xl p-6"><h2 className="text-2xl font-black">Are you employed?</h2><div className="mt-5 grid gap-4 md:grid-cols-2"><Choice active={employmentStatus === 'unemployed'} title="No, I am unemployed" note="Upload identity, selfie, and address documents." onClick={() => setEmploymentStatus('unemployed')} /><Choice active={employmentStatus === 'employed'} title="Yes, I have a job" note="Upload KYC documents and 3 months of bank statements." onClick={() => setEmploymentStatus('employed')} /></div>
       {employmentStatus === 'employed' ? <div className="mt-5 grid gap-4 md:grid-cols-2"><input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none" placeholder="Employer name" value={employerName} onChange={(e) => setEmployerName(e.target.value)} /><input className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 outline-none" placeholder="Monthly income TND" value={monthlyIncomeTnd} onChange={(e) => setMonthlyIncomeTnd(e.target.value)} /></div> : null}
     </section>

@@ -5,7 +5,7 @@ import * as bcrypt from 'bcryptjs';
 import { OAuth2Client } from 'google-auth-library';
 import { UserRecord } from '@bnpl/shared';
 import { JsonDataLakeService } from '../../storage/json-data-lake.service';
-import { GoogleSignupDto, LoginDto, SignupDto } from './dto';
+import { GoogleSignupDto, LoginDto, SetUsernameDto, SignupDto } from './dto';
 
 @Injectable()
 export class AuthService {
@@ -32,6 +32,7 @@ export class AuthService {
     });
     await this.storage.writeClientProfile(user.fullName, {
       id: user.id,
+      username: user.username,
       fullName: user.fullName,
       email: user.email,
       phone: user.phone,
@@ -78,6 +79,7 @@ export class AuthService {
     });
     await this.storage.writeClientProfile(user.fullName, {
       id: user.id,
+      username: user.username,
       fullName: user.fullName,
       email: user.email,
       state: user.state,
@@ -89,10 +91,21 @@ export class AuthService {
     return this.issueTokens(user);
   }
 
+  async setUsername(userId: string, dto: SetUsernameDto) {
+    const username = dto.username.toLowerCase();
+    const existing = await this.storage.query<UserRecord>('users', { where: { username } as Partial<UserRecord>, includeDeleted: false });
+    if (existing.items.length) throw new BadRequestException('Username is already taken');
+    const user = await this.storage.findById<UserRecord>('users', userId);
+    if (!user) throw new BadRequestException('User not found');
+    if (user.usernameSet) throw new BadRequestException('Username can only be set once');
+    const updated = await this.storage.update<UserRecord>('users', userId, { username, usernameSet: true });
+    return this.issueTokens(updated);
+  }
+
   private issueTokens(user: UserRecord) {
     const payload = { sub: user.id, roles: user.roles, state: user.state };
     return {
-      user: { id: user.id, fullName: user.fullName, email: user.email, phone: user.phone, state: user.state, kycState: user.kycState, roles: user.roles },
+      user: { id: user.id, username: user.username, fullName: user.fullName, email: user.email, phone: user.phone, state: user.state, kycState: user.kycState, roles: user.roles },
       accessToken: this.jwt.sign(payload, { expiresIn: '15m' }),
       refreshToken: this.jwt.sign({ ...payload, tokenType: 'refresh' }, { expiresIn: '30d' })
     };

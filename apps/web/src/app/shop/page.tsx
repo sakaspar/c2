@@ -23,8 +23,8 @@ export default function ShopPage() {
     try {
       const stored = localStorage.getItem('bnpl_user');
       if (stored) {
-        const user = JSON.parse(stored) as { id: string };
-        if (user.id) setUserId(user.id);
+        const user = JSON.parse(stored) as { id: string; username?: string };
+        if (user.id) setUserId(user.username ?? user.id);
       }
     } catch {}
     fetch(`${apiBaseUrl}/merchants/products`)

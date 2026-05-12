@@ -26,6 +26,8 @@ export interface UserRecord extends BaseRecord {
   authProvider?: 'local' | 'google';
   googleSub?: string;
   fullName: string;
+  username?: string;
+  usernameSet?: boolean;
   state: UserState;
   kycState: KycState;
   roles: Array<'customer' | 'admin' | 'merchant_operator' | 'risk_analyst'>;

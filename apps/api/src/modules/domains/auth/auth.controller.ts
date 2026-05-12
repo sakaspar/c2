@@ -1,7 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { GoogleSignupDto, LoginDto, SignupDto } from './dto';
+import { GoogleSignupDto, LoginDto, SetUsernameDto, SignupDto } from './dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -21,5 +21,10 @@ export class AuthController {
   @Post('google')
   google(@Body() dto: GoogleSignupDto) {
     return this.auth.googleSignup(dto);
+  }
+
+  @Patch(':userId/username')
+  setUsername(@Param('userId') userId: string, @Body() dto: SetUsernameDto) {
+    return this.auth.setUsername(userId, dto);
   }
 }

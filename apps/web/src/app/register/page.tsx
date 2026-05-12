@@ -22,8 +22,8 @@ export default function RegisterPage() {
         localStorage.setItem('bnpl_refresh', payload.refreshToken ?? '');
         localStorage.setItem('bnpl_user', JSON.stringify(payload.user));
       }
-      setMessage({ type: 'success', text: `Welcome ${payload?.user?.fullName ?? ''}. Redirecting to KYC...` });
-      setTimeout(() => { window.location.href = '/kyc'; }, 800);
+      setMessage({ type: 'success', text: `Welcome ${payload?.user?.fullName ?? ''}. Choose your username...` });
+      setTimeout(() => { window.location.href = '/setup-username'; }, 800);
     } catch {
       setMessage({ type: 'error', text: `API is offline or unreachable at ${apiBaseUrl}. Start the backend with pnpm --filter @bnpl/api dev.` });
     }

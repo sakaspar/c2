@@ -20,9 +20,9 @@ export default function DashboardPage() {
     try {
       const stored = localStorage.getItem('bnpl_user');
       if (stored) {
-        const user = JSON.parse(stored) as { id: string; fullName: string };
+        const user = JSON.parse(stored) as { id: string; fullName: string; username?: string };
         if (user.id) setUserId(user.id);
-        if (user.fullName) setUserName(user.fullName);
+        if (user.fullName) setUserName(user.username ?? user.fullName);
       }
       const t = localStorage.getItem('bnpl_token');
       if (t) setToken(t);

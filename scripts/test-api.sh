@@ -63,6 +63,14 @@ RESP=$(curl -s -w "\n%{http_code}" -X POST "$BASE/auth/login" \
 check "Login with email" "201" "$RESP"
 TOKEN=$(echo "$RESP" | sed '$d' | grep -o '"accessToken":"[^"]*"' | cut -d'"' -f4)
 
+# ─── 2b. AUTH: set username ───
+echo ""
+echo -e "${CYAN}[2b] PATCH /auth/$USER_ID/username${NC}"
+RESP=$(curl -s -w "\n%{http_code}" -X PATCH "$BASE/auth/$USER_ID/username" \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser1"}')
+check "Set username" "200" "$RESP"
+
 # ─── 3. AUTH: google (no real token, expect 400) ───
 echo ""
 echo -e "${CYAN}[3] POST /auth/google (invalid token)${NC}"
