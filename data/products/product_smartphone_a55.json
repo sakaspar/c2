@@ -1,0 +1,17 @@
+{
+  "id": "product_smartphone_a55",
+  "version": 2,
+  "createdAt": "2026-05-12T01:30:00.000Z",
+  "updatedAt": "2026-05-12T01:50:33.469Z",
+  "deletedAt": null,
+  "merchantId": "merchant_techstore_tunis",
+  "merchantName": "TechStore Tunis",
+  "name": "Smartphone A55",
+  "description": "128GB dual-SIM smartphone available for four weekly BNPL repayments.",
+  "price": {
+    "amount": 699,
+    "currency": "TND"
+  },
+  "state": "active",
+  "stock": 7
+}

@@ -1,8 +1,8 @@
 {
   "id": "client_amira_ben_youssef",
-  "version": 1,
+  "version": 2,
   "createdAt": "2026-05-01T09:00:00.000Z",
-  "updatedAt": "2026-05-10T12:00:00.000Z",
+  "updatedAt": "2026-05-12T01:50:33.436Z",
   "deletedAt": null,
   "email": "amira@example.tn",
   "phone": "+21620111222",
@@ -11,8 +11,16 @@
   "fullName": "Amira Ben Youssef",
   "state": "active",
   "kycState": "approved",
-  "roles": ["customer"],
-  "creditLimit": { "amount": 700, "currency": "TND" },
-  "availableCredit": { "amount": 700, "currency": "TND" },
+  "roles": [
+    "customer"
+  ],
+  "creditLimit": {
+    "amount": 700,
+    "currency": "TND"
+  },
+  "availableCredit": {
+    "amount": 1,
+    "currency": "TND"
+  },
   "riskFlags": []
 }

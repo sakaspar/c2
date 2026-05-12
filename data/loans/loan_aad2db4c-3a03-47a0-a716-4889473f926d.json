@@ -1,0 +1,61 @@
+{
+  "userId": "client_amira_ben_youssef",
+  "merchantId": "merchant_techstore_tunis",
+  "principal": {
+    "amount": 699,
+    "currency": "TND"
+  },
+  "outstanding": {
+    "amount": 699,
+    "currency": "TND"
+  },
+  "state": "active",
+  "dueDate": "2026-06-09T01:50:33.402Z",
+  "installments": [
+    {
+      "id": "inst_11465b04-6520-44ce-908c-d130409e677c",
+      "amount": {
+        "amount": 174.75,
+        "currency": "TND"
+      },
+      "dueDate": "2026-05-19T01:50:33.402Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_fb7e0f52-e4bc-4475-aca1-cdf47457fe5e",
+      "amount": {
+        "amount": 174.75,
+        "currency": "TND"
+      },
+      "dueDate": "2026-05-26T01:50:33.402Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_7ef12c50-9e1c-4106-844b-1cb7cb33600c",
+      "amount": {
+        "amount": 174.75,
+        "currency": "TND"
+      },
+      "dueDate": "2026-06-02T01:50:33.402Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_7276df86-0275-485d-867f-e14a2ba654ec",
+      "amount": {
+        "amount": 174.75,
+        "currency": "TND"
+      },
+      "dueDate": "2026-06-09T01:50:33.402Z",
+      "state": "pending"
+    }
+  ],
+  "lateFees": {
+    "amount": 0,
+    "currency": "TND"
+  },
+  "id": "loan_aad2db4c-3a03-47a0-a716-4889473f926d",
+  "version": 1,
+  "createdAt": "2026-05-12T01:50:33.402Z",
+  "updatedAt": "2026-05-12T01:50:33.402Z",
+  "deletedAt": null
+}
