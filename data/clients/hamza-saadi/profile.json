@@ -1,0 +1,10 @@
+{
+  "id": "user_c98561df-d705-4c45-8555-cd64166c974e",
+  "fullName": "Hamza Saadi",
+  "email": "hamza.saadi.xo@gmail.com",
+  "state": "pending_kyc",
+  "kycState": "not_started",
+  "authProvider": "google",
+  "createdAt": "2026-05-12T02:42:24.179Z",
+  "updatedAt": "2026-05-12T02:42:24.179Z"
+}
