@@ -1,16 +1,25 @@
 {
-  "kyc_case_03b71ea4-b978-4946-b093-77dd83b915f7": {
-    "path": "kyc_cases/kyc_case_03b71ea4-b978-4946-b093-77dd83b915f7.json",
-    "updatedAt": "2026-05-12T03:17:10.593Z",
+  "kyc_case_78f4ca45-c6f7-4028-b439-ba829cf5b130": {
+    "path": "kyc_cases/kyc_case_78f4ca45-c6f7-4028-b439-ba829cf5b130.json",
+    "updatedAt": "2026-05-12T20:48:06.977Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "userId": "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561"
+    }
+  },
+  "kyc_case_570155b0-e006-40cf-89a6-d14a52921263": {
+    "path": "kyc_cases/kyc_case_570155b0-e006-40cf-89a6-d14a52921263.json",
+    "updatedAt": "2026-05-12T17:08:03.928Z",
     "deletedAt": null,
     "fields": {
       "state": "under_review",
       "userId": "user_c98561df-d705-4c45-8555-cd64166c974e"
     }
   },
-  "kyc_case_570155b0-e006-40cf-89a6-d14a52921263": {
-    "path": "kyc_cases/kyc_case_570155b0-e006-40cf-89a6-d14a52921263.json",
-    "updatedAt": "2026-05-12T17:08:03.928Z",
+  "kyc_case_19f9466c-23e1-4394-9cf0-1dabe6eeaae5": {
+    "path": "kyc_cases/kyc_case_19f9466c-23e1-4394-9cf0-1dabe6eeaae5.json",
+    "updatedAt": "2026-05-12T17:15:06.829Z",
     "deletedAt": null,
     "fields": {
       "state": "under_review",

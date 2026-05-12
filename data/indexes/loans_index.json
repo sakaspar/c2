@@ -1,12 +1,12 @@
 {
-  "loan_aad2db4c-3a03-47a0-a716-4889473f926d": {
-    "path": "loans/loan_aad2db4c-3a03-47a0-a716-4889473f926d.json",
-    "updatedAt": "2026-05-12T01:50:33.402Z",
+  "loan_demo_001": {
+    "path": "loans/loan_demo_001.json",
+    "updatedAt": "2026-05-12T17:41:40.948Z",
     "deletedAt": null,
     "fields": {
       "state": "active",
-      "userId": "client_amira_ben_youssef",
-      "merchantId": "merchant_techstore_tunis"
+      "userId": "user_demo_amira",
+      "merchantId": "merchant_tunistech"
     }
   }
 }

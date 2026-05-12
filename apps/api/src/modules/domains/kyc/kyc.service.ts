@@ -1,11 +1,15 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { KycApplicationRecord, KycDocumentType, UserRecord } from '@bnpl/shared';
 import { JsonDataLakeService } from '../../storage/json-data-lake.service';
+import { CreditService } from '../credit/credit.service';
 import { SubmitKycDto } from './dto';
 
 @Injectable()
 export class KycService {
-  constructor(private readonly storage: JsonDataLakeService) {}
+  constructor(
+    private readonly storage: JsonDataLakeService,
+    private readonly creditService: CreditService
+  ) {}
 
   async uploadDocument(userId: string, type: string, file: { originalname: string; buffer: Buffer } | undefined) {
     if (!file || !file.buffer) throw new BadRequestException('No file uploaded');
@@ -59,8 +63,12 @@ export class KycService {
     if (!application) throw new NotFoundException('KYC application not found');
     const reviewedAt = new Date().toISOString();
     const updated = await this.storage.update<KycApplicationRecord>('kyc_cases', applicationId, { state: 'approved', reviewedAt, reviewedBy });
-    const user = await this.storage.update<UserRecord>('users', application.userId, { kycState: 'approved', state: 'active' });
-    await this.storage.writeClientProfile(user.fullName, { ...user, latestKycApplicationId: application.id, employmentStatus: application.employmentStatus, documents: application.documents });
+    const existingUser = await this.storage.findById<UserRecord>('users', application.userId);
+    const riskFlags = existingUser?.riskFlags.filter(f => f !== 'kyc_rejected') ?? [];
+    const user = await this.storage.update<UserRecord>('users', application.userId, { kycState: 'approved', state: 'active', riskFlags });
+    await this.creditService.calculate(application.userId);
+    const refreshedUser = (await this.storage.findById<UserRecord>('users', application.userId)) ?? user;
+    await this.storage.writeClientProfile(refreshedUser.fullName, { ...refreshedUser, latestKycApplicationId: application.id, employmentStatus: application.employmentStatus, documents: application.documents });
     return updated;
   }
 

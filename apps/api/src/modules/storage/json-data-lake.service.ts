@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
 import { createReadStream, existsSync } from 'node:fs';
@@ -6,16 +6,17 @@ import { dirname, join, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { PaginatedResult, QueryOptions, StorageRecord, WriteOptions } from './types';
 
-type CollectionName = 'users' | 'loans' | 'transactions' | 'merchants' | 'products' | 'credit_scores' | 'notifications' | 'kyc_cases' | 'sessions';
+type CollectionName = 'users' | 'loans' | 'transactions' | 'merchants' | 'products' | 'credit_scores' | 'notifications' | 'kyc_cases' | 'kyb_cases' | 'sessions';
 
 type CollectionIndex = Record<string, { path: string; updatedAt: string; deletedAt?: string | null; fields: Record<string, unknown> }>;
 
 @Injectable()
 export class JsonDataLakeService implements OnModuleInit {
+  private readonly logger = new Logger(JsonDataLakeService.name);
   private readonly root: string;
   private readonly cache = new Map<string, unknown>();
   private readonly queues = new Map<string, Promise<unknown>>();
-  private readonly collections: CollectionName[] = ['users', 'loans', 'transactions', 'merchants', 'products', 'credit_scores', 'notifications', 'kyc_cases', 'sessions'];
+  private readonly collections: CollectionName[] = ['users', 'loans', 'transactions', 'merchants', 'products', 'credit_scores', 'notifications', 'kyc_cases', 'kyb_cases', 'sessions'];
 
   constructor(config: ConfigService) {
     this.root = resolve(process.cwd(), config.get<string>('DATA_LAKE_ROOT', '../../data'));
@@ -32,6 +33,53 @@ export class JsonDataLakeService implements OnModuleInit {
       mkdir(join(this.root, 'uploads', 'contracts'), { recursive: true })
     ]);
     await Promise.all(this.collections.map((collection) => this.ensureIndex(collection)));
+    await this.rebuildIndexesFromDisk();
+    await this.pruneStaleIndexEntries();
+  }
+
+  private async rebuildIndexesFromDisk() {
+    for (const collection of this.collections) {
+      const index = await this.readIndex(collection);
+      let changed = false;
+      const entries = await this.listCollectionRecordEntries<StorageRecord & Record<string, unknown>>(collection);
+      for (const { record, relativePath } of entries) {
+        const existing = index[record.id];
+        if (!existing || existing.path !== relativePath || existing.updatedAt !== record.updatedAt) {
+          index[record.id] = {
+            path: relativePath,
+            updatedAt: record.updatedAt,
+            deletedAt: record.deletedAt,
+            fields: this.indexFields(record)
+          };
+          changed = true;
+        }
+      }
+      if (changed) await this.atomicWriteJson(this.indexFile(collection), index);
+    }
+  }
+
+  private async pruneStaleIndexEntries() {
+    for (const collection of this.collections) {
+      const index = await this.readIndex(collection);
+      let changed = false;
+      for (const [id, entry] of Object.entries(index)) {
+        if (existsSync(join(this.root, entry.path))) continue;
+        const directoryPath = join(collection, id, 'record.json').replaceAll('\\', '/');
+        const legacyPath = join(collection, `${id}.json`).replaceAll('\\', '/');
+        if (existsSync(join(this.root, directoryPath))) {
+          index[id].path = directoryPath;
+          changed = true;
+        } else if (existsSync(join(this.root, legacyPath))) {
+          index[id].path = legacyPath;
+          changed = true;
+        } else {
+          delete index[id];
+          this.cache.delete(this.cacheKey(collection, id));
+          changed = true;
+        }
+      }
+      if (changed) await this.atomicWriteJson(this.indexFile(collection), index);
+    }
   }
 
   async findById<T extends StorageRecord>(collection: CollectionName, id: string): Promise<T | null> {
@@ -40,9 +88,19 @@ export class JsonDataLakeService implements OnModuleInit {
     const index = await this.readIndex(collection);
     const entry = index[id];
     if (!entry || entry.deletedAt) return null;
-    const record = await this.readJson<T>(join(this.root, entry.path));
-    this.cache.set(key, record);
-    return record;
+    try {
+      const record = await this.readJson<T>(join(this.root, entry.path));
+      this.cache.set(key, record);
+      return record;
+    } catch (err: any) {
+      if (err?.code !== 'ENOENT') throw err;
+      const index = await this.readIndex(collection);
+      delete index[id];
+      await this.atomicWriteJson(this.indexFile(collection), index);
+      this.cache.delete(key);
+      this.logger.warn(`Removed stale index entry for ${collection}:${id} at ${entry.path}`);
+      return null;
+    }
   }
 
   async query<T extends StorageRecord>(collection: CollectionName, options: QueryOptions<T> = {}): Promise<PaginatedResult<T>> {
@@ -96,6 +154,10 @@ export class JsonDataLakeService implements OnModuleInit {
     return join('clients', this.slug(clientName), 'kyc', this.safeFileName(fileName)).replaceAll('\\', '/');
   }
 
+  entityDocumentPath(collection: CollectionName, entityId: string, subDir: string, fileName: string) {
+    return join(collection, entityId, subDir, this.safeFileName(fileName)).replaceAll('\\', '/');
+  }
+
   async listClientProfiles() {
     const clientsRoot = join(this.root, 'clients');
     await mkdir(clientsRoot, { recursive: true });
@@ -120,7 +182,9 @@ export class JsonDataLakeService implements OnModuleInit {
   }
 
   resolveFilePath(relativePath: string) {
-    const full = join(this.root, relativePath);
+    const safePath = relativePath.replaceAll('..', '');
+    const full = join(this.root, safePath);
+    if (!full.startsWith(this.root)) return null;
     if (!existsSync(full)) return null;
     return full;
   }
@@ -137,21 +201,32 @@ export class JsonDataLakeService implements OnModuleInit {
   }
 
   async listCollectionFiles<T>(collection: CollectionName): Promise<T[]> {
+    const records = await this.listCollectionRecordEntries<T>(collection);
+    return records.map((entry) => entry.record);
+  }
+
+  private async listCollectionRecordEntries<T>(collection: CollectionName): Promise<{ record: T; relativePath: string }[]> {
     const collectionRoot = this.collectionPath(collection);
     await mkdir(collectionRoot, { recursive: true });
     const entries = await readdir(collectionRoot, { withFileTypes: true });
-    const records = await Promise.all(entries.filter((entry) => entry.isFile() && entry.name.endsWith('.json')).map(async (entry) => {
+    const records: { record: T; relativePath: string }[] = [];
+    for (const entry of entries) {
       try {
-        return await this.readJson<T>(join(collectionRoot, entry.name));
+        if (entry.isDirectory()) {
+          const relativePath = join(collection, entry.name, 'record.json').replaceAll('\\', '/');
+          records.push({ record: await this.readJson<T>(join(this.root, relativePath)), relativePath });
+        } else if (entry.isFile() && entry.name.endsWith('.json')) {
+          const relativePath = join(collection, entry.name).replaceAll('\\', '/');
+          records.push({ record: await this.readJson<T>(join(this.root, relativePath)), relativePath });
+        }
       } catch {
-        return null;
       }
-    }));
-    return records.filter(Boolean) as T[];
+    }
+    return records;
   }
 
   private async writeRecord<T extends StorageRecord>(collection: CollectionName, record: T, options: WriteOptions, action: string) {
-    const relativePath = join(collection, `${record.id}.json`).replaceAll('\\', '/');
+    const relativePath = join(collection, record.id, 'record.json').replaceAll('\\', '/');
     const absolutePath = join(this.root, relativePath);
     await this.atomicWriteJson(absolutePath, record);
     const index = await this.readIndex(collection);
@@ -163,7 +238,7 @@ export class JsonDataLakeService implements OnModuleInit {
 
   private indexFields(record: StorageRecord & Record<string, unknown>) {
     const fields: Record<string, unknown> = {};
-    for (const key of ['email', 'phone', 'state', 'userId', 'merchantId', 'kycState', 'riskTier', 'channel', 'username']) {
+    for (const key of ['email', 'phone', 'state', 'userId', 'merchantId', 'kycState', 'riskTier', 'channel', 'username', 'displayName', 'legalName', 'category']) {
       if (record[key] !== undefined) fields[key] = record[key];
     }
     return fields;
@@ -189,7 +264,8 @@ export class JsonDataLakeService implements OnModuleInit {
   }
 
   private async readJson<T>(path: string): Promise<T> {
-    return JSON.parse(await readFile(path, 'utf8')) as T;
+    const raw = await readFile(path, 'utf8');
+    return JSON.parse(raw.replace(/^\uFEFF/, '')) as T;
   }
 
   private async atomicWriteJson(path: string, value: unknown) {
@@ -198,8 +274,8 @@ export class JsonDataLakeService implements OnModuleInit {
 
   private async atomicWriteText(path: string, value: string) {
     await mkdir(dirname(path), { recursive: true });
-    const tempPath = `${path}.${process.pid}.${Date.now()}.tmp`;
-    await writeFile(tempPath, value, { encoding: 'utf8', flag: 'wx' });
+    const tempPath = `${path}.${process.pid}.${Date.now()}.${randomUUID().slice(0, 8)}.tmp`;
+    await writeFile(tempPath, value, { encoding: 'utf8' });
     await rename(tempPath, path);
   }
 
