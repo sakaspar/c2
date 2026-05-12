@@ -1,11 +1,7 @@
 {
-  "id": "user_c98561df-d705-4c45-8555-cd64166c974e",
-  "fullName": "Hamza Saadi",
-  "email": "hamza.saadi.xo@gmail.com",
-  "state": "pending_kyc",
-  "kycState": "under_review",
+  "userId": "user_c98561df-d705-4c45-8555-cd64166c974e",
   "employmentStatus": "unemployed",
-  "latestKycApplicationId": "kyc_case_03b71ea4-b978-4946-b093-77dd83b915f7",
+  "state": "under_review",
   "documents": [
     {
       "type": "cin_front",
@@ -32,5 +28,11 @@
       "uploadedAt": "2026-05-12T03:17:10.592Z"
     }
   ],
-  "updatedAt": "2026-05-12T03:17:10.626Z"
+  "missingDocuments": [],
+  "submittedAt": "2026-05-12T03:17:10.592Z",
+  "id": "kyc_case_03b71ea4-b978-4946-b093-77dd83b915f7",
+  "version": 1,
+  "createdAt": "2026-05-12T03:17:10.593Z",
+  "updatedAt": "2026-05-12T03:17:10.593Z",
+  "deletedAt": null
 }

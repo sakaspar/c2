@@ -2,3 +2,6 @@
 {"id":"62c8ef20-58ef-4df9-85f7-e15188e23024","collection":"users","recordId":"client_amira_ben_youssef","action":"update","occurredAt":"2026-05-12T01:50:33.457Z"}
 {"id":"d47cde7b-b17d-4120-9b3a-1e2f5788f617","collection":"products","recordId":"product_smartphone_a55","action":"update","occurredAt":"2026-05-12T01:50:33.492Z"}
 {"id":"5476c327-154e-4ee4-927b-4a0118c08751","collection":"users","recordId":"user_c98561df-d705-4c45-8555-cd64166c974e","action":"create","occurredAt":"2026-05-12T02:42:24.201Z"}
+{"id":"699c66ca-9735-44b0-b6e0-0350b3d8180b","collection":"users","recordId":"user_46112f96-ebe6-48fd-ab1c-c2b64b5eb8bd","action":"create","occurredAt":"2026-05-12T02:53:22.133Z"}
+{"id":"c0629b30-9a3b-42db-b430-9f0e0495e4df","collection":"kyc_cases","recordId":"kyc_case_03b71ea4-b978-4946-b093-77dd83b915f7","action":"create","occurredAt":"2026-05-12T03:17:10.615Z"}
+{"id":"57b1d9f1-35ad-4822-84b7-052cd958b145","collection":"users","recordId":"user_c98561df-d705-4c45-8555-cd64166c974e","action":"update","occurredAt":"2026-05-12T03:17:10.647Z"}

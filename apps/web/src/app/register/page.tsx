@@ -12,13 +12,18 @@ export default function RegisterPage() {
     setMessage(null);
     try {
       const response = await fetch(`${apiBaseUrl}/auth/google`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken }) });
+      const payload = await response.json().catch(() => null) as { user?: { id: string; fullName: string; email?: string }; accessToken?: string; refreshToken?: string; message?: string } | null;
       if (!response.ok) {
-        const payload = await response.json().catch(() => null) as { message?: string } | null;
         setMessage({ type: 'error', text: payload?.message ?? `Google registration failed with status ${response.status}` });
         return;
       }
-      setMessage({ type: 'success', text: 'Account created. Redirecting to KYC...' });
-      window.location.href = '/kyc';
+      if (payload?.accessToken) {
+        localStorage.setItem('bnpl_token', payload.accessToken);
+        localStorage.setItem('bnpl_refresh', payload.refreshToken ?? '');
+        localStorage.setItem('bnpl_user', JSON.stringify(payload.user));
+      }
+      setMessage({ type: 'success', text: `Welcome ${payload?.user?.fullName ?? ''}. Redirecting to KYC...` });
+      setTimeout(() => { window.location.href = '/kyc'; }, 800);
     } catch {
       setMessage({ type: 'error', text: `API is offline or unreachable at ${apiBaseUrl}. Start the backend with pnpm --filter @bnpl/api dev.` });
     }

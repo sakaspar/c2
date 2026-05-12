@@ -16,10 +16,17 @@ const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:400
 
 export default function ShopPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [userId, setUserId] = useState('client_amira_ben_youssef');
+  const [userId, setUserId] = useState('');
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    try {
+      const stored = localStorage.getItem('bnpl_user');
+      if (stored) {
+        const user = JSON.parse(stored) as { id: string };
+        if (user.id) setUserId(user.id);
+      }
+    } catch {}
     fetch(`${apiBaseUrl}/merchants/products`)
       .then((response) => response.json())
       .then((payload: { items?: Product[] }) => setProducts(payload.items ?? []))

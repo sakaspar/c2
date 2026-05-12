@@ -12,10 +12,20 @@
   },
   "user_c98561df-d705-4c45-8555-cd64166c974e": {
     "path": "users/user_c98561df-d705-4c45-8555-cd64166c974e.json",
-    "updatedAt": "2026-05-12T02:42:24.179Z",
+    "updatedAt": "2026-05-12T03:17:10.626Z",
     "deletedAt": null,
     "fields": {
       "email": "hamza.saadi.xo@gmail.com",
+      "state": "pending_kyc",
+      "kycState": "under_review"
+    }
+  },
+  "user_46112f96-ebe6-48fd-ab1c-c2b64b5eb8bd": {
+    "path": "users/user_46112f96-ebe6-48fd-ab1c-c2b64b5eb8bd.json",
+    "updatedAt": "2026-05-12T02:53:22.106Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "hamza.saadi@esprit.tn",
       "state": "pending_kyc",
       "kycState": "not_started"
     }
