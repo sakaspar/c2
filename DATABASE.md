@@ -85,11 +85,17 @@ data/
 
 ---
 
-## Two Storage Systems (⚠️ Known Issue)
+## How The Database Works
 
-There are **two parallel systems** for storing user/client data that must be kept in sync:
+The application uses a **JSON file data lake**. There is no database server. The API reads and writes `.json` files under `data/`.
 
-### 1. Collections System (`create`, `update`, `findById`, `query`)
+There are three important concepts:
+
+- **Collection records** — canonical entities used by API services (`users`, `merchants`, `loans`, etc.)
+- **Indexes** — small lookup files that tell the API where records are and expose filterable fields
+- **Profile/document directories** — human-friendly folders for rich profile views and uploaded files
+
+### 1. Collection Records (`create`, `update`, `findById`, `query`)
 
 Generic CRUD engine. Each collection has:
 - A **directory**: `data/{collection}/` containing entity subdirectories
@@ -100,28 +106,103 @@ Registered collections: `users`, `loans`, `transactions`, `merchants`, `products
 
 When you call `storage.create('users', ...)`, it writes to `data/users/user_{uuid}/record.json` and updates `data/indexes/users_index.json`.
 
-**Stale index pruning**: On startup, the service scans all indexes and removes entries whose files no longer exist on disk.
+The collection record is the **source of truth** for each entity.
 
-### 2. Client Profiles System (`writeClientProfile`, `listClientProfiles`)
+Examples:
 
-A separate per-client directory structure under `data/clients/`:
+- **User**: `data/users/user_123/record.json`
+- **Merchant**: `data/merchants/merchant_123/record.json`
+- **Product**: `data/products/product_123/record.json`
+- **Loan**: `data/loans/loan_123/record.json`
+- **KYB case**: `data/kyb_cases/kyb_case_123/record.json`
+
+### 2. Indexes
+
+Every collection has an index under `data/indexes/`.
+
+Example: `data/indexes/users_index.json`
+
+The index is not the full data. It is a fast lookup table:
+
+- **Key**: record ID
+- **`path`**: where the actual `record.json` lives
+- **`fields`**: small searchable fields like `email`, `state`, `merchantId`, `username`
+
+The API uses indexes for `query()` so it does not need to scan every JSON file every time.
+
+Important rule:
+
+- **If a file is missing but the index still points to it, that index entry is stale.**
+
+The storage service handles this in three ways:
+
+- **Startup rebuild**: `rebuildIndexesFromDisk()` scans actual records on disk and recreates/fixes index entries from real files.
+- **Startup cleanup**: `pruneStaleIndexEntries()` removes entries pointing to missing files only after trying known path formats.
+- **Runtime cleanup**: `findById()` catches `ENOENT`, removes the broken index entry, and returns `null` instead of crashing.
+
+This means Google login and regular login should be based on real user records on disk, not hardcoded users. If a real user file exists but the index path is wrong, startup rebuild repairs it.
+
+### 3. Client Profile Projection (`writeClientProfile`, `listClientProfiles`)
+
+A separate per-client directory structure exists under `data/clients/`:
 - `data/clients/{slug}/profile.json` — rich client profile with documents metadata
 - `data/clients/{slug}/kyc/` — actual uploaded KYC document files (images, PDFs)
 
 The slug is derived from the user's `fullName` (lowercased, diacritics stripped, non-alphanumeric replaced with hyphens).
 
-### ⚠️ The Problem
+This is a **projection / view directory**, not a replacement for the canonical user record.
 
-- The **`users` collection** writes records to `data/users/` and indexes them in `users_index.json`.
-- The **client profiles** write to `data/clients/{slug}/` independently.
-- These two systems can be **out of sync**: a user record may exist in the index pointing to `data/users/user_xxx.json`, but the actual rich profile (with documents, KYC status, employment info) only exists at `data/clients/{slug}/profile.json`.
-- The `data/users/` directory may be **empty** while `data/clients/` has the actual data.
+Canonical user record:
 
-### ⚠️ Legacy `merchant/` vs Collection `merchants/`
+```text
+data/users/user_123/record.json
+```
+
+Client profile projection:
+
+```text
+data/clients/hamza-saadi/profile.json
+data/clients/hamza-saadi/kyc/cin_front.jpg
+```
+
+The KYC flow updates both:
+
+- `users/{id}/record.json` — current user state and KYC status
+- `clients/{slug}/profile.json` — rich admin-friendly profile with document metadata
+
+### 4. Entity Document Directories
+
+Uploaded documents should live inside the entity's directory when possible.
+
+Example merchant KYB:
+
+```text
+data/merchants/merchant_123/
+├── record.json
+└── kyb/
+    ├── commercial_register.pdf
+    ├── tax_certificate.pdf
+    ├── articles_of_association.pdf
+    ├── bank_rib.pdf
+    └── representative_cin.jpg
+```
+
+The API stores these paths as relative paths, for example:
+
+```json
+{
+  "storagePath": "merchants/merchant_123/kyb/commercial_register.pdf"
+}
+```
+
+The admin document preview endpoint resolves that relative path under `data/`.
+
+### Legacy `merchant/` vs Collection `merchants/`
 
 - `data/merchant/` contains hand-seeded merchant files (e.g., `techstore-tunis.json`).
 - `data/merchants/` is the collection directory used by `storage.create('merchants', ...)`.
 - These are **separate** — the seed data in `merchant/` is not indexed or managed by the collections system.
+- New code should use `data/merchants/{merchantId}/record.json`.
 
 ---
 

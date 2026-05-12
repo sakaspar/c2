@@ -22,17 +22,6 @@ export class KycService {
     return { type, fileName: safeName, storagePath };
   }
 
-  async uploadDocument(userId: string, type: string, file: { originalname: string; buffer: Buffer } | undefined) {
-    if (!file || !file.buffer) throw new BadRequestException('No file uploaded');
-    if (!type) throw new BadRequestException('Document type is required');
-    const user = await this.storage.findById<UserRecord>('users', userId);
-    if (!user) throw new NotFoundException('User not found');
-    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const storagePath = this.storage.clientKycDocumentPath(user.fullName, safeName);
-    await this.storage.saveUploadedFile(storagePath, file.buffer);
-    return { type, fileName: safeName, storagePath };
-  }
-
   async submit(userId: string, dto: SubmitKycDto) {
     const user = await this.storage.findById<UserRecord>('users', userId);
     if (!user) throw new NotFoundException('User not found');
