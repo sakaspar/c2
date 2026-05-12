@@ -51,7 +51,8 @@ export class AuthService {
     const user = users.items.find((item) => item.email === dto.identifier || item.phone === dto.identifier);
     if (!user || user.authProvider === 'google' || !(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException('Invalid credentials');
     if (user.state === 'blacklisted' || user.state === 'suspended') throw new UnauthorizedException('Account is not active');
-    return this.issueTokens(user);
+    const updated = await this.storage.update<UserRecord>('users', user.id, { lastActive: new Date().toISOString() });
+    return this.issueTokens(updated);
   }
 
   async googleSignup(dto: GoogleSignupDto) {

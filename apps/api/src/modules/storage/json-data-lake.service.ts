@@ -1,6 +1,7 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
+import { createReadStream, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { PaginatedResult, QueryOptions, StorageRecord, WriteOptions } from './types';
@@ -11,6 +12,7 @@ type CollectionIndex = Record<string, { path: string; updatedAt: string; deleted
 
 @Injectable()
 export class JsonDataLakeService implements OnModuleInit {
+  private readonly logger = new Logger(JsonDataLakeService.name);
   private readonly root: string;
   private readonly cache = new Map<string, unknown>();
   private readonly queues = new Map<string, Promise<unknown>>();
@@ -118,6 +120,25 @@ export class JsonDataLakeService implements OnModuleInit {
     return [...directoryProfiles, ...fileProfiles];
   }
 
+  resolveFilePath(relativePath: string) {
+    const safePath = relativePath.replaceAll('..', '');
+    const full = join(this.root, safePath);
+    if (!full.startsWith(join(this.root, 'clients'))) return null;
+    if (!existsSync(full)) return null;
+    return full;
+  }
+
+  getFileStream(absolutePath: string) {
+    return createReadStream(absolutePath);
+  }
+
+  async saveUploadedFile(relativePath: string, buffer: Buffer) {
+    const full = join(this.root, relativePath);
+    await mkdir(dirname(full), { recursive: true });
+    await writeFile(full, buffer);
+    return relativePath;
+  }
+
   async listCollectionFiles<T>(collection: CollectionName): Promise<T[]> {
     const collectionRoot = this.collectionPath(collection);
     await mkdir(collectionRoot, { recursive: true });
@@ -135,6 +156,7 @@ export class JsonDataLakeService implements OnModuleInit {
   private async writeRecord<T extends StorageRecord>(collection: CollectionName, record: T, options: WriteOptions, action: string) {
     const relativePath = join(collection, `${record.id}.json`).replaceAll('\\', '/');
     const absolutePath = join(this.root, relativePath);
+    this.logger.debug(`Writing ${action} record to ${relativePath}`);
     await this.atomicWriteJson(absolutePath, record);
     const index = await this.readIndex(collection);
     index[record.id] = { path: relativePath, updatedAt: record.updatedAt, deletedAt: record.deletedAt, fields: this.indexFields(record as StorageRecord & Record<string, unknown>) };

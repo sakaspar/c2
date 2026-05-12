@@ -2,7 +2,7 @@
   "email": "testuser@example.com",
   "phone": "+21620123456",
   "fullName": "Test User",
-  "passwordHash": "$2a$12$7vFYYc9VdfyMQlmpab2t1.JrOP3eUBPyon/iK5kh7sd9xY1qJoIiW",
+  "passwordHash": "$2a$12$MQxkRS/ibOL8Xz/VVagGE.eE5luupMpclSF3/uV6DFC.COvAUB1xW",
   "authProvider": "local",
   "state": "active",
   "kycState": "approved",
@@ -10,47 +10,45 @@
     "customer"
   ],
   "creditLimit": {
-    "amount": 100,
+    "amount": 300,
     "currency": "TND"
   },
   "availableCredit": {
-    "amount": 100,
+    "amount": 300,
     "currency": "TND"
   },
   "riskFlags": [],
-  "id": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49",
-  "version": 4,
-  "createdAt": "2026-05-12T16:23:14.944Z",
-  "updatedAt": "2026-05-12T16:23:15.596Z",
+  "id": "user_b2f6c7d6-33cb-43a5-8480-6b1749d07a01",
+  "version": 6,
+  "createdAt": "2026-05-12T17:41:41.434Z",
+  "updatedAt": "2026-05-12T17:41:42.106Z",
   "deletedAt": null,
-  "username": "testuser1",
-  "usernameSet": true,
-  "latestKycApplicationId": "kyc_case_5d266e78-262c-4636-b785-24b9fd7cefe1",
+  "latestKycApplicationId": "kyc_case_8ae0c026-de9d-4258-a5be-f08e853d469d",
   "employmentStatus": "unemployed",
   "documents": [
     {
       "type": "cin_front",
       "fileName": "cin_front.jpg",
       "storagePath": "clients/test-user/kyc/cin_front.jpg",
-      "uploadedAt": "2026-05-12T16:23:15.555Z"
+      "uploadedAt": "2026-05-12T17:41:42.010Z"
     },
     {
       "type": "cin_back",
       "fileName": "cin_back.jpg",
       "storagePath": "clients/test-user/kyc/cin_back.jpg",
-      "uploadedAt": "2026-05-12T16:23:15.555Z"
+      "uploadedAt": "2026-05-12T17:41:42.010Z"
     },
     {
       "type": "selfie",
       "fileName": "selfie.jpg",
       "storagePath": "clients/test-user/kyc/selfie.jpg",
-      "uploadedAt": "2026-05-12T16:23:15.555Z"
+      "uploadedAt": "2026-05-12T17:41:42.010Z"
     },
     {
       "type": "proof_of_address",
       "fileName": "addr.jpg",
       "storagePath": "clients/test-user/kyc/addr.jpg",
-      "uploadedAt": "2026-05-12T16:23:15.555Z"
+      "uploadedAt": "2026-05-12T17:41:42.010Z"
     }
   ]
 }

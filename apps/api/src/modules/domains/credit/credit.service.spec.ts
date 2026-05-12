@@ -29,23 +29,23 @@ describe('CreditService', () => {
   });
 
   describe('calculate', () => {
-    it('should assign 1200 TND limit for high scores', async () => {
+    it('should assign 700 TND limit for mid-high scores', async () => {
       mockStorage.findById.mockResolvedValue({
         id: 'u1',
         kycState: 'approved',
-        riskFlags: []
+        riskFlags: [],
+        creditLimit: { amount: 100, currency: 'TND' },
+        availableCredit: { amount: 100, currency: 'TND' }
       });
       mockStorage.create.mockImplementation((_, data) => Promise.resolve({ ...data, id: 's1' }));
 
       const result = await service.calculate('u1');
 
-      // base 420 + kyc 180 + penalty 0 = 600.
-      // score >= 600 gives 1000 limit.
       expect(result.score).toBe(600);
-      expect(result.limit.amount).toBe(1000);
+      expect(result.limit.amount).toBe(300);
       expect(mockStorage.update).toHaveBeenCalledWith('users', 'u1', {
-        creditLimit: { amount: 1000, currency: 'TND' },
-        availableCredit: { amount: 1000, currency: 'TND' }
+        creditLimit: { amount: 300, currency: 'TND' },
+        availableCredit: { amount: 300, currency: 'TND' }
       });
     });
 
@@ -53,7 +53,9 @@ describe('CreditService', () => {
       mockStorage.findById.mockResolvedValue({
         id: 'u1',
         kycState: 'approved',
-        riskFlags: ['flag1', 'flag2']
+        riskFlags: ['flag1', 'flag2'],
+        creditLimit: { amount: 100, currency: 'TND' },
+        availableCredit: { amount: 100, currency: 'TND' }
       });
       mockStorage.create.mockImplementation((_, data) => Promise.resolve({ ...data, id: 's1' }));
 

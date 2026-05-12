@@ -1,7 +1,7 @@
 {
   "loan_demo_001": {
     "path": "loans/loan_demo_001.json",
-    "updatedAt": "2026-05-12T16:28:44.222Z",
+    "updatedAt": "2026-05-12T17:41:40.948Z",
     "deletedAt": null,
     "fields": {
       "state": "active",
@@ -27,6 +27,216 @@
       "state": "active",
       "userId": "user_a0ba97b3-91f6-4a53-9322-86a39941cb49",
       "merchantId": "merchant_80745629-ba53-4751-9f82-625826c0883d"
+    }
+  },
+  "loan_aad2db4c-3a03-47a0-a716-4889473f926d": {
+    "path": "loans/loan_aad2db4c-3a03-47a0-a716-4889473f926d.json",
+    "updatedAt": "2026-05-12T01:50:33.402Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "client_amira_ben_youssef",
+      "merchantId": "merchant_techstore_tunis"
+    }
+  },
+  "loan_3b471a9e-012e-4e58-b555-dffbfea84806": {
+    "path": "loans/loan_3b471a9e-012e-4e58-b555-dffbfea84806.json",
+    "updatedAt": "2026-05-12T17:25:18.449Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_9949c69d-a5ef-4d0f-9eea-9309bc328c28",
+      "merchantId": "merchant_a04fb06b-7190-4790-9e05-dbe273215405"
+    }
+  },
+  "loan_a879b328-9b42-4d8c-8e97-c302791df5ee": {
+    "path": "loans/loan_a879b328-9b42-4d8c-8e97-c302791df5ee.json",
+    "updatedAt": "2026-05-12T17:26:25.594Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_aa8aed8b-f145-428a-ab29-5c1129daf5e8",
+      "merchantId": "merchant_630159a8-79b8-4c80-806e-b833dfeb0f08"
+    }
+  },
+  "loan_7d7ebb74-51e4-4666-9b3d-faf45c10c63e": {
+    "path": "loans/loan_7d7ebb74-51e4-4666-9b3d-faf45c10c63e.json",
+    "updatedAt": "2026-05-12T17:27:23.718Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_0f6b537c-a368-4bda-b11c-1c02c6f0be62",
+      "merchantId": "merchant_4ec8ec4d-9589-4ed5-87e2-ddcf1390e554"
+    }
+  },
+  "loan_5a170f5b-1d0c-4184-a98b-be6fce968790": {
+    "path": "loans/loan_5a170f5b-1d0c-4184-a98b-be6fce968790.json",
+    "updatedAt": "2026-05-12T17:27:23.685Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_0f6b537c-a368-4bda-b11c-1c02c6f0be62",
+      "merchantId": "merchant_4ec8ec4d-9589-4ed5-87e2-ddcf1390e554"
+    }
+  },
+  "loan_ac61cd24-c3de-4b6f-9ea7-f159415801f1": {
+    "path": "loans/loan_ac61cd24-c3de-4b6f-9ea7-f159415801f1.json",
+    "updatedAt": "2026-05-12T17:28:16.378Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_837d2eb4-ddbf-43c8-afd1-16e628672167",
+      "merchantId": "merchant_ca62c027-506a-4c85-8c68-98dc7c3aecf9"
+    }
+  },
+  "loan_70b696ba-441a-4404-81e7-4b84e7a82571": {
+    "path": "loans/loan_70b696ba-441a-4404-81e7-4b84e7a82571.json",
+    "updatedAt": "2026-05-12T17:28:16.350Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_837d2eb4-ddbf-43c8-afd1-16e628672167",
+      "merchantId": "merchant_ca62c027-506a-4c85-8c68-98dc7c3aecf9"
+    }
+  },
+  "loan_2599ae09-53af-471c-b66a-2efc7e32e5c0": {
+    "path": "loans/loan_2599ae09-53af-471c-b66a-2efc7e32e5c0.json",
+    "updatedAt": "2026-05-12T17:29:10.843Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_913ea7ce-b33d-4eb5-b557-1ccadde7e26b",
+      "merchantId": "merchant_8a7b3ced-ea84-47c7-b8a6-a6f75f3ed48f"
+    }
+  },
+  "loan_38182d8c-a431-48e3-8ed6-426f918f6db5": {
+    "path": "loans/loan_38182d8c-a431-48e3-8ed6-426f918f6db5.json",
+    "updatedAt": "2026-05-12T17:29:10.815Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_913ea7ce-b33d-4eb5-b557-1ccadde7e26b",
+      "merchantId": "merchant_8a7b3ced-ea84-47c7-b8a6-a6f75f3ed48f"
+    }
+  },
+  "loan_860f4d75-110e-4d2a-9cc9-b8d226a890ca": {
+    "path": "loans/loan_860f4d75-110e-4d2a-9cc9-b8d226a890ca.json",
+    "updatedAt": "2026-05-12T17:30:43.315Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_4d81d4a0-5725-4a8a-9399-a66213f770fa",
+      "merchantId": "merchant_4777b779-7465-40af-a206-34664c722ccc"
+    }
+  },
+  "loan_b68986fa-39bf-4dd0-9642-b0cf2e931905": {
+    "path": "loans/loan_b68986fa-39bf-4dd0-9642-b0cf2e931905.json",
+    "updatedAt": "2026-05-12T17:30:43.280Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_4d81d4a0-5725-4a8a-9399-a66213f770fa",
+      "merchantId": "merchant_4777b779-7465-40af-a206-34664c722ccc"
+    }
+  },
+  "loan_7f63aa5c-9d42-4dee-91f2-ebca480297e9": {
+    "path": "loans/loan_7f63aa5c-9d42-4dee-91f2-ebca480297e9.json",
+    "updatedAt": "2026-05-12T17:31:32.881Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_204120e8-3050-4c6f-b815-92ea97139a42",
+      "merchantId": "merchant_cd00b599-5402-4ace-96e9-a08949791740"
+    }
+  },
+  "loan_0c69cb63-e522-4948-89c5-988936de3448": {
+    "path": "loans/loan_0c69cb63-e522-4948-89c5-988936de3448.json",
+    "updatedAt": "2026-05-12T17:31:32.850Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_204120e8-3050-4c6f-b815-92ea97139a42",
+      "merchantId": "merchant_cd00b599-5402-4ace-96e9-a08949791740"
+    }
+  },
+  "loan_f1342c8b-7c40-4f0c-8913-20402534c5b6": {
+    "path": "loans/loan_f1342c8b-7c40-4f0c-8913-20402534c5b6.json",
+    "updatedAt": "2026-05-12T17:32:38.895Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_59ac15b0-2279-4c9f-9403-071f29e87ac7",
+      "merchantId": "merchant_92a890ec-3cd8-419d-aab1-b9c1072dcc7d"
+    }
+  },
+  "loan_0c6bea9a-48fd-4828-8d94-649c33de5985": {
+    "path": "loans/loan_0c6bea9a-48fd-4828-8d94-649c33de5985.json",
+    "updatedAt": "2026-05-12T17:32:38.863Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_59ac15b0-2279-4c9f-9403-071f29e87ac7",
+      "merchantId": "merchant_92a890ec-3cd8-419d-aab1-b9c1072dcc7d"
+    }
+  },
+  "loan_76bbdcaf-be84-4d11-9580-fcfaa310feb7": {
+    "path": "loans/loan_76bbdcaf-be84-4d11-9580-fcfaa310feb7.json",
+    "updatedAt": "2026-05-12T17:33:47.332Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_da4b3251-0593-4bfd-b924-c13a98c5122a",
+      "merchantId": "merchant_f5d361f1-4a70-4730-bd7e-bf82ae6cfd48"
+    }
+  },
+  "loan_695ad434-25c9-48db-8c59-c9542c7dd57f": {
+    "path": "loans/loan_695ad434-25c9-48db-8c59-c9542c7dd57f.json",
+    "updatedAt": "2026-05-12T17:33:47.299Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_da4b3251-0593-4bfd-b924-c13a98c5122a",
+      "merchantId": "merchant_f5d361f1-4a70-4730-bd7e-bf82ae6cfd48"
+    }
+  },
+  "loan_7a4efd2f-f815-4c08-864e-c36aad6696bd": {
+    "path": "loans/loan_7a4efd2f-f815-4c08-864e-c36aad6696bd.json",
+    "updatedAt": "2026-05-12T17:37:27.210Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_77495472-3343-4fab-bdaf-45b4e602bec6",
+      "merchantId": "merchant_975080f2-980b-40f4-aabe-ca5ee72ec4bc"
+    }
+  },
+  "loan_df1d4120-0ec5-432b-8fd2-1bcf869c262f": {
+    "path": "loans/loan_df1d4120-0ec5-432b-8fd2-1bcf869c262f.json",
+    "updatedAt": "2026-05-12T17:37:27.176Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_77495472-3343-4fab-bdaf-45b4e602bec6",
+      "merchantId": "merchant_975080f2-980b-40f4-aabe-ca5ee72ec4bc"
+    }
+  },
+  "loan_f7011967-dc8a-48e3-ba5c-f8f35ac7d8cc": {
+    "path": "loans/loan_f7011967-dc8a-48e3-ba5c-f8f35ac7d8cc.json",
+    "updatedAt": "2026-05-12T17:41:42.372Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_b2f6c7d6-33cb-43a5-8480-6b1749d07a01",
+      "merchantId": "merchant_0d38ee41-b1e4-4775-99df-2fbe34ce4812"
+    }
+  },
+  "loan_90527a0f-bad9-444d-9138-c5ad7bff573e": {
+    "path": "loans/loan_90527a0f-bad9-444d-9138-c5ad7bff573e.json",
+    "updatedAt": "2026-05-12T17:41:42.340Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "active",
+      "userId": "user_b2f6c7d6-33cb-43a5-8480-6b1749d07a01",
+      "merchantId": "merchant_0d38ee41-b1e4-4775-99df-2fbe34ce4812"
     }
   }
 }

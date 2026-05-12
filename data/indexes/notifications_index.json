@@ -16,5 +16,32 @@
       "userId": "user_demo_amira",
       "channel": "in_app"
     }
+  },
+  "notification_e0cfb91a-6254-47cd-a144-9a565495d829": {
+    "path": "notifications/notification_e0cfb91a-6254-47cd-a144-9a565495d829.json",
+    "updatedAt": "2026-05-12T17:33:45.877Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_demo_amira",
+      "channel": "in_app"
+    }
+  },
+  "notification_b28a2cd6-560d-4702-af0f-be5d55b259a5": {
+    "path": "notifications/notification_b28a2cd6-560d-4702-af0f-be5d55b259a5.json",
+    "updatedAt": "2026-05-12T17:37:25.775Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_demo_amira",
+      "channel": "in_app"
+    }
+  },
+  "notification_0ffabbb4-3a6b-47d3-900a-35548a4cff2b": {
+    "path": "notifications/notification_0ffabbb4-3a6b-47d3-900a-35548a4cff2b.json",
+    "updatedAt": "2026-05-12T17:41:40.954Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_demo_amira",
+      "channel": "in_app"
+    }
   }
 }

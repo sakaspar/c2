@@ -1,0 +1,10 @@
+{
+  "id": "admin_merchant_ops",
+  "fullName": "Merchant Operations",
+  "email": "merchant.ops@salafni.tn",
+  "role": "merchant_operations",
+  "permissions": ["merchants:read", "merchants:review", "settlements:read", "settlements:approve"],
+  "state": "active",
+  "createdAt": "2026-05-01T09:00:00.000Z",
+  "updatedAt": "2026-05-01T09:00:00.000Z"
+}

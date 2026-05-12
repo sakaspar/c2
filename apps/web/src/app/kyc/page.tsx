@@ -42,11 +42,29 @@ export default function KycPage() {
     if (!userId.trim()) { setMessage({ type: 'error', text: 'Enter your user ID (shown after registration).' }); return; }
     setSubmitting(true);
     setMessage(null);
-    const documents = docs.map((doc) => {
+
+    const uploads: { type: string; fileName: string; storagePath: string }[] = [];
+    for (const doc of docs) {
       const input = fileRefs.current.get(doc.type);
-      const fileName = input?.files?.[0]?.name ?? `${doc.type}.jpg`;
-      return { type: doc.type, fileName, storagePath: `clients/${userId}/kyc/${fileName}` };
-    });
+      const file = input?.files?.[0];
+      if (!file) continue;
+      const form = new FormData();
+      form.append('file', file);
+      form.append('type', doc.type);
+      try {
+        const res = await fetch(`${apiBaseUrl}/kyc/${userId}/upload`, { method: 'POST', body: form });
+        if (!res.ok) { const p = await res.json().catch(() => null) as { message?: string } | null; setMessage({ type: 'error', text: p?.message ?? `Upload failed for ${doc.label}` }); setSubmitting(false); return; }
+        const uploaded = await res.json() as { type: string; fileName: string; storagePath: string };
+        uploads.push(uploaded);
+      } catch {
+        setMessage({ type: 'error', text: `API is offline at ${apiBaseUrl}.` });
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    if (!uploads.length) { setMessage({ type: 'error', text: 'Select at least one file to upload.' }); setSubmitting(false); return; }
+
     try {
       const response = await fetch(`${apiBaseUrl}/kyc/${userId}/submit`, {
         method: 'POST',
@@ -55,7 +73,7 @@ export default function KycPage() {
           employmentStatus,
           employerName: employmentStatus === 'employed' ? employerName : undefined,
           monthlyIncomeTnd: employmentStatus === 'employed' ? Number(monthlyIncomeTnd) || undefined : undefined,
-          documents
+          documents: uploads
         })
       });
       const payload = await response.json().catch(() => null) as { message?: string; missingDocuments?: string[] } | null;

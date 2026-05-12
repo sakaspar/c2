@@ -34,6 +34,7 @@ export interface UserRecord extends BaseRecord {
   creditLimit: Money;
   availableCredit: Money;
   riskFlags: string[];
+  lastActive?: string;
 }
 
 export interface LoanRecord extends BaseRecord {

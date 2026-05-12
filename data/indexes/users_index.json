@@ -1,7 +1,18 @@
 {
   "user_demo_amira": {
     "path": "users/user_demo_amira.json",
-    "updatedAt": "2026-05-12T16:28:44.206Z",
+    "updatedAt": "2026-05-12T17:41:40.936Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "amira@example.tn",
+      "phone": "+21620111222",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "client_amira_ben_youssef": {
+    "path": "users/client_amira_ben_youssef.json",
+    "updatedAt": "2026-05-12T01:50:33.436Z",
     "deletedAt": null,
     "fields": {
       "email": "amira@example.tn",
@@ -20,6 +31,159 @@
       "state": "active",
       "kycState": "approved",
       "username": "testuser1"
+    }
+  },
+  "user_c98561df-d705-4c45-8555-cd64166c974e": {
+    "path": "users/user_c98561df-d705-4c45-8555-cd64166c974e.json",
+    "updatedAt": "2026-05-12T03:17:10.626Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "hamza.saadi.xo@gmail.com",
+      "state": "pending_kyc",
+      "kycState": "under_review"
+    }
+  },
+  "user_46112f96-ebe6-48fd-ab1c-c2b64b5eb8bd": {
+    "path": "users/user_46112f96-ebe6-48fd-ab1c-c2b64b5eb8bd.json",
+    "updatedAt": "2026-05-12T02:53:22.106Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "hamza.saadi@esprit.tn",
+      "state": "pending_kyc",
+      "kycState": "not_started"
+    }
+  },
+  "user_f29ae4e4-30a0-445e-b4f0-9f28f34127fb": {
+    "path": "users/user_f29ae4e4-30a0-445e-b4f0-9f28f34127fb.json",
+    "updatedAt": "2026-05-12T17:24:17.945Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "pending_kyc",
+      "kycState": "rejected"
+    }
+  },
+  "user_9949c69d-a5ef-4d0f-9eea-9309bc328c28": {
+    "path": "users/user_9949c69d-a5ef-4d0f-9eea-9309bc328c28.json",
+    "updatedAt": "2026-05-12T17:25:18.484Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_aa8aed8b-f145-428a-ab29-5c1129daf5e8": {
+    "path": "users/user_aa8aed8b-f145-428a-ab29-5c1129daf5e8.json",
+    "updatedAt": "2026-05-12T17:26:25.627Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_0f6b537c-a368-4bda-b11c-1c02c6f0be62": {
+    "path": "users/user_0f6b537c-a368-4bda-b11c-1c02c6f0be62.json",
+    "updatedAt": "2026-05-12T17:27:23.752Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_837d2eb4-ddbf-43c8-afd1-16e628672167": {
+    "path": "users/user_837d2eb4-ddbf-43c8-afd1-16e628672167.json",
+    "updatedAt": "2026-05-12T17:28:16.407Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_913ea7ce-b33d-4eb5-b557-1ccadde7e26b": {
+    "path": "users/user_913ea7ce-b33d-4eb5-b557-1ccadde7e26b.json",
+    "updatedAt": "2026-05-12T17:29:56.672Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved",
+      "username": "testuser2"
+    }
+  },
+  "user_4d81d4a0-5725-4a8a-9399-a66213f770fa": {
+    "path": "users/user_4d81d4a0-5725-4a8a-9399-a66213f770fa.json",
+    "updatedAt": "2026-05-12T17:30:43.352Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_204120e8-3050-4c6f-b815-92ea97139a42": {
+    "path": "users/user_204120e8-3050-4c6f-b815-92ea97139a42.json",
+    "updatedAt": "2026-05-12T17:31:32.912Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_59ac15b0-2279-4c9f-9403-071f29e87ac7": {
+    "path": "users/user_59ac15b0-2279-4c9f-9403-071f29e87ac7.json",
+    "updatedAt": "2026-05-12T17:32:38.927Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_da4b3251-0593-4bfd-b924-c13a98c5122a": {
+    "path": "users/user_da4b3251-0593-4bfd-b924-c13a98c5122a.json",
+    "updatedAt": "2026-05-12T17:33:47.365Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_77495472-3343-4fab-bdaf-45b4e602bec6": {
+    "path": "users/user_77495472-3343-4fab-bdaf-45b4e602bec6.json",
+    "updatedAt": "2026-05-12T17:37:27.240Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
+    }
+  },
+  "user_b2f6c7d6-33cb-43a5-8480-6b1749d07a01": {
+    "path": "users/user_b2f6c7d6-33cb-43a5-8480-6b1749d07a01.json",
+    "updatedAt": "2026-05-12T17:41:42.403Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "testuser@example.com",
+      "phone": "+21620123456",
+      "state": "active",
+      "kycState": "approved"
     }
   }
 }

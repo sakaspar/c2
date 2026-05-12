@@ -10,3 +10,7 @@ data/uploads/**
 !data/uploads/.gitkeep
 backups/**
 !backups/.gitkeep
+*.log
+data/*/*.json
+!data/indexes/*.json
+data/audit/*.jsonl

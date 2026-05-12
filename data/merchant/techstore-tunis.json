@@ -1,0 +1,12 @@
+{
+  "id": "merchant_techstore_tunis",
+  "name": "TechStore Tunis",
+  "email": "ops@techstore.tn",
+  "phone": "+21671111222",
+  "category": "electronics",
+  "state": "approved",
+  "settlementAccount": "TN5900000000000000000001",
+  "monthlyVolume": { "amount": 18400, "currency": "TND" },
+  "createdAt": "2026-04-10T09:00:00.000Z",
+  "updatedAt": "2026-05-09T10:00:00.000Z"
+}

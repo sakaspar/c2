@@ -114,6 +114,20 @@ echo -e "${CYAN}[8] PATCH /kyc/applications/$KYC_APP_ID/approve${NC}"
 RESP=$(curl -s -w "\n%{http_code}" -X PATCH "$BASE/kyc/applications/$KYC_APP_ID/approve")
 check "Approve KYC application" "200" "$RESP"
 
+# ─── 9. KYC: reject (on already-approved) ───
+echo ""
+echo -e "${CYAN}[9] PATCH /kyc/applications/$KYC_APP_ID/reject${NC}"
+RESP=$(curl -s -w "\n%{http_code}" -X PATCH "$BASE/kyc/applications/$KYC_APP_ID/reject" \
+  -H "Content-Type: application/json" \
+  -d '{"reason":"Test rejection"}')
+check "Reject KYC application" "200" "$RESP"
+
+# ─── 9b. KYC: re-approve (to allow loan creation) ───
+echo ""
+echo -e "${CYAN}[9b] PATCH /kyc/applications/$KYC_APP_ID/approve${NC}"
+RESP=$(curl -s -w "\n%{http_code}" -X PATCH "$BASE/kyc/applications/$KYC_APP_ID/approve")
+check "Re-approve KYC application" "200" "$RESP"
+
 # ─── 10. MERCHANTS: create ───
 echo ""
 echo -e "${CYAN}[10] POST /merchants${NC}"
@@ -142,7 +156,7 @@ echo ""
 echo -e "${CYAN}[13] POST /merchants/products${NC}"
 RESP=$(curl -s -w "\n%{http_code}" -X POST "$BASE/merchants/products" \
   -H "Content-Type: application/json" \
-  -d "{\"merchantId\":\"$MERCHANT_ID\",\"name\":\"Test Laptop\",\"description\":\"A test laptop\",\"price\":800,\"stock\":5}")
+  -d "{\"merchantId\":\"$MERCHANT_ID\",\"name\":\"Test Laptop\",\"description\":\"A test laptop\",\"price\":200,\"stock\":5}")
 BODY=$(echo "$RESP" | sed '$d')
 check "Create product" "201" "$RESP"
 PRODUCT_ID=$(echo "$BODY" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)

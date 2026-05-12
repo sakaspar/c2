@@ -11,6 +11,17 @@ export class KycService {
     private readonly creditService: CreditService
   ) {}
 
+  async uploadDocument(userId: string, type: string, file: { originalname: string; buffer: Buffer } | undefined) {
+    if (!file || !file.buffer) throw new BadRequestException('No file uploaded');
+    if (!type) throw new BadRequestException('Document type is required');
+    const user = await this.storage.findById<UserRecord>('users', userId);
+    if (!user) throw new NotFoundException('User not found');
+    const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const storagePath = this.storage.clientKycDocumentPath(user.fullName, safeName);
+    await this.storage.saveUploadedFile(storagePath, file.buffer);
+    return { type, fileName: safeName, storagePath };
+  }
+
   async submit(userId: string, dto: SubmitKycDto) {
     const user = await this.storage.findById<UserRecord>('users', userId);
     if (!user) throw new NotFoundException('User not found');
@@ -52,9 +63,12 @@ export class KycService {
     if (!application) throw new NotFoundException('KYC application not found');
     const reviewedAt = new Date().toISOString();
     const updated = await this.storage.update<KycApplicationRecord>('kyc_cases', applicationId, { state: 'approved', reviewedAt, reviewedBy });
-    const user = await this.storage.update<UserRecord>('users', application.userId, { kycState: 'approved', state: 'active' });
+    const existingUser = await this.storage.findById<UserRecord>('users', application.userId);
+    const riskFlags = existingUser?.riskFlags.filter(f => f !== 'kyc_rejected') ?? [];
+    const user = await this.storage.update<UserRecord>('users', application.userId, { kycState: 'approved', state: 'active', riskFlags });
     await this.creditService.calculate(application.userId);
-    await this.storage.writeClientProfile(user.fullName, { ...user, latestKycApplicationId: application.id, employmentStatus: application.employmentStatus, documents: application.documents });
+    const refreshedUser = (await this.storage.findById<UserRecord>('users', application.userId)) ?? user;
+    await this.storage.writeClientProfile(refreshedUser.fullName, { ...refreshedUser, latestKycApplicationId: application.id, employmentStatus: application.employmentStatus, documents: application.documents });
     return updated;
   }
 

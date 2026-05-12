@@ -1,0 +1,12 @@
+{
+  "id": "merchant_mode_carthage",
+  "name": "Mode Carthage",
+  "email": "finance@modecarthage.tn",
+  "phone": "+21672111333",
+  "category": "fashion",
+  "state": "approved",
+  "settlementAccount": "TN5900000000000000000002",
+  "monthlyVolume": { "amount": 9600, "currency": "TND" },
+  "createdAt": "2026-04-18T11:30:00.000Z",
+  "updatedAt": "2026-05-08T16:00:00.000Z"
+}

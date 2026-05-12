@@ -1,7 +1,7 @@
 {
   "merchant_tunistech": {
     "path": "merchants/merchant_tunistech.json",
-    "updatedAt": "2026-05-12T16:28:44.215Z",
+    "updatedAt": "2026-05-12T17:41:40.943Z",
     "deletedAt": null,
     "fields": {
       "state": "approved",
@@ -11,6 +11,114 @@
   "merchant_80745629-ba53-4751-9f82-625826c0883d": {
     "path": "merchants/merchant_80745629-ba53-4751-9f82-625826c0883d.json",
     "updatedAt": "2026-05-12T16:23:15.684Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_a25f1b98-1d93-4c64-b72f-e771f37bfb91": {
+    "path": "merchants/merchant_a25f1b98-1d93-4c64-b72f-e771f37bfb91.json",
+    "updatedAt": "2026-05-12T17:24:18.026Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_a04fb06b-7190-4790-9e05-dbe273215405": {
+    "path": "merchants/merchant_a04fb06b-7190-4790-9e05-dbe273215405.json",
+    "updatedAt": "2026-05-12T17:25:18.239Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_630159a8-79b8-4c80-806e-b833dfeb0f08": {
+    "path": "merchants/merchant_630159a8-79b8-4c80-806e-b833dfeb0f08.json",
+    "updatedAt": "2026-05-12T17:26:25.410Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_4ec8ec4d-9589-4ed5-87e2-ddcf1390e554": {
+    "path": "merchants/merchant_4ec8ec4d-9589-4ed5-87e2-ddcf1390e554.json",
+    "updatedAt": "2026-05-12T17:27:23.526Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_ca62c027-506a-4c85-8c68-98dc7c3aecf9": {
+    "path": "merchants/merchant_ca62c027-506a-4c85-8c68-98dc7c3aecf9.json",
+    "updatedAt": "2026-05-12T17:28:16.197Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_8a7b3ced-ea84-47c7-b8a6-a6f75f3ed48f": {
+    "path": "merchants/merchant_8a7b3ced-ea84-47c7-b8a6-a6f75f3ed48f.json",
+    "updatedAt": "2026-05-12T17:29:10.655Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_4777b779-7465-40af-a206-34664c722ccc": {
+    "path": "merchants/merchant_4777b779-7465-40af-a206-34664c722ccc.json",
+    "updatedAt": "2026-05-12T17:30:43.099Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_cd00b599-5402-4ace-96e9-a08949791740": {
+    "path": "merchants/merchant_cd00b599-5402-4ace-96e9-a08949791740.json",
+    "updatedAt": "2026-05-12T17:31:32.697Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_92a890ec-3cd8-419d-aab1-b9c1072dcc7d": {
+    "path": "merchants/merchant_92a890ec-3cd8-419d-aab1-b9c1072dcc7d.json",
+    "updatedAt": "2026-05-12T17:32:38.704Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_f5d361f1-4a70-4730-bd7e-bf82ae6cfd48": {
+    "path": "merchants/merchant_f5d361f1-4a70-4730-bd7e-bf82ae6cfd48.json",
+    "updatedAt": "2026-05-12T17:33:47.137Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_975080f2-980b-40f4-aabe-ca5ee72ec4bc": {
+    "path": "merchants/merchant_975080f2-980b-40f4-aabe-ca5ee72ec4bc.json",
+    "updatedAt": "2026-05-12T17:37:27.022Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low"
+    }
+  },
+  "merchant_0d38ee41-b1e4-4775-99df-2fbe34ce4812": {
+    "path": "merchants/merchant_0d38ee41-b1e4-4775-99df-2fbe34ce4812.json",
+    "updatedAt": "2026-05-12T17:41:42.186Z",
     "deletedAt": null,
     "fields": {
       "state": "approved",
