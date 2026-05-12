@@ -1,7 +1,7 @@
 import { Controller, Get, NotFoundException, Param, Res, StreamableFile } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
-import { KycApplicationRecord, LoanRecord, MerchantRecord, UserRecord } from '@bnpl/shared';
+import { KybApplicationRecord, KycApplicationRecord, LoanRecord, MerchantRecord, UserRecord } from '@bnpl/shared';
 import { JsonDataLakeService } from '../../storage/json-data-lake.service';
 
 @ApiTags('admin')
@@ -48,6 +48,22 @@ export class AdminController {
   @Get('kyc-applications')
   kycApplications() {
     return this.storage.query<KycApplicationRecord>('kyc_cases', { pageSize: 100, sortBy: 'createdAt', sortDirection: 'desc' });
+  }
+
+  @Get('kyb-applications')
+  kybApplications() {
+    return this.storage.query<KybApplicationRecord>('kyb_cases', { pageSize: 100, sortBy: 'createdAt', sortDirection: 'desc' });
+  }
+
+  @Get('kyb-documents/*')
+  kybDocument(@Param('0') filePath: string, @Res({ passthrough: true }) res: Response) {
+    const path = this.storage.resolveFilePath(filePath);
+    if (!path) throw new NotFoundException('Document not found');
+    const fileName = filePath.split('/').pop() ?? '';
+    const ext = fileName.split('.').pop()?.toLowerCase();
+    const mime = ext === 'pdf' ? 'application/pdf' : ext === 'png' ? 'image/png' : ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : 'application/octet-stream';
+    res.set({ 'Content-Type': mime, 'Cache-Control': 'max-age=3600', 'Cross-Origin-Resource-Policy': 'cross-origin', 'Access-Control-Allow-Origin': '*' });
+    return new StreamableFile(this.storage.getFileStream(path));
   }
 
   @Get('kyc-documents/*')

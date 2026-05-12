@@ -6,7 +6,7 @@ import { dirname, join, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { PaginatedResult, QueryOptions, StorageRecord, WriteOptions } from './types';
 
-type CollectionName = 'users' | 'loans' | 'transactions' | 'merchants' | 'products' | 'credit_scores' | 'notifications' | 'kyc_cases' | 'sessions';
+type CollectionName = 'users' | 'loans' | 'transactions' | 'merchants' | 'products' | 'credit_scores' | 'notifications' | 'kyc_cases' | 'kyb_cases' | 'sessions';
 
 type CollectionIndex = Record<string, { path: string; updatedAt: string; deletedAt?: string | null; fields: Record<string, unknown> }>;
 
@@ -16,7 +16,7 @@ export class JsonDataLakeService implements OnModuleInit {
   private readonly root: string;
   private readonly cache = new Map<string, unknown>();
   private readonly queues = new Map<string, Promise<unknown>>();
-  private readonly collections: CollectionName[] = ['users', 'loans', 'transactions', 'merchants', 'products', 'credit_scores', 'notifications', 'kyc_cases', 'sessions'];
+  private readonly collections: CollectionName[] = ['users', 'loans', 'transactions', 'merchants', 'products', 'credit_scores', 'notifications', 'kyc_cases', 'kyb_cases', 'sessions'];
 
   constructor(config: ConfigService) {
     this.root = resolve(process.cwd(), config.get<string>('DATA_LAKE_ROOT', '../../data'));
@@ -27,12 +27,27 @@ export class JsonDataLakeService implements OnModuleInit {
       ...this.collections.map((collection) => mkdir(this.collectionPath(collection), { recursive: true })),
       mkdir(this.indexPath(), { recursive: true }),
       mkdir(join(this.root, 'audit'), { recursive: true }),
-      mkdir(join(this.root, 'clients'), { recursive: true }),
-      mkdir(join(this.root, 'transactions_log'), { recursive: true }),
-      mkdir(join(this.root, 'uploads', 'kyc'), { recursive: true }),
-      mkdir(join(this.root, 'uploads', 'contracts'), { recursive: true })
+      mkdir(join(this.root, 'transactions_log'), { recursive: true })
     ]);
     await Promise.all(this.collections.map((collection) => this.ensureIndex(collection)));
+    await this.pruneStaleIndexEntries();
+  }
+
+  private async pruneStaleIndexEntries() {
+    for (const collection of this.collections) {
+      const index = await this.readIndex(collection);
+      let pruned = 0;
+      for (const [id, entry] of Object.entries(index)) {
+        if (!existsSync(join(this.root, entry.path))) {
+          delete index[id];
+          pruned++;
+        }
+      }
+      if (pruned > 0) {
+        await this.atomicWriteJson(this.indexFile(collection), index);
+        this.logger.log(`Pruned ${pruned} stale entries from ${collection} index`);
+      }
+    }
   }
 
   async findById<T extends StorageRecord>(collection: CollectionName, id: string): Promise<T | null> {
@@ -101,8 +116,16 @@ export class JsonDataLakeService implements OnModuleInit {
     return clientPath;
   }
 
+  entityDocumentPath(collection: CollectionName, entityId: string, subDir: string, fileName: string) {
+    return join(collection, entityId, subDir, this.safeFileName(fileName)).replaceAll('\\', '/');
+  }
+
   clientKycDocumentPath(clientName: string, fileName: string) {
     return join('clients', this.slug(clientName), 'kyc', this.safeFileName(fileName)).replaceAll('\\', '/');
+  }
+
+  merchantKybDocumentPath(merchantName: string, fileName: string) {
+    return join('merchants', this.slug(merchantName), 'kyb', this.safeFileName(fileName)).replaceAll('\\', '/');
   }
 
   async listClientProfiles() {
@@ -131,7 +154,7 @@ export class JsonDataLakeService implements OnModuleInit {
   resolveFilePath(relativePath: string) {
     const safePath = relativePath.replaceAll('..', '');
     const full = join(this.root, safePath);
-    if (!full.startsWith(join(this.root, 'clients'))) return null;
+    if (!full.startsWith(this.root)) return null;
     if (!existsSync(full)) return null;
     return full;
   }
@@ -151,19 +174,26 @@ export class JsonDataLakeService implements OnModuleInit {
     const collectionRoot = this.collectionPath(collection);
     await mkdir(collectionRoot, { recursive: true });
     const entries = await readdir(collectionRoot, { withFileTypes: true });
-    const records = await Promise.all(entries.filter((entry) => entry.isFile() && entry.name.endsWith('.json')).map(async (entry) => {
+    const records: (T | null)[] = [];
+    for (const entry of entries) {
       try {
-        return await this.readJson<T>(join(collectionRoot, entry.name));
+        if (entry.isDirectory()) {
+          records.push(await this.readJson<T>(join(collectionRoot, entry.name, 'record.json')));
+        } else if (entry.isFile() && entry.name.endsWith('.json')) {
+          records.push(await this.readJson<T>(join(collectionRoot, entry.name)));
+        }
       } catch {
-        return null;
+        records.push(null);
       }
-    }));
+    }
     return records.filter(Boolean) as T[];
   }
 
   private async writeRecord<T extends StorageRecord>(collection: CollectionName, record: T, options: WriteOptions, action: string) {
-    const relativePath = join(collection, `${record.id}.json`).replaceAll('\\', '/');
+    const entityDir = join(collection, record.id);
+    const relativePath = join(entityDir, 'record.json').replaceAll('\\', '/');
     const absolutePath = join(this.root, relativePath);
+    await mkdir(join(this.root, entityDir), { recursive: true });
     this.logger.debug(`Writing ${action} record to ${relativePath}`);
     await this.atomicWriteJson(absolutePath, record);
     if (!existsSync(absolutePath)) {
@@ -178,7 +208,7 @@ export class JsonDataLakeService implements OnModuleInit {
 
   private indexFields(record: StorageRecord & Record<string, unknown>) {
     const fields: Record<string, unknown> = {};
-    for (const key of ['email', 'phone', 'state', 'userId', 'merchantId', 'kycState', 'riskTier', 'channel', 'username']) {
+    for (const key of ['email', 'phone', 'state', 'userId', 'merchantId', 'kycState', 'riskTier', 'channel', 'username', 'displayName', 'legalName', 'category']) {
       if (record[key] !== undefined) fields[key] = record[key];
     }
     return fields;

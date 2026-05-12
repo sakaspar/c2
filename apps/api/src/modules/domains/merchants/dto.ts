@@ -1,9 +1,23 @@
-import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsArray, IsNumber, IsOptional, IsString, Min, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateMerchantDto {
   @IsString() legalName!: string;
   @IsString() displayName!: string;
   @IsString() category!: string;
+  @IsOptional() @IsString() settlementIban?: string;
+  @IsOptional() @IsString() contactEmail?: string;
+  @IsOptional() @IsString() contactPhone?: string;
+}
+
+export class KybDocumentDto {
+  @IsString() type!: string;
+  @IsString() fileName!: string;
+  @IsOptional() @IsString() storagePath?: string;
+}
+
+export class SubmitKybDto {
+  @IsArray() @ValidateNested({ each: true }) @Type(() => KybDocumentDto) documents!: KybDocumentDto[];
 }
 
 export class CreateProductDto {

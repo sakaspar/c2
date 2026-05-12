@@ -19,6 +19,7 @@ data/
 │   ├── products_index.json
 │   ├── credit_scores_index.json
 │   ├── kyc_cases_index.json
+│   ├── kyb_cases_index.json
 │   ├── transactions_index.json
 │   ├── notifications_index.json
 │   └── sessions_index.json
@@ -32,49 +33,52 @@ data/
 │           ├── selfie.jpg
 │           └── proof_of_address.jpg
 │
-├── users/                            # ⚠️ COLLECTION — user record JSON files
-│   └── user_{uuid}.json              #    Written by the collections system
+├── users/                            # User entities (directory per user)
+│   └── user_{uuid}/
+│       └── record.json               # UserRecord
 │
-├── loans/                            # Loan record JSON files
-│   └── loan_{uuid}.json
+├── loans/                            # Loan entities (directory per loan)
+│   └── loan_{uuid}/
+│       └── record.json               # LoanRecord
 │
-├── merchants/                        # Merchant record JSON files (collection)
-│   └── merchant_{uuid}.json
+├── merchants/                        # Merchant entities (directory per merchant)
+│   └── merchant_{uuid}/
+│       ├── record.json               # MerchantRecord
+│       └── kyb/                      # KYB document uploads
+│           ├── commercial_register.pdf
+│           ├── tax_certificate.pdf
+│           └── ...
 │
-├── merchant/                         # ⚠️ LEGACY seed merchant data (not a collection)
-│   ├── techstore-tunis.json
-│   ├── mode-carthage.json
-│   └── maison-sousse.json
+├── products/                         # Product entities (directory per product)
+│   └── product_{uuid}/
+│       └── record.json               # ProductRecord
 │
-├── products/                         # Product record JSON files
-│   └── product_{uuid}.json
+├── credit_scores/                    # Credit score entities
+│   └── credit_score_{uuid}/
+│       └── record.json               # CreditScoreRecord
 │
-├── credit_scores/                    # Credit score record JSON files
-│   └── credit_score_{uuid}.json
+├── kyc_cases/                        # KYC application entities
+│   └── kyc_case_{uuid}/
+│       └── record.json               # KycApplicationRecord
 │
-├── kyc_cases/                        # KYC application case JSON files
-│   └── kyc_case_{uuid}.json
+├── kyb_cases/                        # KYB application entities
+│   └── kyb_case_{uuid}/
+│       └── record.json               # KybApplicationRecord
 │
-├── transactions/                     # Transaction record JSON files
-│   └── transaction_{uuid}.json
+├── transactions/                     # Transaction entities
+│   └── transaction_{uuid}/
+│       └── record.json               # TransactionRecord
 │
-├── notifications/                    # Notification record JSON files
-│   └── notification_{uuid}.json
+├── notifications/                    # Notification entities
+│   └── notification_{uuid}/
+│       └── record.json               # NotificationRecord
 │
-├── sessions/                         # Session record JSON files
-│   └── session_{uuid}.json
-│
-├── admin/                            # Static admin user seed data
-│   ├── super-admin.json
-│   ├── merchant-ops.json
-│   └── risk-analyst.json
+├── sessions/                         # Session entities
+│   └── session_{uuid}/
+│       └── record.json               # SessionRecord
 │
 ├── audit/                            # Append-only audit log (one file per day)
 │   └── YYYY-MM-DD.jsonl
-│
-├── uploads/                          # Generic upload staging area
-│   ├── kyc/
-│   └── contracts/
 │
 └── transactions_log/                 # Transaction log (reserved)
 ```
@@ -88,12 +92,15 @@ There are **two parallel systems** for storing user/client data that must be kep
 ### 1. Collections System (`create`, `update`, `findById`, `query`)
 
 Generic CRUD engine. Each collection has:
-- A **directory**: `data/{collection}/` containing `{id}.json` files
+- A **directory**: `data/{collection}/` containing entity subdirectories
+- Each entity: `data/{collection}/{id}/record.json` (directory per entity, room for related files)
 - An **index**: `data/indexes/{collection}_index.json` for fast lookup/filtering
 
-Registered collections: `users`, `loans`, `transactions`, `merchants`, `products`, `credit_scores`, `notifications`, `kyc_cases`, `sessions`
+Registered collections: `users`, `loans`, `transactions`, `merchants`, `products`, `credit_scores`, `notifications`, `kyc_cases`, `kyb_cases`, `sessions`
 
-When you call `storage.create('users', ...)`, it writes to `data/users/user_{uuid}.json` and updates `data/indexes/users_index.json`.
+When you call `storage.create('users', ...)`, it writes to `data/users/user_{uuid}/record.json` and updates `data/indexes/users_index.json`.
+
+**Stale index pruning**: On startup, the service scans all indexes and removes entries whose files no longer exist on disk.
 
 ### 2. Client Profiles System (`writeClientProfile`, `listClientProfiles`)
 
@@ -125,7 +132,7 @@ Each `data/indexes/{collection}_index.json` is a flat object keyed by record ID:
 ```json
 {
   "user_{uuid}": {
-    "path": "users/user_{uuid}.json",
+    "path": "users/user_{uuid}/record.json",
     "updatedAt": "2026-05-12T17:41:42.403Z",
     "deletedAt": null,
     "fields": {
@@ -139,8 +146,8 @@ Each `data/indexes/{collection}_index.json` is a flat object keyed by record ID:
 }
 ```
 
-- **`path`**: relative path from `data/` root to the record JSON file
-- **`fields`**: indexed subset of the record (used for filtering in `query()` without reading every file). Indexed fields: `email`, `phone`, `state`, `userId`, `merchantId`, `kycState`, `riskTier`, `channel`, `username`
+- **`path`**: relative path from `data/` root to the record JSON file (e.g., `users/user_{uuid}/record.json`)
+- **`fields`**: indexed subset of the record (used for filtering in `query()` without reading every file). Indexed fields: `email`, `phone`, `state`, `userId`, `merchantId`, `kycState`, `riskTier`, `channel`, `username`, `displayName`, `legalName`, `category`
 
 ---
 

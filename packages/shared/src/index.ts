@@ -5,6 +5,7 @@ export type MerchantState = 'pending' | 'approved' | 'suspended' | 'rejected';
 export type PaymentStatus = 'pending' | 'succeeded' | 'failed' | 'reversed';
 export type EmploymentStatus = 'employed' | 'unemployed';
 export type KycDocumentType = 'cin_front' | 'cin_back' | 'selfie' | 'proof_of_address' | 'bank_statement_month_1' | 'bank_statement_month_2' | 'bank_statement_month_3';
+export type KybDocumentType = 'commercial_register' | 'tax_certificate' | 'articles_of_association' | 'bank_rib' | 'representative_cin';
 
 export interface Money {
   amount: number;
@@ -63,6 +64,9 @@ export interface MerchantRecord extends BaseRecord {
   settlementIban?: string;
   category: string;
   riskTier: 'low' | 'medium' | 'high';
+  contactEmail?: string;
+  contactPhone?: string;
+  latestKybApplicationId?: string;
 }
 
 export interface ProductRecord extends BaseRecord {
@@ -90,6 +94,24 @@ export interface NotificationRecord extends BaseRecord {
   title: string;
   body: string;
   readAt?: string;
+}
+
+export interface KybDocument {
+  type: KybDocumentType;
+  fileName: string;
+  storagePath: string;
+  uploadedAt: string;
+}
+
+export interface KybApplicationRecord extends BaseRecord {
+  merchantId: string;
+  state: 'pending' | 'under_review' | 'approved' | 'rejected';
+  documents: KybDocument[];
+  missingDocuments: KybDocumentType[];
+  submittedAt: string;
+  reviewedAt?: string;
+  reviewedBy?: string;
+  rejectionReason?: string;
 }
 
 export interface KycDocument {

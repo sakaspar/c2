@@ -8,7 +8,7 @@ const rows = [
   { label: 'KYC review queue', href: '/admin/applications' },
   { label: 'All clients', href: '/admin/clients' },
   { label: 'Loan monitoring', href: '/admin' },
-  { label: 'Merchant approvals', href: '/admin' },
+  { label: 'Merchant KYB review', href: '/admin/merchants' },
   { label: 'Fraud flags', href: '/admin' },
   { label: 'Manual credit controls', href: '/admin' }
 ];
