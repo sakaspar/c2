@@ -46,7 +46,7 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const users = await this.storage.query<UserRecord>('users', { includeDeleted: false, pageSize: 100 });
+    const users = await this.storage.query<UserRecord>('users', { includeDeleted: false, pageSize: 10000 });
     const user = users.items.find((item) => item.email === dto.identifier || item.phone === dto.identifier);
     if (!user || user.authProvider === 'google' || !(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException('Invalid credentials');
     if (user.state === 'blacklisted' || user.state === 'suspended') throw new UnauthorizedException('Account is not active');
@@ -60,7 +60,7 @@ export class AuthService {
     const payload = ticket.getPayload();
     if (!payload?.sub || !payload.email || !payload.name) throw new BadRequestException('Google account profile is incomplete');
     if (!payload.email_verified) throw new BadRequestException('Google email is not verified');
-    const users = await this.storage.query<UserRecord>('users', { includeDeleted: false, pageSize: 100 });
+    const users = await this.storage.query<UserRecord>('users', { includeDeleted: false, pageSize: 10000 });
     const existing = users.items.find((item) => item.googleSub === payload.sub || item.email === payload.email);
     if (existing) return this.issueTokens(existing);
     const user = await this.storage.create<UserRecord>('users', {
