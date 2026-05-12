@@ -1,6 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { mkdir, readFile, readdir, rename, writeFile } from 'node:fs/promises';
+import { createReadStream, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { PaginatedResult, QueryOptions, StorageRecord, WriteOptions } from './types';
@@ -116,6 +117,16 @@ export class JsonDataLakeService implements OnModuleInit {
       }
     }));
     return [...directoryProfiles, ...fileProfiles];
+  }
+
+  resolveFilePath(relativePath: string) {
+    const full = join(this.root, relativePath);
+    if (!existsSync(full)) return null;
+    return full;
+  }
+
+  getFileStream(absolutePath: string) {
+    return createReadStream(absolutePath);
   }
 
   async listCollectionFiles<T>(collection: CollectionName): Promise<T[]> {
