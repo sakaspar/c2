@@ -129,6 +129,13 @@ export class JsonDataLakeService implements OnModuleInit {
     return createReadStream(absolutePath);
   }
 
+  async saveUploadedFile(relativePath: string, buffer: Buffer) {
+    const full = join(this.root, relativePath);
+    await mkdir(dirname(full), { recursive: true });
+    await writeFile(full, buffer);
+    return relativePath;
+  }
+
   async listCollectionFiles<T>(collection: CollectionName): Promise<T[]> {
     const collectionRoot = this.collectionPath(collection);
     await mkdir(collectionRoot, { recursive: true });
