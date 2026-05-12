@@ -5,7 +5,7 @@ import { dirname, join, resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { PaginatedResult, QueryOptions, StorageRecord, WriteOptions } from './types';
 
-type CollectionName = 'users' | 'loans' | 'transactions' | 'merchants' | 'credit_scores' | 'notifications' | 'kyc_cases' | 'sessions';
+type CollectionName = 'users' | 'loans' | 'transactions' | 'merchants' | 'products' | 'credit_scores' | 'notifications' | 'kyc_cases' | 'sessions';
 
 type CollectionIndex = Record<string, { path: string; updatedAt: string; deletedAt?: string | null; fields: Record<string, unknown> }>;
 
@@ -14,7 +14,7 @@ export class JsonDataLakeService implements OnModuleInit {
   private readonly root: string;
   private readonly cache = new Map<string, unknown>();
   private readonly queues = new Map<string, Promise<unknown>>();
-  private readonly collections: CollectionName[] = ['users', 'loans', 'transactions', 'merchants', 'credit_scores', 'notifications', 'kyc_cases', 'sessions'];
+  private readonly collections: CollectionName[] = ['users', 'loans', 'transactions', 'merchants', 'products', 'credit_scores', 'notifications', 'kyc_cases', 'sessions'];
 
   constructor(config: ConfigService) {
     this.root = resolve(process.cwd(), config.get<string>('DATA_LAKE_ROOT', '../../data'));
@@ -99,7 +99,7 @@ export class JsonDataLakeService implements OnModuleInit {
     const clientsRoot = join(this.root, 'clients');
     await mkdir(clientsRoot, { recursive: true });
     const entries = await readdir(clientsRoot, { withFileTypes: true });
-    const profiles = await Promise.all(entries.filter((entry) => entry.isDirectory()).map(async (entry) => {
+    const directoryProfiles = await Promise.all(entries.filter((entry) => entry.isDirectory()).map(async (entry) => {
       try {
         const profile = await this.readJson<Record<string, unknown>>(join(clientsRoot, entry.name, 'profile.json'));
         return { directory: entry.name, profile };
@@ -107,7 +107,29 @@ export class JsonDataLakeService implements OnModuleInit {
         return { directory: entry.name, profile: null };
       }
     }));
-    return profiles;
+    const fileProfiles = await Promise.all(entries.filter((entry) => entry.isFile() && entry.name.endsWith('.json')).map(async (entry) => {
+      try {
+        const profile = await this.readJson<Record<string, unknown>>(join(clientsRoot, entry.name));
+        return { directory: entry.name, profile };
+      } catch {
+        return { directory: entry.name, profile: null };
+      }
+    }));
+    return [...directoryProfiles, ...fileProfiles];
+  }
+
+  async listCollectionFiles<T>(collection: CollectionName): Promise<T[]> {
+    const collectionRoot = this.collectionPath(collection);
+    await mkdir(collectionRoot, { recursive: true });
+    const entries = await readdir(collectionRoot, { withFileTypes: true });
+    const records = await Promise.all(entries.filter((entry) => entry.isFile() && entry.name.endsWith('.json')).map(async (entry) => {
+      try {
+        return await this.readJson<T>(join(collectionRoot, entry.name));
+      } catch {
+        return null;
+      }
+    }));
+    return records.filter(Boolean) as T[];
   }
 
   private async writeRecord<T extends StorageRecord>(collection: CollectionName, record: T, options: WriteOptions, action: string) {

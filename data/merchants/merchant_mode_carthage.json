@@ -1,0 +1,13 @@
+{
+  "id": "merchant_mode_carthage",
+  "version": 1,
+  "createdAt": "2026-04-18T11:30:00.000Z",
+  "updatedAt": "2026-05-08T16:00:00.000Z",
+  "deletedAt": null,
+  "legalName": "Mode Carthage SARL",
+  "displayName": "Mode Carthage",
+  "state": "approved",
+  "settlementIban": "TN5900000000000000000002",
+  "category": "fashion",
+  "riskTier": "low"
+}

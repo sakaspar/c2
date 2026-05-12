@@ -1,0 +1,13 @@
+{
+  "id": "client_amira_ben_youssef",
+  "fullName": "Amira Ben Youssef",
+  "email": "amira@example.tn",
+  "phone": "+21620111222",
+  "state": "active",
+  "kycState": "approved",
+  "employmentStatus": "employed",
+  "creditLimit": { "amount": 700, "currency": "TND" },
+  "availableCredit": { "amount": 520, "currency": "TND" },
+  "createdAt": "2026-05-01T09:00:00.000Z",
+  "updatedAt": "2026-05-10T12:00:00.000Z"
+}

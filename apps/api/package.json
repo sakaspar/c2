@@ -5,15 +5,16 @@
   "type": "commonjs",
   "scripts": {
     "predev": "pnpm --filter @bnpl/shared build",
-    "dev": "nest start --watch",
+    "dev": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true});try{require('fs').rmSync('tsconfig.tsbuildinfo',{force:true})}catch{}\" && nest start --watch",
     "prebuild": "pnpm --filter @bnpl/shared build",
-    "build": "nest build",
+    "build": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true});try{require('fs').rmSync('tsconfig.tsbuildinfo',{force:true})}catch{}\" && nest build",
     "start": "node dist/main.js",
     "lint": "eslint \"src/**/*.ts\"",
     "typecheck": "tsc --noEmit",
     "seed": "tsx src/scripts/seed.ts"
   },
   "dependencies": {
+    "@bnpl/shared": "workspace:*",
     "@aws-sdk/client-s3": "^3.717.0",
     "@nestjs/common": "^10.4.15",
     "@nestjs/config": "^3.3.0",

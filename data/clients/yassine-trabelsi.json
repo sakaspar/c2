@@ -1,0 +1,13 @@
+{
+  "id": "client_yassine_trabelsi",
+  "fullName": "Yassine Trabelsi",
+  "email": "yassine@example.tn",
+  "phone": "+21622111333",
+  "state": "pending_kyc",
+  "kycState": "submitted",
+  "employmentStatus": "employed",
+  "creditLimit": { "amount": 300, "currency": "TND" },
+  "availableCredit": { "amount": 300, "currency": "TND" },
+  "createdAt": "2026-05-03T10:30:00.000Z",
+  "updatedAt": "2026-05-11T08:15:00.000Z"
+}

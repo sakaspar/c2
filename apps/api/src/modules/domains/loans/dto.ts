@@ -9,3 +9,8 @@ export class CreateLoanDto {
 export class RepayLoanDto {
   @IsNumber() @Min(1) amount!: number;
 }
+
+export class CheckoutProductDto {
+  @IsString() userId!: string;
+  @IsString() productId!: string;
+}

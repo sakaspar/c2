@@ -1,1 +1,13 @@
-{}
+{
+  "client_amira_ben_youssef": {
+    "path": "users/client_amira_ben_youssef.json",
+    "updatedAt": "2026-05-10T12:00:00.000Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "amira@example.tn",
+      "phone": "+21620111222",
+      "state": "active",
+      "kycState": "approved"
+    }
+  }
+}

@@ -62,6 +62,17 @@ export interface MerchantRecord extends BaseRecord {
   riskTier: 'low' | 'medium' | 'high';
 }
 
+export interface ProductRecord extends BaseRecord {
+  merchantId: string;
+  merchantName: string;
+  name: string;
+  description: string;
+  price: Money;
+  imageUrl?: string;
+  state: 'active' | 'inactive';
+  stock: number;
+}
+
 export interface CreditScoreRecord extends BaseRecord {
   userId: string;
   score: number;

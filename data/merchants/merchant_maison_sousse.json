@@ -1,0 +1,13 @@
+{
+  "id": "merchant_maison_sousse",
+  "version": 1,
+  "createdAt": "2026-05-02T13:45:00.000Z",
+  "updatedAt": "2026-05-11T09:20:00.000Z",
+  "deletedAt": null,
+  "legalName": "Maison Sousse SARL",
+  "displayName": "Maison Sousse",
+  "state": "approved",
+  "settlementIban": "TN5900000000000000000003",
+  "category": "home_goods",
+  "riskTier": "low"
+}

@@ -5,14 +5,14 @@ export default function HomePage() {
     <nav className="mx-auto flex max-w-7xl items-center justify-between rounded-3xl border border-white/10 bg-white/5 px-6 py-4 backdrop-blur-xl">
       <div className="text-xl font-black tracking-tight">Salafni<span className="text-teal-300">.tn</span></div>
       <div className="hidden gap-6 text-sm text-slate-300 md:flex"><a href="/dashboard">Customer</a><a href="/admin">Admin</a><a href="/merchant">Merchant</a></div>
-      <a className="rounded-full bg-teal-300 px-5 py-2 text-sm font-bold text-slate-950" href="/register">Register with Gmail</a>
+      <div className="flex gap-3"><a className="rounded-full border border-white/15 px-5 py-2 text-sm font-bold text-white" href="/login">Login</a><a className="rounded-full bg-teal-300 px-5 py-2 text-sm font-bold text-slate-950" href="/register">Register with Gmail</a></div>
     </nav>
     <section className="mx-auto grid max-w-7xl gap-10 py-20 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
       <div>
         <p className="mb-5 inline-flex rounded-full border border-teal-300/30 bg-teal-300/10 px-4 py-2 text-sm text-teal-200">Tunisian Dinar BNPL infrastructure</p>
         <h1 className="max-w-4xl text-5xl font-black leading-tight tracking-tight md:text-7xl">A premium BNPL platform built for Tunisia&apos;s next fintech wave.</h1>
         <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">Customer onboarding, KYC workflows, dynamic credit limits, merchant settlements, mock payment rails, audit logs, and a JSON data lake engineered behind repository/service boundaries.</p>
-        <div className="mt-8 flex flex-wrap gap-3"><a className="rounded-full bg-white px-6 py-3 font-black text-slate-950" href="/register">Create account with Gmail</a><a className="rounded-full border border-white/15 px-6 py-3 font-black text-white" href="/dashboard">Launch demo</a></div>
+        <div className="mt-8 flex flex-wrap gap-3"><a className="rounded-full bg-white px-6 py-3 font-black text-slate-950" href="/login">Login</a><a className="rounded-full bg-teal-300 px-6 py-3 font-black text-slate-950" href="/register">Create account with Gmail</a><a className="rounded-full border border-white/15 px-6 py-3 font-black text-white" href="/dashboard">Launch demo</a></div>
         <div className="mt-8 flex flex-wrap gap-3">{stats.map((stat) => <span className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-sm text-slate-200" key={stat}>{stat}</span>)}</div>
       </div>
       <div className="glass rounded-[2rem] p-6 shadow-glow">

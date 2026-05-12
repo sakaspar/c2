@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { Installment, LoanRecord, UserRecord } from '@bnpl/shared';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Installment, LoanRecord, ProductRecord, UserRecord } from '@bnpl/shared';
 import { randomUUID } from 'node:crypto';
 import { JsonDataLakeService } from '../../storage/json-data-lake.service';
 import { CreateLoanDto } from './dto';
@@ -10,13 +10,22 @@ export class LoansService {
 
   async create(dto: CreateLoanDto) {
     const user = await this.storage.findById<UserRecord>('users', dto.userId);
-    if (!user || user.state !== 'active') throw new Error('User is not eligible for BNPL');
-    if (user.availableCredit.amount < dto.amount) throw new Error('Insufficient credit limit');
+    if (!user || user.state !== 'active' || user.kycState !== 'approved') throw new BadRequestException('Client must be active and KYC-approved to use BNPL');
+    if (user.availableCredit.amount < dto.amount) throw new BadRequestException('Insufficient credit limit');
     const now = new Date();
     const installments: Installment[] = Array.from({ length: 4 }).map((_, index) => ({ id: `inst_${randomUUID()}`, amount: { amount: Number((dto.amount / 4).toFixed(3)), currency: 'TND' }, dueDate: new Date(now.getTime() + (index + 1) * 7 * 86400000).toISOString(), state: 'pending' }));
     const loan = await this.storage.create<LoanRecord>('loans', { userId: dto.userId, merchantId: dto.merchantId, principal: { amount: dto.amount, currency: 'TND' }, outstanding: { amount: dto.amount, currency: 'TND' }, state: 'active', dueDate: installments[3].dueDate, installments, lateFees: { amount: 0, currency: 'TND' } });
     await this.storage.update<UserRecord>('users', user.id, { availableCredit: { amount: user.availableCredit.amount - dto.amount, currency: 'TND' } });
     return loan;
+  }
+
+  async checkoutProduct(userId: string, productId: string) {
+    const product = await this.storage.findById<ProductRecord>('products', productId);
+    if (!product || product.state !== 'active') throw new BadRequestException('Product is not available');
+    if (product.stock < 1) throw new BadRequestException('Product is out of stock');
+    const loan = await this.create({ userId, merchantId: product.merchantId, amount: product.price.amount });
+    await this.storage.update<ProductRecord>('products', product.id, { stock: product.stock - 1, state: product.stock - 1 > 0 ? product.state : 'inactive' });
+    return { loan, product };
   }
 
   list() { return this.storage.query<LoanRecord>('loans', { pageSize: 100, sortBy: 'createdAt', sortDirection: 'desc' }); }

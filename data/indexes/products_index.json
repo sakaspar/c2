@@ -1,0 +1,20 @@
+{
+  "product_smartphone_a55": {
+    "path": "products/smartphone-a55.json",
+    "updatedAt": "2026-05-12T01:30:00.000Z",
+    "deletedAt": null,
+    "fields": { "merchantId": "merchant_techstore_tunis", "state": "active" }
+  },
+  "product_winter_jacket": {
+    "path": "products/winter-jacket.json",
+    "updatedAt": "2026-05-12T01:31:00.000Z",
+    "deletedAt": null,
+    "fields": { "merchantId": "merchant_mode_carthage", "state": "active" }
+  },
+  "product_coffee_table": {
+    "path": "products/coffee-table.json",
+    "updatedAt": "2026-05-12T01:32:00.000Z",
+    "deletedAt": null,
+    "fields": { "merchantId": "merchant_maison_sousse", "state": "active" }
+  }
+}
