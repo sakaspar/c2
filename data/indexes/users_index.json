@@ -1,13 +1,13 @@
 {
   "user_c98561df-d705-4c45-8555-cd64166c974e": {
     "path": "users/user_c98561df-d705-4c45-8555-cd64166c974e/record.json",
-    "updatedAt": "2026-05-12T23:09:14.867Z",
+    "updatedAt": "2026-05-13T00:16:29.702Z",
     "deletedAt": null,
     "fields": {
       "email": "hamza.saadi.xo@gmail.com",
-      "state": "pending_kyc",
-      "kycState": "under_review",
-      "username": "ksp"
+      "state": "active",
+      "kycState": "approved",
+      "username": "dotksp"
     }
   },
   "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561": {

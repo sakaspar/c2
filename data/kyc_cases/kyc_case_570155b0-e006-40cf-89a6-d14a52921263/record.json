@@ -1,32 +1,7 @@
 {
-  "email": "hamza.saadi.xo@gmail.com",
-  "fullName": "Hamza Saadi",
-  "passwordHash": "",
-  "authProvider": "google",
-  "googleSub": "107835523629597705486",
-  "state": "active",
-  "kycState": "approved",
-  "roles": [
-    "customer"
-  ],
-  "creditLimit": {
-    "amount": 300,
-    "currency": "TND"
-  },
-  "availableCredit": {
-    "amount": 300,
-    "currency": "TND"
-  },
-  "riskFlags": [],
-  "id": "user_c98561df-d705-4c45-8555-cd64166c974e",
-  "version": 8,
-  "createdAt": "2026-05-12T02:42:24.179Z",
-  "updatedAt": "2026-05-13T00:16:29.702Z",
-  "deletedAt": null,
-  "username": "dotksp",
-  "usernameSet": true,
-  "latestKycApplicationId": "kyc_case_570155b0-e006-40cf-89a6-d14a52921263",
+  "userId": "user_c98561df-d705-4c45-8555-cd64166c974e",
   "employmentStatus": "unemployed",
+  "state": "approved",
   "documents": [
     {
       "type": "cin_front",
@@ -52,5 +27,14 @@
       "storagePath": "clients/hamza-saadi/kyc/backgroundDefault.jpg",
       "uploadedAt": "2026-05-12T17:08:03.928Z"
     }
-  ]
+  ],
+  "missingDocuments": [],
+  "submittedAt": "2026-05-12T17:08:03.928Z",
+  "id": "kyc_case_570155b0-e006-40cf-89a6-d14a52921263",
+  "version": 2,
+  "createdAt": "2026-05-12T17:08:03.928Z",
+  "updatedAt": "2026-05-13T00:16:29.585Z",
+  "deletedAt": null,
+  "reviewedAt": "2026-05-13T00:16:29.584Z",
+  "reviewedBy": "admin"
 }
