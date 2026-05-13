@@ -35,10 +35,25 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
+  async function openPreview(url: string) {
+    const token = localStorage.getItem('bnpl_token');
+    try {
+      const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!res.ok) throw new Error('Failed to fetch document');
+      const blob = await res.blob();
+      setPreviewUrl(URL.createObjectURL(blob));
+    } catch (err) {
+      setMessage('Could not load document preview.');
+    }
+  }
+
   const fetchApps = useCallback(async () => {
     setLoading(true);
+    const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/admin/kyc-applications`);
+      const res = await fetch(`${apiBaseUrl}/admin/kyc-applications`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       if (!res.ok) { setMessage(`API returned ${res.status}`); return; }
       const data = await res.json() as { items: KycApp[] };
       setApps(data.items ?? []);
@@ -54,8 +69,12 @@ export default function ApplicationsPage() {
 
   async function approve(appId: string) {
     setMessage(null);
+    const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/kyc/applications/${appId}/approve`, { method: 'PATCH' });
+      const res = await fetch(`${apiBaseUrl}/kyc/applications/${appId}/approve`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       if (!res.ok) { const p = await res.json().catch(() => null) as { message?: string } | null; setMessage(p?.message ?? `Approve failed (${res.status})`); return; }
       setMessage('Application approved. Client is now active.');
       void fetchApps();
@@ -66,8 +85,16 @@ export default function ApplicationsPage() {
     const reason = window.prompt('Rejection reason:');
     if (!reason) return;
     setMessage(null);
+    const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/kyc/applications/${appId}/reject`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
+      const res = await fetch(`${apiBaseUrl}/kyc/applications/${appId}/reject`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ reason })
+      });
       if (!res.ok) { const p = await res.json().catch(() => null) as { message?: string } | null; setMessage(p?.message ?? `Reject failed (${res.status})`); return; }
       setMessage('Application rejected.');
       void fetchApps();
@@ -79,7 +106,7 @@ export default function ApplicationsPage() {
     {message ? <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-4">{message}</div> : null}
     {loading ? <p className="mt-8 text-slate-400">Loading applications...</p> : null}
     <section className="mt-8 space-y-4">{apps.map((app) => <article className="glass rounded-3xl p-6" key={app.id}><div className="grid gap-4 md:grid-cols-[1.2fr_.8fr_.8fr_.8fr_.8fr] md:items-center"><div><p className="text-sm text-slate-400">{app.id}</p><h2 className="text-xl font-black">{app.username ?? app.userId}</h2></div><Badge label={app.state} /><p>{app.employmentStatus}</p><p>{app.documents.length} docs</p><p className="text-teal-200">{app.employerName ? `${app.employerName} · ${app.monthlyIncomeTnd} TND` : 'N/A'}</p></div>
-      <div className="mt-4 border-t border-white/10 pt-4"><p className="text-sm font-bold text-slate-400 mb-3">Uploaded documents</p><div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">{app.documents.map((doc) => <button key={doc.type} className="flex items-center gap-3 rounded-xl bg-white/5 p-3 hover:bg-white/10 transition cursor-pointer text-left w-full" onClick={() => setPreviewUrl(`${apiBaseUrl}/admin/kyc-documents/${doc.storagePath ?? `clients/${app.userId}/kyc/${doc.fileName}`}`)}><span className="text-lg">{doc.type.includes('cin') ? '\u{1FAAA}' : doc.type === 'selfie' ? '\u{1F933}' : doc.type === 'proof_of_address' ? '\u{1F4C4}' : '\u{1F3E6}'}</span><div><p className="text-sm font-bold">{docLabels[doc.type] ?? doc.type}</p><p className="text-xs text-teal-300 truncate max-w-[180px]">{doc.fileName}</p></div></button>)}</div>{app.missingDocuments.length ? <p className="mt-3 text-sm text-rose-300">Missing: {app.missingDocuments.map((d) => docLabels[d] ?? d).join(', ')}</p> : null}</div>
+      <div className="mt-4 border-t border-white/10 pt-4"><p className="text-sm font-bold text-slate-400 mb-3">Uploaded documents</p><div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">{app.documents.map((doc) => <button key={doc.type} className="flex items-center gap-3 rounded-xl bg-white/5 p-3 hover:bg-white/10 transition cursor-pointer text-left w-full" onClick={() => openPreview(`${apiBaseUrl}/admin/kyc-documents/${doc.storagePath ?? `clients/${app.userId}/kyc/${doc.fileName}`}`)}><span className="text-lg">{doc.type.includes('cin') ? '\u{1FAAA}' : doc.type === 'selfie' ? '\u{1F933}' : doc.type === 'proof_of_address' ? '\u{1F4C4}' : '\u{1F3E6}'}</span><div><p className="text-sm font-bold">{docLabels[doc.type] ?? doc.type}</p><p className="text-xs text-teal-300 truncate max-w-[180px]">{doc.fileName}</p></div></button>)}</div>{app.missingDocuments.length ? <p className="mt-3 text-sm text-rose-300">Missing: {app.missingDocuments.map((d) => docLabels[d] ?? d).join(', ')}</p> : null}</div>
       <div className="mt-5 flex gap-3">{app.state === 'under_review' || app.state === 'submitted' ? <><button className="rounded-2xl bg-teal-300 px-5 py-3 font-black text-slate-950" onClick={() => void approve(app.id)}>Approve</button><button className="rounded-2xl border border-rose-300/40 px-5 py-3 font-black text-rose-200" onClick={() => void reject(app.id)}>Reject</button></> : <span className="text-sm text-slate-400">{app.state === 'approved' ? '✓ Approved' : app.state === 'rejected' ? `✗ Rejected: ${app.rejectionReason ?? ''}` : app.state}</span>}</div></article>)}
     {!loading && !apps.length ? <p className="text-slate-400">No KYC applications yet.</p> : null}</section>
     <p className="mt-6 text-sm text-slate-400">API targets: GET /api/v1/admin/kyc-applications, PATCH /api/v1/kyc/applications/:applicationId/approve, PATCH /api/v1/kyc/applications/:applicationId/reject.</p>

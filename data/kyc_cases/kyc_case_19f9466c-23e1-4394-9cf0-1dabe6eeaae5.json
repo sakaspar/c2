@@ -1,36 +1,38 @@
 {
-  "id": "user_c98561df-d705-4c45-8555-cd64166c974e",
-  "fullName": "Hamza Saadi",
-  "email": "hamza.saadi.xo@gmail.com",
-  "state": "pending_kyc",
-  "kycState": "under_review",
+  "userId": "user_c98561df-d705-4c45-8555-cd64166c974e",
   "employmentStatus": "unemployed",
-  "latestKycApplicationId": "kyc_case_570155b0-e006-40cf-89a6-d14a52921263",
+  "state": "under_review",
   "documents": [
     {
       "type": "cin_front",
       "fileName": "133850774347389914.jpg",
       "storagePath": "clients/hamza-saadi/kyc/133850774347389914.jpg",
-      "uploadedAt": "2026-05-12T17:08:03.928Z"
+      "uploadedAt": "2026-05-12T17:15:06.829Z"
     },
     {
       "type": "cin_back",
       "fileName": "133857801683649366.jpg",
       "storagePath": "clients/hamza-saadi/kyc/133857801683649366.jpg",
-      "uploadedAt": "2026-05-12T17:08:03.928Z"
+      "uploadedAt": "2026-05-12T17:15:06.829Z"
     },
     {
       "type": "selfie",
       "fileName": "133865337310820252.jpg",
       "storagePath": "clients/hamza-saadi/kyc/133865337310820252.jpg",
-      "uploadedAt": "2026-05-12T17:08:03.928Z"
+      "uploadedAt": "2026-05-12T17:15:06.829Z"
     },
     {
       "type": "proof_of_address",
       "fileName": "backgroundDefault.jpg",
       "storagePath": "clients/hamza-saadi/kyc/backgroundDefault.jpg",
-      "uploadedAt": "2026-05-12T17:08:03.928Z"
+      "uploadedAt": "2026-05-12T17:15:06.829Z"
     }
   ],
-  "updatedAt": "2026-05-12T17:08:03.962Z"
+  "missingDocuments": [],
+  "submittedAt": "2026-05-12T17:15:06.829Z",
+  "id": "kyc_case_19f9466c-23e1-4394-9cf0-1dabe6eeaae5",
+  "version": 1,
+  "createdAt": "2026-05-12T17:15:06.829Z",
+  "updatedAt": "2026-05-12T17:15:06.829Z",
+  "deletedAt": null
 }

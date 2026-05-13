@@ -1,0 +1,26 @@
+{
+  "email": "hamza.saadi.xo@gmail.com",
+  "fullName": "Hamza Saadi",
+  "passwordHash": "",
+  "authProvider": "google",
+  "googleSub": "107835523629597705486",
+  "state": "active",
+  "kycState": "approved",
+  "roles": [
+    "customer"
+  ],
+  "creditLimit": {
+    "amount": 300,
+    "currency": "TND"
+  },
+  "availableCredit": {
+    "amount": 300,
+    "currency": "TND"
+  },
+  "riskFlags": [],
+  "id": "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561",
+  "version": 4,
+  "createdAt": "2026-05-12T20:40:17.916Z",
+  "updatedAt": "2026-05-12T20:48:07.078Z",
+  "deletedAt": null
+}
