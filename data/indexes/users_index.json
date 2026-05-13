@@ -1,7 +1,7 @@
 {
   "user_demo_amira": {
     "path": "users/user_demo_amira/record.json",
-    "updatedAt": "2026-05-13T03:01:35.620Z",
+    "updatedAt": "2026-05-13T12:26:54.466Z",
     "deletedAt": null,
     "fields": {
       "email": "amira@example.tn",
@@ -14,20 +14,6 @@
       ]
     }
   },
-  "user_f12f2230-2e51-40c1-b770-0bc669e62c5c": {
-    "path": "users/user_f12f2230-2e51-40c1-b770-0bc669e62c5c/record.json",
-    "updatedAt": "2026-05-13T03:01:36.459Z",
-    "deletedAt": null,
-    "fields": {
-      "email": "user@example.com",
-      "phone": "+21655555555",
-      "state": "active",
-      "kycState": "approved",
-      "roles": [
-        "customer"
-      ]
-    }
-  },
   "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561": {
     "path": "users/user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561.json",
     "updatedAt": "2026-05-12T20:48:07.078Z",
@@ -36,6 +22,8 @@
       "email": "hamza.saadi.xo@gmail.com",
       "state": "active",
       "kycState": "approved",
+      "googleSub": "107835523629597705486",
+      "authProvider": "google",
       "roles": [
         "customer"
       ]

@@ -4,6 +4,31 @@ import { useCallback, useEffect, useState } from 'react';
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:4000/api/v1';
 
+async function refreshAccessToken() {
+  const refreshToken = localStorage.getItem('bnpl_refresh');
+  if (!refreshToken) return null;
+  const response = await fetch(`${apiBaseUrl}/auth/refresh`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refreshToken }) });
+  const payload = await response.json().catch(() => null) as { accessToken?: string; refreshToken?: string; user?: unknown } | null;
+  if (!response.ok || !payload?.accessToken) return null;
+  localStorage.setItem('bnpl_token', payload.accessToken);
+  localStorage.setItem('bnpl_refresh', payload.refreshToken ?? refreshToken);
+  if (payload.user) localStorage.setItem('bnpl_user', JSON.stringify(payload.user));
+  return payload.accessToken;
+}
+
+async function fetchWithAdminAuth(input: string, init: RequestInit = {}) {
+  const token = localStorage.getItem('bnpl_token');
+  const headers = new Headers(init.headers);
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+  let response = await fetch(input, { ...init, headers });
+  if (response.status !== 401) return response;
+  const refreshed = await refreshAccessToken();
+  if (!refreshed) return response;
+  headers.set('Authorization', `Bearer ${refreshed}`);
+  response = await fetch(input, { ...init, headers });
+  return response;
+}
+
 type KycApp = {
   id: string;
   userId: string;
@@ -34,13 +59,15 @@ export default function ApplicationsPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewMime, setPreviewMime] = useState<string | null>(null);
 
   async function openPreview(url: string) {
     const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+      const res = await fetchWithAdminAuth(url);
       if (!res.ok) throw new Error('Failed to fetch document');
       const blob = await res.blob();
+      setPreviewMime(blob.type);
       setPreviewUrl(URL.createObjectURL(blob));
     } catch (err) {
       setMessage('Could not load document preview.');
@@ -51,10 +78,8 @@ export default function ApplicationsPage() {
     setLoading(true);
     const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/admin/kyc-applications`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!res.ok) { setMessage(`API returned ${res.status}`); return; }
+      const res = await fetchWithAdminAuth(`${apiBaseUrl}/admin/kyc-applications`);
+      if (!res.ok) { setMessage(res.status === 401 ? 'Admin session expired. Please log in again with the admin account.' : res.status === 403 ? 'Your account is signed in, but it is not an admin account. Log out and sign in with amira@example.tn / DemoPass123!.' : `KYC API returned ${res.status}`); return; }
       const data = await res.json() as { items: KycApp[] };
       setApps(data.items ?? []);
       setMessage(null);
@@ -71,10 +96,7 @@ export default function ApplicationsPage() {
     setMessage(null);
     const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/kyc/applications/${appId}/approve`, {
-        method: 'PATCH',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
+      const res = await fetchWithAdminAuth(`${apiBaseUrl}/admin/kyc-applications/${appId}/approve`, { method: 'PATCH' });
       if (!res.ok) { const p = await res.json().catch(() => null) as { message?: string } | null; setMessage(p?.message ?? `Approve failed (${res.status})`); return; }
       setMessage('Application approved. Client is now active.');
       void fetchApps();
@@ -87,11 +109,10 @@ export default function ApplicationsPage() {
     setMessage(null);
     const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/kyc/applications/${appId}/reject`, {
+      const res = await fetchWithAdminAuth(`${apiBaseUrl}/admin/kyc-applications/${appId}/reject`, {
         method: 'PATCH',
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ reason })
       });
@@ -109,8 +130,8 @@ export default function ApplicationsPage() {
       <div className="mt-4 border-t border-white/10 pt-4"><p className="text-sm font-bold text-slate-400 mb-3">Uploaded documents</p><div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">{app.documents.map((doc) => <button key={doc.type} className="flex items-center gap-3 rounded-xl bg-white/5 p-3 hover:bg-white/10 transition cursor-pointer text-left w-full" onClick={() => openPreview(`${apiBaseUrl}/admin/kyc-documents/${doc.storagePath ?? `clients/${app.userId}/kyc/${doc.fileName}`}`)}><span className="text-lg">{doc.type.includes('cin') ? '\u{1FAAA}' : doc.type === 'selfie' ? '\u{1F933}' : doc.type === 'proof_of_address' ? '\u{1F4C4}' : '\u{1F3E6}'}</span><div><p className="text-sm font-bold">{docLabels[doc.type] ?? doc.type}</p><p className="text-xs text-teal-300 truncate max-w-[180px]">{doc.fileName}</p></div></button>)}</div>{app.missingDocuments.length ? <p className="mt-3 text-sm text-rose-300">Missing: {app.missingDocuments.map((d) => docLabels[d] ?? d).join(', ')}</p> : null}</div>
       <div className="mt-5 flex gap-3">{app.state === 'under_review' || app.state === 'submitted' ? <><button className="rounded-2xl bg-teal-300 px-5 py-3 font-black text-slate-950" onClick={() => void approve(app.id)}>Approve</button><button className="rounded-2xl border border-rose-300/40 px-5 py-3 font-black text-rose-200" onClick={() => void reject(app.id)}>Reject</button></> : <span className="text-sm text-slate-400">{app.state === 'approved' ? '✓ Approved' : app.state === 'rejected' ? `✗ Rejected: ${app.rejectionReason ?? ''}` : app.state}</span>}</div></article>)}
     {!loading && !apps.length ? <p className="text-slate-400">No KYC applications yet.</p> : null}</section>
-    <p className="mt-6 text-sm text-slate-400">API targets: GET /api/v1/admin/kyc-applications, PATCH /api/v1/kyc/applications/:applicationId/approve, PATCH /api/v1/kyc/applications/:applicationId/reject.</p>
-    {previewUrl ? <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6" onClick={() => setPreviewUrl(null)}><div className="relative max-h-[90vh] max-w-[90vw] rounded-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}><button className="absolute top-3 right-3 z-10 rounded-full bg-black/60 px-3 py-1 text-white text-sm hover:bg-black/80" onClick={() => setPreviewUrl(null)}>✕ Close</button><img className="max-h-[85vh] max-w-[85vw] object-contain rounded-2xl" src={previewUrl} alt="KYC document preview" /></div></div> : null}
+    <p className="mt-6 text-sm text-slate-400">API targets: GET /api/v1/admin/kyc-applications, PATCH /api/v1/admin/kyc-applications/:applicationId/approve, PATCH /api/v1/admin/kyc-applications/:applicationId/reject.</p>
+    {previewUrl ? <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6" onClick={() => { setPreviewUrl(null); setPreviewMime(null); }}><div className="relative h-[90vh] w-[90vw] rounded-2xl overflow-hidden bg-[#1a1c2e]" onClick={(e) => e.stopPropagation()}><button className="absolute top-3 right-3 z-10 rounded-full bg-black/60 px-3 py-1 text-white text-sm hover:bg-black/80" onClick={() => { setPreviewUrl(null); setPreviewMime(null); }}>✕ Close</button>{previewMime === 'application/pdf' ? <iframe className="h-full w-full border-0" src={previewUrl} title="KYC PDF preview" /> : <div className="flex h-full w-full items-center justify-center p-8"><img className="max-h-full max-w-full object-contain rounded-2xl" src={previewUrl} alt="KYC document preview" /></div>}</div></div> : null}
   </div></main>;
 }
 function Badge({ label }: { label: string }) { return <span className="w-fit rounded-full bg-violet-400/15 px-4 py-2 text-sm text-violet-200">{label}</span>; }

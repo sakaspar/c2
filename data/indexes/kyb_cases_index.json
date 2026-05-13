@@ -1,1 +1,11 @@
-{}
+{
+  "kyb_case_426751d6-ca94-48b8-95e6-0d5a43bd8e42": {
+    "path": "kyb_cases/kyb_case_426751d6-ca94-48b8-95e6-0d5a43bd8e42/record.json",
+    "updatedAt": "2026-05-13T12:27:30.347Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "merchantId": "merchant_05eac7aa-e662-49c3-aefb-6030a9642d72"
+    }
+  }
+}

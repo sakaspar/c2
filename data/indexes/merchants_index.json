@@ -11,18 +11,6 @@
       "category": "electronics"
     }
   },
-  "merchant_b0cec8d4-f07c-41c1-831f-843bb87b1853": {
-    "path": "merchants/merchant_b0cec8d4-f07c-41c1-831f-843bb87b1853/record.json",
-    "updatedAt": "2026-05-13T03:01:36.371Z",
-    "deletedAt": null,
-    "fields": {
-      "state": "approved",
-      "riskTier": "low",
-      "displayName": "UserStore",
-      "legalName": "User Store",
-      "category": "retail"
-    }
-  },
   "merchant_75cb8d7d-9124-422a-bd26-b2e96a7a8816": {
     "path": "merchants/merchant_75cb8d7d-9124-422a-bd26-b2e96a7a8816/record.json",
     "updatedAt": "2026-05-13T00:25:52.020Z",
@@ -33,6 +21,21 @@
       "displayName": "doukou",
       "legalName": "doukhou",
       "category": "electronics"
+    }
+  },
+  "merchant_05eac7aa-e662-49c3-aefb-6030a9642d72": {
+    "path": "merchants/merchant_05eac7aa-e662-49c3-aefb-6030a9642d72/record.json",
+    "updatedAt": "2026-05-13T12:27:30.385Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "riskTier": "low",
+      "displayName": "rust player's Store",
+      "legalName": "rust player",
+      "category": "other",
+      "ownerEmail": "irust2020@gmail.com",
+      "googleSub": "111091609954235397676",
+      "authProvider": "google"
     }
   }
 }

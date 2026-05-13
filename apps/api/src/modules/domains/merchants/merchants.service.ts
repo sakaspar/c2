@@ -1,13 +1,19 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { OAuth2Client } from 'google-auth-library';
 import { KybApplicationRecord, KybDocumentType, MerchantRecord, ProductRecord } from '@bnpl/shared';
 import { JsonDataLakeService } from '../../storage/json-data-lake.service';
-import { CreateMerchantDto, CreateProductDto, SubmitKybDto } from './dto';
+import { CreateMerchantDto, CreateProductDto, SubmitKybDto, UpdateMerchantDto } from './dto';
 
 const REQUIRED_KYB_DOCS: KybDocumentType[] = ['commercial_register', 'tax_certificate', 'articles_of_association', 'bank_rib', 'representative_cin'];
 
 @Injectable()
 export class MerchantsService {
-  constructor(private readonly storage: JsonDataLakeService) {}
+  private readonly googleClient: OAuth2Client;
+
+  constructor(private readonly storage: JsonDataLakeService, private readonly config: ConfigService) {
+    this.googleClient = new OAuth2Client(this.config.get<string>('GOOGLE_CLIENT_ID'));
+  }
 
   async register(dto: CreateMerchantDto) {
     return this.storage.create<MerchantRecord>('merchants', {
@@ -23,6 +29,56 @@ export class MerchantsService {
   }
 
   list() { return this.storage.query<MerchantRecord>('merchants', { pageSize: 100 }); }
+
+  async googleLogin(idToken: string) {
+    const googleClientId = this.config.get<string>('GOOGLE_CLIENT_ID');
+    if (!googleClientId) throw new BadRequestException('Google merchant login is not configured');
+    const ticket = await this.googleClient.verifyIdToken({ idToken, audience: googleClientId });
+    const payload = ticket.getPayload();
+    if (!payload?.sub || !payload.email || !payload.name) throw new BadRequestException('Google merchant profile is incomplete');
+    if (!payload.email_verified) throw new BadRequestException('Google email is not verified');
+
+    let merchant = await this.storage.findOneByField<MerchantRecord>('merchants', 'googleSub', payload.sub);
+    if (!merchant) merchant = await this.storage.findOneByField<MerchantRecord>('merchants', 'ownerEmail', payload.email);
+    if (merchant) {
+      const patch: Partial<MerchantRecord> = { googleSub: payload.sub, authProvider: 'google', ownerEmail: payload.email, ownerName: payload.name, contactEmail: merchant.contactEmail ?? payload.email };
+      return this.storage.update<MerchantRecord>('merchants', merchant.id, patch);
+    }
+
+    return this.storage.create<MerchantRecord>('merchants', {
+      legalName: payload.name,
+      displayName: `${payload.name}'s Store`,
+      category: 'other',
+      contactEmail: payload.email,
+      ownerEmail: payload.email,
+      ownerName: payload.name,
+      authProvider: 'google',
+      googleSub: payload.sub,
+      state: 'pending',
+      riskTier: 'medium'
+    });
+  }
+
+  async get(merchantId: string) {
+    const merchant = await this.storage.findById<MerchantRecord>('merchants', merchantId);
+    if (!merchant) throw new NotFoundException('Merchant not found');
+    return merchant;
+  }
+
+  async updateMerchant(merchantId: string, dto: UpdateMerchantDto) {
+    await this.get(merchantId);
+    return this.storage.update<MerchantRecord>('merchants', merchantId, dto as Partial<MerchantRecord>);
+  }
+
+  async latestKyb(merchantId: string) {
+    const merchant = await this.get(merchantId);
+    if (merchant.latestKybApplicationId) {
+      const app = await this.storage.findById<KybApplicationRecord>('kyb_cases', merchant.latestKybApplicationId);
+      if (app) return app;
+    }
+    const apps = await this.storage.query<KybApplicationRecord>('kyb_cases', { where: { merchantId } as Partial<KybApplicationRecord>, pageSize: 100, sortBy: 'createdAt', sortDirection: 'desc' });
+    return apps.items[0] ?? null;
+  }
 
   async uploadKybDocument(merchantId: string, type: string, file: { originalname: string; buffer: Buffer; mimetype: string } | undefined) {
     if (!file || !file.buffer) throw new BadRequestException('No file uploaded');
@@ -60,6 +116,32 @@ export class MerchantsService {
       missingDocuments: [],
       submittedAt: new Date().toISOString()
     });
+    await this.storage.update<MerchantRecord>('merchants', merchantId, { state: 'pending', latestKybApplicationId: application.id });
+    return application;
+  }
+
+  async upsertKyb(merchantId: string, dto: SubmitKybDto) {
+    const merchant = await this.storage.findById<MerchantRecord>('merchants', merchantId);
+    if (!merchant) throw new NotFoundException('Merchant not found');
+    const latest = await this.latestKyb(merchantId);
+    const byType = new Map<KybDocumentType, KybApplicationRecord['documents'][number]>();
+    for (const document of latest?.documents ?? []) byType.set(document.type, document);
+    for (const document of dto.documents) {
+      byType.set(document.type as KybDocumentType, {
+        type: document.type as KybDocumentType,
+        fileName: document.fileName,
+        storagePath: document.storagePath ?? this.storage.entityDocumentPath('merchants', merchantId, 'kyb', document.fileName),
+        uploadedAt: new Date().toISOString()
+      });
+    }
+    const documents = Array.from(byType.values());
+    const uploaded = new Set(documents.map((document) => document.type));
+    const missingDocuments = REQUIRED_KYB_DOCS.filter((document) => !uploaded.has(document));
+    const state = missingDocuments.length ? 'pending' : 'under_review';
+    if (latest && latest.state !== 'approved') {
+      return this.storage.update<KybApplicationRecord>('kyb_cases', latest.id, { state, documents, missingDocuments, submittedAt: new Date().toISOString(), reviewedAt: undefined, reviewedBy: undefined, rejectionReason: undefined });
+    }
+    const application = await this.storage.create<KybApplicationRecord>('kyb_cases', { merchantId, state, documents, missingDocuments, submittedAt: new Date().toISOString() });
     await this.storage.update<MerchantRecord>('merchants', merchantId, { state: 'pending', latestKybApplicationId: application.id });
     return application;
   }

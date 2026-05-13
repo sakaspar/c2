@@ -16,6 +16,10 @@ export class GoogleSignupDto {
   @IsString() idToken!: string;
 }
 
+export class RefreshTokenDto {
+  @IsString() refreshToken!: string;
+}
+
 export class SetUsernameDto {
   @IsString() @Matches(/^[a-z0-9][a-z0-9_-]{2,29}$/, { message: 'Username must be 3-30 chars, lowercase letters, digits, hyphens, underscores only' })
   username!: string;

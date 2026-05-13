@@ -246,7 +246,7 @@ export class JsonDataLakeService implements OnModuleInit {
 
   private indexFields(record: StorageRecord & Record<string, unknown>) {
     const fields: Record<string, unknown> = {};
-    for (const key of ['email', 'phone', 'state', 'userId', 'merchantId', 'kycState', 'riskTier', 'channel', 'username', 'displayName', 'legalName', 'category', 'roles']) {
+    for (const key of ['email', 'phone', 'state', 'userId', 'merchantId', 'kycState', 'riskTier', 'channel', 'username', 'displayName', 'legalName', 'category', 'ownerEmail', 'googleSub', 'authProvider', 'roles']) {
       if (record[key] !== undefined) fields[key] = record[key];
     }
     return fields;

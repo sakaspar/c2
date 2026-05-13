@@ -122,6 +122,19 @@ export class AuthService {
     };
   }
 
+  async refresh(refreshToken: string) {
+    try {
+      const payload = await this.jwt.verifyAsync(refreshToken);
+      if (payload.tokenType !== 'refresh' || !payload.sub) throw new UnauthorizedException('Invalid refresh token');
+      const user = await this.storage.findById<UserRecord>('users', payload.sub);
+      if (!user) throw new UnauthorizedException('User not found');
+      if (user.state === 'blacklisted' || user.state === 'suspended') throw new UnauthorizedException('Account is not active');
+      return this.issueTokens(user);
+    } catch {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+  }
+
   private issueTokens(user: UserRecord) {
     const roles = user.roles || [];
     const payload = { sub: user.id, roles, state: user.state };

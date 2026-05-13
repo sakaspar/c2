@@ -1,11 +1,1 @@
-{
-  "product_bcd1bd40-5e72-491b-965a-6b31b483e984": {
-    "path": "products/product_bcd1bd40-5e72-491b-965a-6b31b483e984/record.json",
-    "updatedAt": "2026-05-13T03:01:36.412Z",
-    "deletedAt": null,
-    "fields": {
-      "state": "active",
-      "merchantId": "merchant_b0cec8d4-f07c-41c1-831f-843bb87b1853"
-    }
-  }
-}
+{}

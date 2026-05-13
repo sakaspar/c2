@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { GoogleSignupDto, LoginDto, SetUsernameDto, SignupDto } from './dto';
+import { GoogleSignupDto, LoginDto, RefreshTokenDto, SetUsernameDto, SignupDto } from './dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { OwnershipGuard } from './guards/ownership.guard';
 
@@ -23,6 +23,11 @@ export class AuthController {
   @Post('google')
   google(@Body() dto: GoogleSignupDto) {
     return this.auth.googleSignup(dto);
+  }
+
+  @Post('refresh')
+  refresh(@Body() dto: RefreshTokenDto) {
+    return this.auth.refresh(dto.refreshToken);
   }
 
   @Get('me')
