@@ -214,5 +214,17 @@
       "legalName": "User Store",
       "category": "retail"
     }
+  },
+  "merchant_75cb8d7d-9124-422a-bd26-b2e96a7a8816": {
+    "path": "merchants/merchant_75cb8d7d-9124-422a-bd26-b2e96a7a8816/record.json",
+    "updatedAt": "2026-05-13T00:25:52.020Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "pending",
+      "riskTier": "medium",
+      "displayName": "doukou",
+      "legalName": "doukhou",
+      "category": "electronics"
+    }
   }
 }

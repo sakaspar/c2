@@ -151,5 +151,23 @@
       "state": "approved",
       "userId": "user_10fa35ad-1f90-4df0-9c19-4d9ede29908f"
     }
+  },
+  "kyc_case_19f9466c-23e1-4394-9cf0-1dabe6eeaae5": {
+    "path": "kyc_cases/kyc_case_19f9466c-23e1-4394-9cf0-1dabe6eeaae5.json",
+    "updatedAt": "2026-05-12T17:15:06.829Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "under_review",
+      "userId": "user_c98561df-d705-4c45-8555-cd64166c974e"
+    }
+  },
+  "kyc_case_78f4ca45-c6f7-4028-b439-ba829cf5b130": {
+    "path": "kyc_cases/kyc_case_78f4ca45-c6f7-4028-b439-ba829cf5b130.json",
+    "updatedAt": "2026-05-12T20:48:06.977Z",
+    "deletedAt": null,
+    "fields": {
+      "state": "approved",
+      "userId": "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561"
+    }
   }
 }

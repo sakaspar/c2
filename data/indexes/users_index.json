@@ -27,5 +27,18 @@
         "customer"
       ]
     }
+  },
+  "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561": {
+    "path": "users/user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561.json",
+    "updatedAt": "2026-05-12T20:48:07.078Z",
+    "deletedAt": null,
+    "fields": {
+      "email": "hamza.saadi.xo@gmail.com",
+      "state": "active",
+      "kycState": "approved",
+      "roles": [
+        "customer"
+      ]
+    }
   }
 }

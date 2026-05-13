@@ -60,8 +60,8 @@
     }
   },
   "loan_demo_001": {
-    "path": "loans/loan_demo_001/record.json",
-    "updatedAt": "2026-05-13T01:17:47.851Z",
+    "path": "loans/loan_demo_001.json",
+    "updatedAt": "2026-05-12T17:41:40.948Z",
     "deletedAt": null,
     "fields": {
       "state": "active",
