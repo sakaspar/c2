@@ -96,13 +96,30 @@ export class AuthService {
 
   async setUsername(userId: string, dto: SetUsernameDto) {
     const username = dto.username.toLowerCase();
-    const existing = await this.storage.query<UserRecord>('users', { where: { username } as Partial<UserRecord>, includeDeleted: false });
-    if (existing.items.length) throw new BadRequestException('Username is already taken');
+    const existing = await this.storage.findOneByField<UserRecord>('users', 'username', username);
+    if (existing) throw new BadRequestException('Username is already taken');
     const user = await this.storage.findById<UserRecord>('users', userId);
     if (!user) throw new BadRequestException('User not found');
     if (user.usernameSet) throw new BadRequestException('Username can only be set once');
     const updated = await this.storage.update<UserRecord>('users', userId, { username, usernameSet: true });
     return this.issueTokens(updated);
+  }
+
+  async getMe(userId: string) {
+    const user = await this.storage.findById<UserRecord>('users', userId);
+    if (!user) throw new UnauthorizedException();
+    return {
+      id: user.id,
+      username: user.username,
+      fullName: user.fullName,
+      email: user.email,
+      phone: user.phone,
+      state: user.state,
+      kycState: user.kycState,
+      roles: user.roles,
+      creditLimit: user.creditLimit,
+      availableCredit: user.availableCredit,
+    };
   }
 
   private issueTokens(user: UserRecord) {

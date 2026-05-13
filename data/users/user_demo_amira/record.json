@@ -3,7 +3,7 @@
   "email": "amira@example.tn",
   "phone": "+21620111222",
   "fullName": "Amira Ben Youssef",
-  "passwordHash": "$2a$12$RwUAnxtDJXoIYSHT0tlTb.eI/j4ysBY3KfWbfhbakcUuw8DHk7CY.",
+  "passwordHash": "$2a$12$fIaNtsSHCqq.Scivoejg6./zs.K3IK1R/ZtcTzRIrNz03zwBdqN.a",
   "state": "active",
   "kycState": "approved",
   "roles": [
@@ -19,9 +19,9 @@
     "currency": "TND"
   },
   "riskFlags": [],
-  "version": 4,
-  "createdAt": "2026-05-13T01:15:49.881Z",
-  "updatedAt": "2026-05-13T01:17:48.335Z",
+  "version": 6,
+  "createdAt": "2026-05-13T02:07:40.214Z",
+  "updatedAt": "2026-05-13T02:11:52.954Z",
   "deletedAt": null,
-  "lastActive": "2026-05-13T01:17:48.335Z"
+  "lastActive": "2026-05-13T02:11:52.954Z"
 }

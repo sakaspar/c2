@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, NotFoundException, Param, Patch, Post, Res, StreamableFile, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateMerchantDto, CreateProductDto, SubmitKybDto } from './dto';
@@ -28,4 +28,20 @@ export class MerchantsController {
   @Get('products') products() { return this.merchants.products(); }
   @Post('products') createProduct(@Body() dto: CreateProductDto) { return this.merchants.createProduct(dto); }
   @Patch(':id/approve') @Roles('admin') approve(@Param('id') id: string) { return this.merchants.approve(id); }
+
+  @Post('products/:productId/upload-image')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadProductImage(@Param('productId') productId: string, @UploadedFile() file: { originalname: string; buffer: Buffer; mimetype: string } | undefined) {
+    return this.merchants.uploadProductImage(productId, file);
+  }
+
+  @Get('products/images/:productId/:fileName')
+  async getProductImage(@Param('productId') productId: string, @Param('fileName') fileName: string, @Res({ passthrough: true }) res: any) {
+    const path = this.storage.resolveFilePath(this.storage.entityDocumentPath('products', productId, 'images', fileName));
+    if (!path) throw new NotFoundException('Image not found');
+    const ext = fileName.split('.').pop()?.toLowerCase();
+    const mime = ext === 'png' ? 'image/png' : 'image/jpeg';
+    res.set({ 'Content-Type': mime, 'Cache-Control': 'max-age=86400' });
+    return new StreamableFile(this.storage.getFileStream(path));
+  }
 }

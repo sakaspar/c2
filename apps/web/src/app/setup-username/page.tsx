@@ -45,8 +45,8 @@ export default function SetupUsernamePage() {
         localStorage.setItem('bnpl_token', payload.accessToken);
         localStorage.setItem('bnpl_user', JSON.stringify(payload.user));
       }
-      setMessage({ type: 'success', text: `Username @${payload?.user?.username} set. Redirecting to KYC...` });
-      setTimeout(() => { window.location.href = '/kyc'; }, 1000);
+      setMessage({ type: 'success', text: `Username @${payload?.user?.username} set. Redirecting to Dashboard...` });
+      setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
     } catch {
       setMessage({ type: 'error', text: `API is offline at ${apiBaseUrl}.` });
     } finally {

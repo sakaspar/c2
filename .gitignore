@@ -11,6 +11,7 @@ data/uploads/**
 backups/**
 !backups/.gitkeep
 *.log
-data/*/*.json
+data/**/record.json
+data/**/profile.json
 !data/indexes/*.json
 data/audit/*.jsonl

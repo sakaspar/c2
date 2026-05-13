@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Request, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { GoogleSignupDto, LoginDto, SetUsernameDto, SignupDto } from './dto';
@@ -23,6 +23,12 @@ export class AuthController {
   @Post('google')
   google(@Body() dto: GoogleSignupDto) {
     return this.auth.googleSignup(dto);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getMe(@Request() req: any) {
+    return this.auth.getMe(req.user.userId);
   }
 
   @Patch(':userId/username')

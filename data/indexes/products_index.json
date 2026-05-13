@@ -1,47 +1,11 @@
 {
-  "product_43dcc819-8070-469c-8f34-65e938b177fc": {
-    "path": "products/product_43dcc819-8070-469c-8f34-65e938b177fc/record.json",
-    "updatedAt": "2026-05-13T01:05:04.180Z",
+  "product_6b3ba9f3-5145-4a6a-89b9-f75a7ed9d4b4": {
+    "path": "products/product_6b3ba9f3-5145-4a6a-89b9-f75a7ed9d4b4/record.json",
+    "updatedAt": "2026-05-13T02:11:53.677Z",
     "deletedAt": null,
     "fields": {
       "state": "active",
-      "merchantId": "merchant_f67ce449-8811-4588-950b-265c5b9ade29"
-    }
-  },
-  "product_4286f30a-cb16-42c5-bee0-9c0558020d5c": {
-    "path": "products/product_4286f30a-cb16-42c5-bee0-9c0558020d5c/record.json",
-    "updatedAt": "2026-05-13T01:06:07.592Z",
-    "deletedAt": null,
-    "fields": {
-      "state": "active",
-      "merchantId": "merchant_9aab29b8-b3b2-4dd0-8347-d0b9c89c9f45"
-    }
-  },
-  "product_c8e9835c-96c4-422b-8301-bb3597626168": {
-    "path": "products/product_c8e9835c-96c4-422b-8301-bb3597626168/record.json",
-    "updatedAt": "2026-05-13T01:09:22.540Z",
-    "deletedAt": null,
-    "fields": {
-      "state": "active",
-      "merchantId": "merchant_779c4b0b-dbfc-4c57-aebe-d8552b369da3"
-    }
-  },
-  "product_5f6c1885-c2a7-46c6-b972-70add60bdd19": {
-    "path": "products/product_5f6c1885-c2a7-46c6-b972-70add60bdd19/record.json",
-    "updatedAt": "2026-05-13T01:15:51.111Z",
-    "deletedAt": null,
-    "fields": {
-      "state": "active",
-      "merchantId": "merchant_36ba4001-db38-4e6c-bc9c-a6f5e1a13657"
-    }
-  },
-  "product_2f27e901-1af5-4f0f-80a9-6baca9840dd5": {
-    "path": "products/product_2f27e901-1af5-4f0f-80a9-6baca9840dd5/record.json",
-    "updatedAt": "2026-05-13T01:17:48.998Z",
-    "deletedAt": null,
-    "fields": {
-      "state": "active",
-      "merchantId": "merchant_d0db9a92-755a-4408-9437-b8ea3c6b56e7"
+      "merchantId": "merchant_40a55552-9606-4e7d-99be-3a3f87b58365"
     }
   }
 }

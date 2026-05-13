@@ -41,12 +41,26 @@ export default function AdminMerchantsPage() {
   const [loading, setLoading] = useState(true);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
+  async function openPreview(url: string) {
+    const token = localStorage.getItem('bnpl_token');
+    try {
+      const res = await fetch(url, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!res.ok) throw new Error('Failed to fetch document');
+      const blob = await res.blob();
+      setPreviewUrl(URL.createObjectURL(blob));
+    } catch (err) {
+      setMessage('Could not load document preview.');
+    }
+  }
+
   const fetchData = useCallback(async () => {
     setLoading(true);
+    const token = localStorage.getItem('bnpl_token');
+    const headers = { 'Authorization': `Bearer ${token}` };
     try {
       const [kybRes, merchantRes] = await Promise.all([
-        fetch(`${apiBaseUrl}/admin/kyb-applications`),
-        fetch(`${apiBaseUrl}/merchants`)
+        fetch(`${apiBaseUrl}/admin/kyb-applications`, { headers }),
+        fetch(`${apiBaseUrl}/merchants`, { headers })
       ]);
       if (!kybRes.ok || !merchantRes.ok) { setMessage(`API error`); return; }
       const kybData = await kybRes.json() as { items: KybApp[] };
@@ -67,8 +81,12 @@ export default function AdminMerchantsPage() {
 
   async function approve(appId: string) {
     setMessage(null);
+    const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/merchants/kyb-applications/${appId}/approve`, { method: 'PATCH' });
+      const res = await fetch(`${apiBaseUrl}/merchants/kyb-applications/${appId}/approve`, {
+        method: 'PATCH',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
       if (!res.ok) { const p = await res.json().catch(() => null) as { message?: string } | null; setMessage(p?.message ?? `Approve failed (${res.status})`); return; }
       setMessage('KYB approved. Merchant is now active.');
       void fetchData();
@@ -79,8 +97,16 @@ export default function AdminMerchantsPage() {
     const reason = window.prompt('Rejection reason:');
     if (!reason) return;
     setMessage(null);
+    const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/merchants/kyb-applications/${appId}/reject`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
+      const res = await fetch(`${apiBaseUrl}/merchants/kyb-applications/${appId}/reject`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ reason })
+      });
       if (!res.ok) { const p = await res.json().catch(() => null) as { message?: string } | null; setMessage(p?.message ?? `Reject failed (${res.status})`); return; }
       setMessage('KYB rejected.');
       void fetchData();
@@ -120,7 +146,7 @@ export default function AdminMerchantsPage() {
             <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
               {app.documents.map(doc => (
                 <button key={doc.type} className="flex items-center gap-3 rounded-xl bg-white/5 p-3 hover:bg-white/10 transition cursor-pointer text-left w-full"
-                  onClick={() => setPreviewUrl(`${apiBaseUrl}/admin/kyb-documents/${doc.storagePath ?? `merchants/${app.merchantId}/kyb/${doc.fileName}`}`)}>
+                  onClick={() => openPreview(`${apiBaseUrl}/admin/kyb-documents/${doc.storagePath ?? `merchants/${app.merchantId}/kyb/${doc.fileName}`}`)}>
                   <span className="text-lg">{doc.type === 'representative_cin' ? '\u{1FAAA}' : doc.type === 'bank_rib' ? '\u{1F3E6}' : '\u{1F4C4}'}</span>
                   <div>
                     <p className="text-sm font-bold">{docLabels[doc.type] ?? doc.type}</p>

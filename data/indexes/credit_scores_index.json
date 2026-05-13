@@ -1,66 +1,10 @@
 {
-  "credit_score_a5fca60b-5f15-42ff-9f92-a297f090dabe": {
-    "path": "credit_scores/credit_score_a5fca60b-5f15-42ff-9f92-a297f090dabe/record.json",
-    "updatedAt": "2026-05-13T01:05:03.890Z",
+  "credit_score_397544a1-ff96-430d-820f-3dc95af7d5c5": {
+    "path": "credit_scores/credit_score_397544a1-ff96-430d-820f-3dc95af7d5c5/record.json",
+    "updatedAt": "2026-05-13T02:11:53.580Z",
     "deletedAt": null,
     "fields": {
-      "userId": "user_7387cbc2-2a57-41a7-9a71-0989c610b134"
-    }
-  },
-  "credit_score_f2aad4b2-5436-4453-960b-5746bf2290ee": {
-    "path": "credit_scores/credit_score_f2aad4b2-5436-4453-960b-5746bf2290ee/record.json",
-    "updatedAt": "2026-05-13T01:05:03.954Z",
-    "deletedAt": null,
-    "fields": {
-      "userId": "user_7387cbc2-2a57-41a7-9a71-0989c610b134"
-    }
-  },
-  "credit_score_7f609e94-61a6-44b4-9e4b-d21831faa580": {
-    "path": "credit_scores/credit_score_7f609e94-61a6-44b4-9e4b-d21831faa580/record.json",
-    "updatedAt": "2026-05-13T01:06:07.300Z",
-    "deletedAt": null,
-    "fields": {
-      "userId": "user_8253ff1d-d7b1-49ab-b982-c9e09c16ed41"
-    }
-  },
-  "credit_score_d5d126b5-b874-4fe2-a1ba-0526045f9b4a": {
-    "path": "credit_scores/credit_score_d5d126b5-b874-4fe2-a1ba-0526045f9b4a/record.json",
-    "updatedAt": "2026-05-13T01:06:07.364Z",
-    "deletedAt": null,
-    "fields": {
-      "userId": "user_8253ff1d-d7b1-49ab-b982-c9e09c16ed41"
-    }
-  },
-  "credit_score_f806bfea-5173-4f6b-9ca3-ea22411f0b38": {
-    "path": "credit_scores/credit_score_f806bfea-5173-4f6b-9ca3-ea22411f0b38/record.json",
-    "updatedAt": "2026-05-13T01:09:22.253Z",
-    "deletedAt": null,
-    "fields": {
-      "userId": "user_d9abeb81-20e3-46f3-9287-dc2cf45be2e5"
-    }
-  },
-  "credit_score_df1973c9-71bb-42ee-b5dd-8cc4ea4b10b7": {
-    "path": "credit_scores/credit_score_df1973c9-71bb-42ee-b5dd-8cc4ea4b10b7/record.json",
-    "updatedAt": "2026-05-13T01:09:22.319Z",
-    "deletedAt": null,
-    "fields": {
-      "userId": "user_d9abeb81-20e3-46f3-9287-dc2cf45be2e5"
-    }
-  },
-  "credit_score_ee4b1862-1a40-42e4-9487-c28efad5fff3": {
-    "path": "credit_scores/credit_score_ee4b1862-1a40-42e4-9487-c28efad5fff3/record.json",
-    "updatedAt": "2026-05-13T01:15:51.024Z",
-    "deletedAt": null,
-    "fields": {
-      "userId": "user_f5c678f3-92cc-439f-bcc6-e1e444190a48"
-    }
-  },
-  "credit_score_c53d21d2-34a5-4b80-bc0a-1c35646f3ac5": {
-    "path": "credit_scores/credit_score_c53d21d2-34a5-4b80-bc0a-1c35646f3ac5/record.json",
-    "updatedAt": "2026-05-13T01:17:48.911Z",
-    "deletedAt": null,
-    "fields": {
-      "userId": "user_10fa35ad-1f90-4df0-9c19-4d9ede29908f"
+      "userId": "user_b2f9c734-91bb-4fbb-9bfd-a962baa11c20"
     }
   }
 }
