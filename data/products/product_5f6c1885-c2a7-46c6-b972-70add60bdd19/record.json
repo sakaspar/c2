@@ -1,0 +1,17 @@
+{
+  "merchantId": "merchant_36ba4001-db38-4e6c-bc9c-a6f5e1a13657",
+  "merchantName": "UserStore",
+  "name": "Cool Item",
+  "description": "Stuff",
+  "price": {
+    "amount": 50,
+    "currency": "TND"
+  },
+  "state": "active",
+  "stock": 10,
+  "id": "product_5f6c1885-c2a7-46c6-b972-70add60bdd19",
+  "version": 1,
+  "createdAt": "2026-05-13T01:15:51.111Z",
+  "updatedAt": "2026-05-13T01:15:51.111Z",
+  "deletedAt": null
+}

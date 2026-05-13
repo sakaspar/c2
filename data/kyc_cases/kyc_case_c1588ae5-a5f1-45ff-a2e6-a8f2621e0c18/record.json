@@ -1,0 +1,38 @@
+{
+  "userId": "user_db58926e-89d7-4bcb-9583-aac508ac92e4",
+  "employmentStatus": "unemployed",
+  "state": "under_review",
+  "documents": [
+    {
+      "type": "cin_front",
+      "fileName": "cin_front.jpg",
+      "storagePath": "clients/admin-user/kyc/cin_front.jpg",
+      "uploadedAt": "2026-05-13T00:33:52.558Z"
+    },
+    {
+      "type": "cin_back",
+      "fileName": "cin_back.jpg",
+      "storagePath": "clients/admin-user/kyc/cin_back.jpg",
+      "uploadedAt": "2026-05-13T00:33:52.558Z"
+    },
+    {
+      "type": "selfie",
+      "fileName": "selfie.jpg",
+      "storagePath": "clients/admin-user/kyc/selfie.jpg",
+      "uploadedAt": "2026-05-13T00:33:52.558Z"
+    },
+    {
+      "type": "proof_of_address",
+      "fileName": "addr.jpg",
+      "storagePath": "clients/admin-user/kyc/addr.jpg",
+      "uploadedAt": "2026-05-13T00:33:52.558Z"
+    }
+  ],
+  "missingDocuments": [],
+  "submittedAt": "2026-05-13T00:33:52.558Z",
+  "id": "kyc_case_c1588ae5-a5f1-45ff-a2e6-a8f2621e0c18",
+  "version": 1,
+  "createdAt": "2026-05-13T00:33:52.558Z",
+  "updatedAt": "2026-05-13T00:33:52.558Z",
+  "deletedAt": null
+}

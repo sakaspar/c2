@@ -41,12 +41,27 @@ describe('LoansService', () => {
       await expect(service.create({ userId: '1', merchantId: 'm1', amount: 100 }))
         .rejects.toThrow(BadRequestException);
     });
+
+    it('should use optimistic locking when updating user credit', async () => {
+      const mockUser = { id: 'u1', state: 'active', kycState: 'approved', availableCredit: { amount: 500 }, version: 5 };
+      mockStorage.findById.mockResolvedValue(mockUser);
+      mockStorage.create.mockResolvedValue({ id: 'loan1', principal: { amount: 100 } });
+
+      await service.create({ userId: 'u1', merchantId: 'm1', amount: 100 });
+
+      expect(mockStorage.update).toHaveBeenCalledWith(
+        'users',
+        'u1',
+        { availableCredit: { amount: 400, currency: 'TND' } },
+        { expectedVersion: 5 }
+      );
+    });
   });
 
   describe('repay', () => {
-    it('should restore available credit', async () => {
+    it('should restore available credit with optimistic locking', async () => {
       const mockLoan = { id: 'l1', userId: 'u1', outstanding: { amount: 100 }, state: 'active' };
-      const mockUser = { id: 'u1', availableCredit: { amount: 500 }, creditLimit: { amount: 1000 } };
+      const mockUser = { id: 'u1', availableCredit: { amount: 500 }, creditLimit: { amount: 1000 }, version: 10 };
 
       mockStorage.findById
         .mockResolvedValueOnce(mockLoan)
@@ -54,9 +69,14 @@ describe('LoansService', () => {
 
       await service.repay('l1', 40);
 
-      expect(mockStorage.update).toHaveBeenCalledWith('users', 'u1', {
-        availableCredit: { amount: 540, currency: 'TND' }
-      });
+      expect(mockStorage.update).toHaveBeenCalledWith(
+        'users',
+        'u1',
+        {
+          availableCredit: { amount: 540, currency: 'TND' }
+        },
+        { expectedVersion: 10 }
+      );
     });
   });
 });

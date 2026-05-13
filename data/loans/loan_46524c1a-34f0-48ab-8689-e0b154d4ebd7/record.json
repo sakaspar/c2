@@ -1,0 +1,61 @@
+{
+  "userId": "user_10fa35ad-1f90-4df0-9c19-4d9ede29908f",
+  "merchantId": "merchant_d0db9a92-755a-4408-9437-b8ea3c6b56e7",
+  "principal": {
+    "amount": 20,
+    "currency": "TND"
+  },
+  "outstanding": {
+    "amount": 20,
+    "currency": "TND"
+  },
+  "state": "active",
+  "dueDate": "2026-06-10T01:17:49.027Z",
+  "installments": [
+    {
+      "id": "inst_dae5aea9-0e6d-4e0e-8b93-774efd415eed",
+      "amount": {
+        "amount": 5,
+        "currency": "TND"
+      },
+      "dueDate": "2026-05-20T01:17:49.027Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_c609fda2-ae74-42b8-ac18-2844a81b3603",
+      "amount": {
+        "amount": 5,
+        "currency": "TND"
+      },
+      "dueDate": "2026-05-27T01:17:49.027Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_9ff85e31-1f78-4a54-a1ee-462de1ed03f4",
+      "amount": {
+        "amount": 5,
+        "currency": "TND"
+      },
+      "dueDate": "2026-06-03T01:17:49.027Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_a9bb711e-fc26-4772-b7e6-2f25aee35027",
+      "amount": {
+        "amount": 5,
+        "currency": "TND"
+      },
+      "dueDate": "2026-06-10T01:17:49.027Z",
+      "state": "pending"
+    }
+  ],
+  "lateFees": {
+    "amount": 0,
+    "currency": "TND"
+  },
+  "id": "loan_46524c1a-34f0-48ab-8689-e0b154d4ebd7",
+  "version": 1,
+  "createdAt": "2026-05-13T01:17:49.027Z",
+  "updatedAt": "2026-05-13T01:17:49.027Z",
+  "deletedAt": null
+}

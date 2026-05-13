@@ -1,0 +1,27 @@
+{
+  "id": "user_demo_amira",
+  "email": "amira@example.tn",
+  "phone": "+21620111222",
+  "fullName": "Amira Ben Youssef",
+  "passwordHash": "$2a$12$RwUAnxtDJXoIYSHT0tlTb.eI/j4ysBY3KfWbfhbakcUuw8DHk7CY.",
+  "state": "active",
+  "kycState": "approved",
+  "roles": [
+    "customer",
+    "admin"
+  ],
+  "creditLimit": {
+    "amount": 700,
+    "currency": "TND"
+  },
+  "availableCredit": {
+    "amount": 612.5,
+    "currency": "TND"
+  },
+  "riskFlags": [],
+  "version": 4,
+  "createdAt": "2026-05-13T01:15:49.881Z",
+  "updatedAt": "2026-05-13T01:17:48.335Z",
+  "deletedAt": null,
+  "lastActive": "2026-05-13T01:17:48.335Z"
+}

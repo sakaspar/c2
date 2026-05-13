@@ -1,0 +1,12 @@
+{
+  "legalName": "Test Store SARL",
+  "displayName": "TestStore",
+  "category": "electronics",
+  "state": "pending",
+  "riskTier": "medium",
+  "id": "merchant_1087996b-d727-4373-8322-62149fcf0ca0",
+  "version": 1,
+  "createdAt": "2026-05-13T00:37:05.762Z",
+  "updatedAt": "2026-05-13T00:37:05.762Z",
+  "deletedAt": null
+}

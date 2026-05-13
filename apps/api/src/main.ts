@@ -9,6 +9,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   const config = app.get(ConfigService);
 
+  if (process.env.NODE_ENV === 'production' && !config.get('JWT_ACCESS_SECRET')) {
+    throw new Error('JWT_ACCESS_SECRET environment variable is required in production');
+  }
+
   app.setGlobalPrefix('api');
   app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
   app.enableCors({ origin: true, credentials: true });

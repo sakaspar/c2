@@ -1,23 +1,31 @@
 {
-  "user_c98561df-d705-4c45-8555-cd64166c974e": {
-    "path": "users/user_c98561df-d705-4c45-8555-cd64166c974e/record.json",
-    "updatedAt": "2026-05-12T23:09:14.867Z",
+  "user_demo_amira": {
+    "path": "users/user_demo_amira/record.json",
+    "updatedAt": "2026-05-13T01:17:48.335Z",
     "deletedAt": null,
     "fields": {
-      "email": "hamza.saadi.xo@gmail.com",
-      "state": "pending_kyc",
-      "kycState": "under_review",
-      "username": "ksp"
+      "email": "amira@example.tn",
+      "phone": "+21620111222",
+      "state": "active",
+      "kycState": "approved",
+      "roles": [
+        "customer",
+        "admin"
+      ]
     }
   },
-  "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561": {
-    "path": "users/user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561.json",
-    "updatedAt": "2026-05-12T20:48:07.078Z",
+  "user_10fa35ad-1f90-4df0-9c19-4d9ede29908f": {
+    "path": "users/user_10fa35ad-1f90-4df0-9c19-4d9ede29908f/record.json",
+    "updatedAt": "2026-05-13T01:17:49.033Z",
     "deletedAt": null,
     "fields": {
-      "email": "hamza.saadi.xo@gmail.com",
+      "email": "user@example.com",
+      "phone": "+21655555555",
       "state": "active",
-      "kycState": "approved"
+      "kycState": "approved",
+      "roles": [
+        "customer"
+      ]
     }
   }
 }

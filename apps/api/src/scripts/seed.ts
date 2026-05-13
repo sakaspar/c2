@@ -15,7 +15,7 @@ async function main() {
     passwordHash,
     state: 'active',
     kycState: 'approved',
-    roles: ['customer'],
+    roles: ['customer', 'admin'],
     creditLimit: { amount: 700, currency: 'TND' },
     availableCredit: { amount: 612.5, currency: 'TND' },
     riskFlags: []

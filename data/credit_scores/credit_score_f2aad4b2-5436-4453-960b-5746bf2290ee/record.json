@@ -1,0 +1,19 @@
+{
+  "userId": "user_7387cbc2-2a57-41a7-9a71-0989c610b134",
+  "score": 600,
+  "limit": {
+    "amount": 300,
+    "currency": "TND"
+  },
+  "factors": {
+    "kyc": 180,
+    "fraudPenalty": 0,
+    "base": 600
+  },
+  "manualAdjustment": 0,
+  "id": "credit_score_f2aad4b2-5436-4453-960b-5746bf2290ee",
+  "version": 1,
+  "createdAt": "2026-05-13T01:05:03.954Z",
+  "updatedAt": "2026-05-13T01:05:03.954Z",
+  "deletedAt": null
+}

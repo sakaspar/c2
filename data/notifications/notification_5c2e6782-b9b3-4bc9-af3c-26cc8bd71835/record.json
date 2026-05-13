@@ -1,0 +1,11 @@
+{
+  "userId": "user_demo_amira",
+  "channel": "in_app",
+  "title": "KYC approved",
+  "body": "Your BNPL account is active with a 700 TND limit.",
+  "id": "notification_5c2e6782-b9b3-4bc9-af3c-26cc8bd71835",
+  "version": 1,
+  "createdAt": "2026-05-13T01:15:49.897Z",
+  "updatedAt": "2026-05-13T01:15:49.897Z",
+  "deletedAt": null
+}

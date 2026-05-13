@@ -1,0 +1,41 @@
+{
+  "userId": "user_7387cbc2-2a57-41a7-9a71-0989c610b134",
+  "employmentStatus": "unemployed",
+  "state": "approved",
+  "documents": [
+    {
+      "type": "cin_front",
+      "fileName": "cin_front.jpg",
+      "storagePath": "clients/admin-user/kyc/cin_front.jpg",
+      "uploadedAt": "2026-05-13T01:05:03.842Z"
+    },
+    {
+      "type": "cin_back",
+      "fileName": "cin_back.jpg",
+      "storagePath": "clients/admin-user/kyc/cin_back.jpg",
+      "uploadedAt": "2026-05-13T01:05:03.842Z"
+    },
+    {
+      "type": "selfie",
+      "fileName": "selfie.jpg",
+      "storagePath": "clients/admin-user/kyc/selfie.jpg",
+      "uploadedAt": "2026-05-13T01:05:03.842Z"
+    },
+    {
+      "type": "proof_of_address",
+      "fileName": "addr.jpg",
+      "storagePath": "clients/admin-user/kyc/addr.jpg",
+      "uploadedAt": "2026-05-13T01:05:03.842Z"
+    }
+  ],
+  "missingDocuments": [],
+  "submittedAt": "2026-05-13T01:05:03.842Z",
+  "id": "kyc_case_a738b044-1497-4549-bec4-cb647610bb6f",
+  "version": 4,
+  "createdAt": "2026-05-13T01:05:03.842Z",
+  "updatedAt": "2026-05-13T01:05:03.947Z",
+  "deletedAt": null,
+  "reviewedAt": "2026-05-13T01:05:03.947Z",
+  "reviewedBy": "admin",
+  "rejectionReason": "Test rejection"
+}

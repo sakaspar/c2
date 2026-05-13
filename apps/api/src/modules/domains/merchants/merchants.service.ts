@@ -24,9 +24,15 @@ export class MerchantsService {
 
   list() { return this.storage.query<MerchantRecord>('merchants', { pageSize: 100 }); }
 
-  async uploadKybDocument(merchantId: string, type: string, file: { originalname: string; buffer: Buffer } | undefined) {
+  async uploadKybDocument(merchantId: string, type: string, file: { originalname: string; buffer: Buffer; mimetype: string } | undefined) {
     if (!file || !file.buffer) throw new BadRequestException('No file uploaded');
     if (!type) throw new BadRequestException('Document type is required');
+
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    if (!allowedMimeTypes.includes(file.mimetype)) {
+      throw new BadRequestException('Invalid file type. Only JPEG, PNG and PDF are allowed.');
+    }
+
     const merchant = await this.storage.findById<MerchantRecord>('merchants', merchantId);
     if (!merchant) throw new NotFoundException('Merchant not found');
     const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
