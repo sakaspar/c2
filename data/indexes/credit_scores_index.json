@@ -6,5 +6,21 @@
     "fields": {
       "userId": "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561"
     }
+  },
+  "credit_score_4b5288dd-3698-4d4b-b4ca-4519dfc21bd7": {
+    "path": "credit_scores/credit_score_4b5288dd-3698-4d4b-b4ca-4519dfc21bd7/record.json",
+    "updatedAt": "2026-05-13T00:16:25.073Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_c98561df-d705-4c45-8555-cd64166c974e"
+    }
+  },
+  "credit_score_420fc541-4612-43a4-8ad4-d49ffa29f332": {
+    "path": "credit_scores/credit_score_420fc541-4612-43a4-8ad4-d49ffa29f332/record.json",
+    "updatedAt": "2026-05-13T00:16:29.663Z",
+    "deletedAt": null,
+    "fields": {
+      "userId": "user_c98561df-d705-4c45-8555-cd64166c974e"
+    }
   }
 }
