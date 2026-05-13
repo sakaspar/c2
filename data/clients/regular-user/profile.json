@@ -1,9 +1,9 @@
 {
-  "id": "user_b2f9c734-91bb-4fbb-9bfd-a962baa11c20",
+  "id": "user_f12f2230-2e51-40c1-b770-0bc669e62c5c",
   "fullName": "Regular User",
   "state": "active",
   "kycState": "approved",
-  "latestKycApplicationId": "kyc_case_7e4935d1-9c46-4456-b029-27f54c225d82",
+  "latestKycApplicationId": "kyc_case_08ac19ab-8c5e-46a4-aae4-24319f2aa89b",
   "employmentStatus": "unemployed",
-  "updatedAt": "2026-05-13T02:11:53.582Z"
+  "updatedAt": "2026-05-13T03:01:36.289Z"
 }

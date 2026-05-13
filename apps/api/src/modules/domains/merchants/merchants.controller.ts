@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateMerchantDto, CreateProductDto, SubmitKybDto } from './dto';
 import { MerchantsService } from './merchants.service';
+import { JsonDataLakeService } from '../../storage/json-data-lake.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -11,7 +12,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 @Controller('merchants')
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class MerchantsController {
-  constructor(private readonly merchants: MerchantsService) {}
+  constructor(private readonly merchants: MerchantsService, private readonly storage: JsonDataLakeService) {}
   @Get() @Roles('admin') list() { return this.merchants.list(); }
   @Post('register') register(@Body() dto: CreateMerchantDto) { return this.merchants.register(dto); }
   @Post(':merchantId/kyb/upload') @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }))

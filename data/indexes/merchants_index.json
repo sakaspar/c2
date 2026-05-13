@@ -1,7 +1,7 @@
 {
   "merchant_tunistech": {
     "path": "merchants/merchant_tunistech/record.json",
-    "updatedAt": "2026-05-13T02:11:52.444Z",
+    "updatedAt": "2026-05-13T03:01:35.054Z",
     "deletedAt": null,
     "fields": {
       "state": "approved",
@@ -11,9 +11,9 @@
       "category": "electronics"
     }
   },
-  "merchant_40a55552-9606-4e7d-99be-3a3f87b58365": {
-    "path": "merchants/merchant_40a55552-9606-4e7d-99be-3a3f87b58365/record.json",
-    "updatedAt": "2026-05-13T02:11:53.647Z",
+  "merchant_b0cec8d4-f07c-41c1-831f-843bb87b1853": {
+    "path": "merchants/merchant_b0cec8d4-f07c-41c1-831f-843bb87b1853/record.json",
+    "updatedAt": "2026-05-13T03:01:36.371Z",
     "deletedAt": null,
     "fields": {
       "state": "approved",

@@ -108,7 +108,7 @@ export class MerchantsService {
     const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
     const storagePath = this.storage.entityDocumentPath('products', productId, 'images', safeName);
     await this.storage.saveUploadedFile(storagePath, file.buffer);
-    const imageUrl = `/api/merchants/products/images/${productId}/${safeName}`;
+    const imageUrl = `/api/v1/merchants/products/images/${productId}/${safeName}`;
     await this.storage.update<ProductRecord>('products', productId, { imageUrl });
     return { imageUrl };
   }

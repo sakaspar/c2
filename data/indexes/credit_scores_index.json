@@ -1,10 +1,10 @@
 {
-  "credit_score_397544a1-ff96-430d-820f-3dc95af7d5c5": {
-    "path": "credit_scores/credit_score_397544a1-ff96-430d-820f-3dc95af7d5c5/record.json",
-    "updatedAt": "2026-05-13T02:11:53.580Z",
+  "credit_score_45af30ad-f7ab-4e99-b948-b6ee89d596b8": {
+    "path": "credit_scores/credit_score_45af30ad-f7ab-4e99-b948-b6ee89d596b8/record.json",
+    "updatedAt": "2026-05-13T03:01:36.281Z",
     "deletedAt": null,
     "fields": {
-      "userId": "user_b2f9c734-91bb-4fbb-9bfd-a962baa11c20"
+      "userId": "user_f12f2230-2e51-40c1-b770-0bc669e62c5c"
     }
   }
 }

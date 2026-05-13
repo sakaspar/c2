@@ -1,7 +1,7 @@
 {
   "loan_demo_001": {
     "path": "loans/loan_demo_001/record.json",
-    "updatedAt": "2026-05-13T02:11:52.448Z",
+    "updatedAt": "2026-05-13T03:01:35.061Z",
     "deletedAt": null,
     "fields": {
       "state": "active",
@@ -9,14 +9,14 @@
       "merchantId": "merchant_tunistech"
     }
   },
-  "loan_8774c582-e689-4b94-8279-82b0b87df92b": {
-    "path": "loans/loan_8774c582-e689-4b94-8279-82b0b87df92b/record.json",
-    "updatedAt": "2026-05-13T02:11:53.713Z",
+  "loan_48202328-06ef-4261-bd47-35fc4e018e01": {
+    "path": "loans/loan_48202328-06ef-4261-bd47-35fc4e018e01/record.json",
+    "updatedAt": "2026-05-13T03:01:36.453Z",
     "deletedAt": null,
     "fields": {
       "state": "active",
-      "userId": "user_b2f9c734-91bb-4fbb-9bfd-a962baa11c20",
-      "merchantId": "merchant_40a55552-9606-4e7d-99be-3a3f87b58365"
+      "userId": "user_f12f2230-2e51-40c1-b770-0bc669e62c5c",
+      "merchantId": "merchant_b0cec8d4-f07c-41c1-831f-843bb87b1853"
     }
   }
 }

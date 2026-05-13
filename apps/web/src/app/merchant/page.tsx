@@ -96,7 +96,7 @@ export default function MerchantPage() {
         {products.map((p) => (
           <div key={p.id} className="rounded-2xl border border-white/10 bg-white/5 p-4 flex flex-col gap-3">
             <div className="aspect-video w-full rounded-xl bg-slate-800 overflow-hidden relative">
-              {p.imageUrl ? <img src={`${apiBaseUrl.replace('/api/v1', '')}${p.imageUrl}`} alt={p.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-500">No image</div>}
+              {p.imageUrl ? <ProductImage url={`${apiBaseUrl.replace('/api/v1', '')}${p.imageUrl}`} alt={p.name} /> : <div className="w-full h-full flex items-center justify-center text-slate-500">No image</div>}
             </div>
             <div>
               <h3 className="font-bold">{p.name}</h3>
@@ -112,3 +112,15 @@ export default function MerchantPage() {
   </div></main>;
 }
 function Tile({ label, value }: { label: string; value: string }) { return <div className="glass rounded-3xl p-6"><p className="text-sm text-slate-400">{label}</p><p className="mt-3 text-3xl font-black">{value}</p></div>; }
+
+function ProductImage({ url, alt }: { url: string; alt: string }) {
+  const [src, setSrc] = useState<string | null>(null);
+  useEffect(() => {
+    const token = localStorage.getItem('bnpl_token');
+    fetch(url, { headers: { 'Authorization': `Bearer ${token}` } })
+      .then(res => res.blob())
+      .then(blob => setSrc(URL.createObjectURL(blob)))
+      .catch(() => {});
+  }, [url]);
+  return src ? <img src={src} alt={alt} className="w-full h-full object-cover" /> : <div className="w-full h-full animate-pulse bg-white/5" />;
+}

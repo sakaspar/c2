@@ -30,10 +30,14 @@ export default function SetupUsernamePage() {
     if (!username.trim()) { setMessage({ type: 'error', text: 'Enter a username.' }); return; }
     setSubmitting(true);
     setMessage(null);
+    const token = localStorage.getItem('bnpl_token');
     try {
       const response = await fetch(`${apiBaseUrl}/auth/${userId}/username`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ username: username.trim() })
       });
       const payload = await response.json().catch(() => null) as { user?: { id: string; username?: string; fullName: string }; accessToken?: string; message?: string } | null;
