@@ -1,0 +1,13 @@
+{
+  "id": "merchant_tunistech",
+  "legalName": "TunisTech SARL",
+  "displayName": "TunisTech Store",
+  "state": "approved",
+  "settlementIban": "TN5900000000000000000000",
+  "category": "electronics",
+  "riskTier": "low",
+  "version": 1,
+  "createdAt": "2026-05-13T03:01:35.054Z",
+  "updatedAt": "2026-05-13T03:01:35.054Z",
+  "deletedAt": null
+}

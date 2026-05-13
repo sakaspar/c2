@@ -1,10 +1,13 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CheckoutProductDto, CreateLoanDto, RepayLoanDto } from './dto';
 import { LoansService } from './loans.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @ApiTags('loans')
 @Controller('loans')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class LoansController {
   constructor(private readonly loans: LoansService) {}
   @Get() list() { return this.loans.list(); }

@@ -20,6 +20,7 @@ export default function ShopPage() {
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    const token = localStorage.getItem('bnpl_token');
     try {
       const stored = localStorage.getItem('bnpl_user');
       if (stored) {
@@ -27,7 +28,9 @@ export default function ShopPage() {
         if (user.id) setUserId(user.username ?? user.id);
       }
     } catch {}
-    fetch(`${apiBaseUrl}/merchants/products`)
+    fetch(`${apiBaseUrl}/merchants/products`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
       .then((response) => response.json())
       .then((payload: { items?: Product[] }) => setProducts(payload.items ?? []))
       .catch(() => setMessage(`API is offline or unreachable at ${apiBaseUrl}.`));
@@ -35,8 +38,16 @@ export default function ShopPage() {
 
   async function buy(productId: string) {
     setMessage(null);
+    const token = localStorage.getItem('bnpl_token');
     try {
-      const response = await fetch(`${apiBaseUrl}/loans/checkout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId, productId }) });
+      const response = await fetch(`${apiBaseUrl}/loans/checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ userId, productId })
+      });
       const payload = await response.json().catch(() => null) as { message?: string } | null;
       if (!response.ok) {
         setMessage(payload?.message ?? `Checkout failed with status ${response.status}`);

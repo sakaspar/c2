@@ -16,6 +16,11 @@ export class AuthService {
   }
 
   async signup(dto: SignupDto) {
+    const existingEmail = await this.storage.findOneByField<UserRecord>('users', 'email', dto.email);
+    const existingPhone = await this.storage.findOneByField<UserRecord>('users', 'phone', dto.phone);
+    if (existingEmail || existingPhone) {
+      throw new BadRequestException('User with this email or phone already exists');
+    }
     const passwordHash = await bcrypt.hash(dto.password, 12);
     const user = await this.storage.create<UserRecord>('users', {
       email: dto.email,
@@ -32,14 +37,9 @@ export class AuthService {
     });
     await this.storage.writeClientProfile(user.fullName, {
       id: user.id,
-      username: user.username,
       fullName: user.fullName,
-      email: user.email,
-      phone: user.phone,
       state: user.state,
       kycState: user.kycState,
-      creditLimit: user.creditLimit,
-      availableCredit: user.availableCredit,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     });
@@ -47,8 +47,9 @@ export class AuthService {
   }
 
   async login(dto: LoginDto) {
-    const users = await this.storage.query<UserRecord>('users', { includeDeleted: false, pageSize: 10000 });
-    const user = users.items.find((item) => item.email === dto.identifier || item.phone === dto.identifier);
+    let user = await this.storage.findOneByField<UserRecord>('users', 'email', dto.identifier);
+    if (!user) user = await this.storage.findOneByField<UserRecord>('users', 'phone', dto.identifier);
+
     if (!user || user.authProvider === 'google' || !(await bcrypt.compare(dto.password, user.passwordHash))) throw new UnauthorizedException('Invalid credentials');
     if (user.state === 'blacklisted' || user.state === 'suspended') throw new UnauthorizedException('Account is not active');
     const updated = await this.storage.update<UserRecord>('users', user.id, { lastActive: new Date().toISOString() });
@@ -62,9 +63,13 @@ export class AuthService {
     const payload = ticket.getPayload();
     if (!payload?.sub || !payload.email || !payload.name) throw new BadRequestException('Google account profile is incomplete');
     if (!payload.email_verified) throw new BadRequestException('Google email is not verified');
-    const users = await this.storage.query<UserRecord>('users', { includeDeleted: false, pageSize: 10000 });
-    const existing = users.items.find((item) => item.googleSub === payload.sub || item.email === payload.email);
-    if (existing) return this.issueTokens(existing);
+    const existing = await this.storage.findOneByField<UserRecord>('users', 'email', payload.email);
+    if (existing) {
+      if (existing.authProvider !== 'google') {
+        throw new BadRequestException('An account with this email already exists with a different login method');
+      }
+      return this.issueTokens(existing);
+    }
     const user = await this.storage.create<UserRecord>('users', {
       email: payload.email,
       fullName: payload.name,
@@ -80,12 +85,9 @@ export class AuthService {
     });
     await this.storage.writeClientProfile(user.fullName, {
       id: user.id,
-      username: user.username,
       fullName: user.fullName,
-      email: user.email,
       state: user.state,
       kycState: user.kycState,
-      authProvider: user.authProvider,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     });
@@ -94,8 +96,8 @@ export class AuthService {
 
   async setUsername(userId: string, dto: SetUsernameDto) {
     const username = dto.username.toLowerCase();
-    const existing = await this.storage.query<UserRecord>('users', { where: { username } as Partial<UserRecord>, includeDeleted: false });
-    if (existing.items.length) throw new BadRequestException('Username is already taken');
+    const existing = await this.storage.findOneByField<UserRecord>('users', 'username', username);
+    if (existing) throw new BadRequestException('Username is already taken');
     const user = await this.storage.findById<UserRecord>('users', userId);
     if (!user) throw new BadRequestException('User not found');
     if (user.usernameSet) throw new BadRequestException('Username can only be set once');
@@ -103,10 +105,41 @@ export class AuthService {
     return this.issueTokens(updated);
   }
 
-  private issueTokens(user: UserRecord) {
-    const payload = { sub: user.id, roles: user.roles, state: user.state };
+  async getMe(userId: string) {
+    const user = await this.storage.findById<UserRecord>('users', userId);
+    if (!user) throw new UnauthorizedException();
     return {
-      user: { id: user.id, username: user.username, fullName: user.fullName, email: user.email, phone: user.phone, state: user.state, kycState: user.kycState, roles: user.roles },
+      id: user.id,
+      username: user.username,
+      fullName: user.fullName,
+      email: user.email,
+      phone: user.phone,
+      state: user.state,
+      kycState: user.kycState,
+      roles: user.roles,
+      creditLimit: user.creditLimit,
+      availableCredit: user.availableCredit,
+    };
+  }
+
+  async refresh(refreshToken: string) {
+    try {
+      const payload = await this.jwt.verifyAsync(refreshToken);
+      if (payload.tokenType !== 'refresh' || !payload.sub) throw new UnauthorizedException('Invalid refresh token');
+      const user = await this.storage.findById<UserRecord>('users', payload.sub);
+      if (!user) throw new UnauthorizedException('User not found');
+      if (user.state === 'blacklisted' || user.state === 'suspended') throw new UnauthorizedException('Account is not active');
+      return this.issueTokens(user);
+    } catch {
+      throw new UnauthorizedException('Invalid or expired refresh token');
+    }
+  }
+
+  private issueTokens(user: UserRecord) {
+    const roles = user.roles || [];
+    const payload = { sub: user.id, roles, state: user.state };
+    return {
+      user: { id: user.id, username: user.username, fullName: user.fullName, email: user.email, phone: user.phone, state: user.state, kycState: user.kycState, roles },
       accessToken: this.jwt.sign(payload, { expiresIn: '15m' }),
       refreshToken: this.jwt.sign({ ...payload, tokenType: 'refresh' }, { expiresIn: '30d' })
     };

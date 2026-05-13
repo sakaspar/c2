@@ -67,6 +67,10 @@ export interface MerchantRecord extends BaseRecord {
   contactEmail?: string;
   contactPhone?: string;
   latestKybApplicationId?: string;
+  authProvider?: 'google';
+  googleSub?: string;
+  ownerEmail?: string;
+  ownerName?: string;
 }
 
 export interface ProductRecord extends BaseRecord {

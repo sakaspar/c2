@@ -6,11 +6,13 @@ coverage
 .env.*.local
 .DS_Store
 pnpm-lock.yaml
+*.tsbuildinfo
 data/uploads/**
 !data/uploads/.gitkeep
 backups/**
 !backups/.gitkeep
 *.log
-data/*/*.json
+data/**/record.json
+data/**/profile.json
 !data/indexes/*.json
 data/audit/*.jsonl

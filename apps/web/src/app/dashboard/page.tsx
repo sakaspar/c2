@@ -30,13 +30,18 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    fetch(`${apiBaseUrl}/loans`).then((r) => r.json()).then((d: { items: Loan[] }) => setLoans((d.items ?? []).filter((l) => l.state === 'active'))).catch(() => {});
-    fetch(`${apiBaseUrl}/credit/${userId}`).then((r) => r.json()).then((d: { items: { score: number; limit: { amount: number } }[] }) => { if (d.items?.length) { setCreditScore(d.items[0].score); setCreditLimit(d.items[0].limit.amount); } }).catch(() => {});
-    fetch(`${apiBaseUrl}/admin/clients`).then((r) => r.json()).then((d: { items: { id: string; fullName: string; kycState: string; availableCredit?: { amount: number }; creditLimit?: { amount: number } }[] }) => {
-      const u = d.items?.find((c) => c.id === userId);
-      if (u) { setUserName(u.fullName); setKycState(u.kycState); setAvailableCredit(u.availableCredit?.amount ?? null); if (!creditLimit) setCreditLimit(u.creditLimit?.amount ?? null); }
+    if (!token) return;
+    const headers = { 'Authorization': `Bearer ${token}` };
+    fetch(`${apiBaseUrl}/loans`, { headers }).then((r) => r.json()).then((d: { items: Loan[] }) => setLoans((d.items ?? []).filter((l) => l.state === 'active'))).catch(() => {});
+    fetch(`${apiBaseUrl}/auth/me`, { headers }).then((r) => r.json()).then((u: { fullName: string; kycState: string; availableCredit?: { amount: number }; creditLimit?: { amount: number } }) => {
+      if (u && u.fullName) {
+        setUserName(u.fullName);
+        setKycState(u.kycState);
+        setAvailableCredit(u.availableCredit?.amount ?? null);
+        setCreditLimit(u.creditLimit?.amount ?? null);
+      }
     }).catch(() => {});
-  }, [userId]);
+  }, [userId, token]);
 
   return <main className="min-h-screen bg-slate-950 p-6 text-white"><div className="mx-auto max-w-7xl">
     <header className="flex flex-col justify-between gap-4 md:flex-row md:items-center"><div><p className="text-teal-300">Customer dashboard</p><h1 className="text-4xl font-black">Welcome back, {userName}</h1></div><a className="rounded-full bg-white px-5 py-3 font-bold text-slate-950" href="/">Home</a></header>

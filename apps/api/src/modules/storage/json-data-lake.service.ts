@@ -44,12 +44,14 @@ export class JsonDataLakeService implements OnModuleInit {
       const entries = await this.listCollectionRecordEntries<StorageRecord & Record<string, unknown>>(collection);
       for (const { record, relativePath } of entries) {
         const existing = index[record.id];
-        if (!existing || existing.path !== relativePath || existing.updatedAt !== record.updatedAt) {
+        const currentFields = this.indexFields(record);
+        const fieldsMatch = existing && JSON.stringify(existing.fields) === JSON.stringify(currentFields);
+        if (!existing || existing.path !== relativePath || existing.updatedAt !== record.updatedAt || !fieldsMatch) {
           index[record.id] = {
             path: relativePath,
             updatedAt: record.updatedAt,
             deletedAt: record.deletedAt,
-            fields: this.indexFields(record)
+            fields: currentFields
           };
           changed = true;
         }
@@ -89,7 +91,7 @@ export class JsonDataLakeService implements OnModuleInit {
     const entry = index[id];
     if (!entry || entry.deletedAt) return null;
     try {
-      const record = await this.readJson<T>(join(this.root, entry.path));
+      const record = await this.readJson<T>(resolve(this.root, entry.path));
       this.cache.set(key, record);
       return record;
     } catch (err: any) {
@@ -101,6 +103,13 @@ export class JsonDataLakeService implements OnModuleInit {
       this.logger.warn(`Removed stale index entry for ${collection}:${id} at ${entry.path}`);
       return null;
     }
+  }
+
+  async findOneByField<T extends StorageRecord>(collection: CollectionName, field: string, value: unknown): Promise<T | null> {
+    const index = await this.readIndex(collection);
+    const match = Object.entries(index).find(([, entry]) => entry.fields[field] === value && !entry.deletedAt);
+    if (!match) return null;
+    return this.findById<T>(collection, match[0]);
   }
 
   async query<T extends StorageRecord>(collection: CollectionName, options: QueryOptions<T> = {}): Promise<PaginatedResult<T>> {
@@ -182,8 +191,7 @@ export class JsonDataLakeService implements OnModuleInit {
   }
 
   resolveFilePath(relativePath: string) {
-    const safePath = relativePath.replaceAll('..', '');
-    const full = join(this.root, safePath);
+    const full = resolve(this.root, relativePath);
     if (!full.startsWith(this.root)) return null;
     if (!existsSync(full)) return null;
     return full;
@@ -238,7 +246,7 @@ export class JsonDataLakeService implements OnModuleInit {
 
   private indexFields(record: StorageRecord & Record<string, unknown>) {
     const fields: Record<string, unknown> = {};
-    for (const key of ['email', 'phone', 'state', 'userId', 'merchantId', 'kycState', 'riskTier', 'channel', 'username', 'displayName', 'legalName', 'category']) {
+    for (const key of ['email', 'phone', 'state', 'userId', 'merchantId', 'kycState', 'riskTier', 'channel', 'username', 'displayName', 'legalName', 'category', 'ownerEmail', 'googleSub', 'authProvider', 'roles']) {
       if (record[key] !== undefined) fields[key] = record[key];
     }
     return fields;

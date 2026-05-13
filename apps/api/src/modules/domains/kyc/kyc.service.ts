@@ -11,9 +11,15 @@ export class KycService {
     private readonly creditService: CreditService
   ) {}
 
-  async uploadDocument(userId: string, type: string, file: { originalname: string; buffer: Buffer } | undefined) {
+  async uploadDocument(userId: string, type: string, file: { originalname: string; buffer: Buffer; mimetype: string } | undefined) {
     if (!file || !file.buffer) throw new BadRequestException('No file uploaded');
     if (!type) throw new BadRequestException('Document type is required');
+
+    const allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    if (!allowedMimeTypes.includes(file.mimetype)) {
+      throw new BadRequestException('Invalid file type. Only JPEG, PNG and PDF are allowed.');
+    }
+
     const user = await this.storage.findById<UserRecord>('users', userId);
     if (!user) throw new NotFoundException('User not found');
     const safeName = file.originalname.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -44,15 +50,10 @@ export class KycService {
     await this.storage.writeClientProfile(user.fullName, {
       id: updatedUser.id,
       fullName: updatedUser.fullName,
-      email: updatedUser.email,
-      phone: updatedUser.phone,
       state: updatedUser.state,
       kycState: updatedUser.kycState,
       employmentStatus: dto.employmentStatus,
-      employerName: dto.employerName,
-      monthlyIncomeTnd: dto.monthlyIncomeTnd,
       latestKycApplicationId: application.id,
-      documents,
       updatedAt: updatedUser.updatedAt
     });
     return application;
@@ -68,7 +69,15 @@ export class KycService {
     const user = await this.storage.update<UserRecord>('users', application.userId, { kycState: 'approved', state: 'active', riskFlags });
     await this.creditService.calculate(application.userId);
     const refreshedUser = (await this.storage.findById<UserRecord>('users', application.userId)) ?? user;
-    await this.storage.writeClientProfile(refreshedUser.fullName, { ...refreshedUser, latestKycApplicationId: application.id, employmentStatus: application.employmentStatus, documents: application.documents });
+    await this.storage.writeClientProfile(refreshedUser.fullName, {
+      id: refreshedUser.id,
+      fullName: refreshedUser.fullName,
+      state: refreshedUser.state,
+      kycState: refreshedUser.kycState,
+      latestKycApplicationId: application.id,
+      employmentStatus: application.employmentStatus,
+      updatedAt: refreshedUser.updatedAt
+    });
     return updated;
   }
 
@@ -78,7 +87,16 @@ export class KycService {
     const reviewedAt = new Date().toISOString();
     const updated = await this.storage.update<KycApplicationRecord>('kyc_cases', applicationId, { state: 'rejected', reviewedAt, reviewedBy, rejectionReason: reason });
     const user = await this.storage.update<UserRecord>('users', application.userId, { kycState: 'rejected', state: 'pending_kyc', riskFlags: ['kyc_rejected'] });
-    await this.storage.writeClientProfile(user.fullName, { ...user, latestKycApplicationId: application.id, employmentStatus: application.employmentStatus, documents: application.documents, rejectionReason: reason });
+    await this.storage.writeClientProfile(user.fullName, {
+      id: user.id,
+      fullName: user.fullName,
+      state: user.state,
+      kycState: user.kycState,
+      latestKycApplicationId: application.id,
+      employmentStatus: application.employmentStatus,
+      rejectionReason: reason,
+      updatedAt: user.updatedAt
+    });
     return updated;
   }
 

@@ -1,0 +1,40 @@
+{
+  "userId": "user_b6c6822b-b3eb-4e16-a75d-5bf8bc859561",
+  "employmentStatus": "unemployed",
+  "state": "approved",
+  "documents": [
+    {
+      "type": "cin_front",
+      "fileName": "133850774347389914.jpg",
+      "storagePath": "clients/hamza-saadi/kyc/133850774347389914.jpg",
+      "uploadedAt": "2026-05-12T20:43:01.795Z"
+    },
+    {
+      "type": "cin_back",
+      "fileName": "133857801683649366.jpg",
+      "storagePath": "clients/hamza-saadi/kyc/133857801683649366.jpg",
+      "uploadedAt": "2026-05-12T20:43:01.795Z"
+    },
+    {
+      "type": "selfie",
+      "fileName": "133865337310820252.jpg",
+      "storagePath": "clients/hamza-saadi/kyc/133865337310820252.jpg",
+      "uploadedAt": "2026-05-12T20:43:01.795Z"
+    },
+    {
+      "type": "proof_of_address",
+      "fileName": "backgroundDefault.jpg",
+      "storagePath": "clients/hamza-saadi/kyc/backgroundDefault.jpg",
+      "uploadedAt": "2026-05-12T20:43:01.795Z"
+    }
+  ],
+  "missingDocuments": [],
+  "submittedAt": "2026-05-12T20:43:01.795Z",
+  "id": "kyc_case_78f4ca45-c6f7-4028-b439-ba829cf5b130",
+  "version": 2,
+  "createdAt": "2026-05-12T20:43:01.795Z",
+  "updatedAt": "2026-05-12T20:48:06.977Z",
+  "deletedAt": null,
+  "reviewedAt": "2026-05-12T20:48:06.977Z",
+  "reviewedBy": "admin"
+}

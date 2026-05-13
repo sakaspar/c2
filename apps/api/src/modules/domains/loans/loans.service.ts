@@ -15,7 +15,7 @@ export class LoansService {
     const now = new Date();
     const installments: Installment[] = Array.from({ length: 4 }).map((_, index) => ({ id: `inst_${randomUUID()}`, amount: { amount: Number((dto.amount / 4).toFixed(3)), currency: 'TND' }, dueDate: new Date(now.getTime() + (index + 1) * 7 * 86400000).toISOString(), state: 'pending' }));
     const loan = await this.storage.create<LoanRecord>('loans', { userId: dto.userId, merchantId: dto.merchantId, principal: { amount: dto.amount, currency: 'TND' }, outstanding: { amount: dto.amount, currency: 'TND' }, state: 'active', dueDate: installments[3].dueDate, installments, lateFees: { amount: 0, currency: 'TND' } });
-    await this.storage.update<UserRecord>('users', user.id, { availableCredit: { amount: user.availableCredit.amount - dto.amount, currency: 'TND' } });
+    await this.storage.update<UserRecord>('users', user.id, { availableCredit: { amount: user.availableCredit.amount - dto.amount, currency: 'TND' } }, { expectedVersion: user.version });
     return loan;
   }
 
@@ -49,7 +49,7 @@ export class LoansService {
         amount: Math.min(user.availableCredit.amount + actualRepaid, user.creditLimit.amount),
         currency: 'TND'
       }
-    });
+    }, { expectedVersion: user.version });
 
     return updatedLoan;
   }

@@ -8,6 +8,7 @@ import { KycService } from './kyc.service';
 @Module({
   imports: [StorageModule, CreditModule, MulterModule.register({ limits: { fileSize: 10 * 1024 * 1024 } })],
   controllers: [KycController],
-  providers: [KycService]
+  providers: [KycService],
+  exports: [KycService]
 })
 export class KycModule {}

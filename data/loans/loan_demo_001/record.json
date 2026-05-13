@@ -1,0 +1,61 @@
+{
+  "id": "loan_demo_001",
+  "userId": "user_demo_amira",
+  "merchantId": "merchant_tunistech",
+  "principal": {
+    "amount": 350,
+    "currency": "TND"
+  },
+  "outstanding": {
+    "amount": 87.5,
+    "currency": "TND"
+  },
+  "state": "active",
+  "dueDate": "2026-05-20T03:01:35.061Z",
+  "installments": [
+    {
+      "id": "inst_demo_1",
+      "amount": {
+        "amount": 87.5,
+        "currency": "TND"
+      },
+      "dueDate": "2026-05-20T03:01:35.061Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_demo_2",
+      "amount": {
+        "amount": 87.5,
+        "currency": "TND"
+      },
+      "dueDate": "2026-05-27T03:01:35.061Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_demo_3",
+      "amount": {
+        "amount": 87.5,
+        "currency": "TND"
+      },
+      "dueDate": "2026-06-03T03:01:35.061Z",
+      "state": "pending"
+    },
+    {
+      "id": "inst_demo_4",
+      "amount": {
+        "amount": 87.5,
+        "currency": "TND"
+      },
+      "dueDate": "2026-06-10T03:01:35.061Z",
+      "state": "pending"
+    }
+  ],
+  "lateFees": {
+    "amount": 0,
+    "currency": "TND"
+  },
+  "version": 1,
+  "createdAt": "2026-05-13T03:01:35.061Z",
+  "updatedAt": "2026-05-13T03:01:35.061Z",
+  "deletedAt": null
+}

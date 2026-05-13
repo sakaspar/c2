@@ -1,13 +1,24 @@
-import { Controller, Get, NotFoundException, Param, Res, StreamableFile } from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Patch, Res, StreamableFile, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import type { Response } from 'express';
 import { KybApplicationRecord, KycApplicationRecord, LoanRecord, MerchantRecord, UserRecord } from '@bnpl/shared';
 import { JsonDataLakeService } from '../../storage/json-data-lake.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { KycService } from '../kyc/kyc.service';
+import { MerchantsService } from '../merchants/merchants.service';
 
 @ApiTags('admin')
 @Controller('admin')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('admin')
 export class AdminController {
-  constructor(private readonly storage: JsonDataLakeService) {}
+  constructor(
+    private readonly storage: JsonDataLakeService,
+    private readonly kyc: KycService,
+    private readonly merchants: MerchantsService
+  ) {}
 
   @Get('analytics')
   async analytics() {
@@ -45,9 +56,29 @@ export class AdminController {
     return this.storage.query<KycApplicationRecord>('kyc_cases', { pageSize: 100, sortBy: 'createdAt', sortDirection: 'desc' });
   }
 
+  @Patch('kyc-applications/:applicationId/approve')
+  approveKyc(@Param('applicationId') applicationId: string) {
+    return this.kyc.approve(applicationId);
+  }
+
+  @Patch('kyc-applications/:applicationId/reject')
+  rejectKyc(@Param('applicationId') applicationId: string, @Body('reason') reason: string) {
+    return this.kyc.reject(applicationId, reason);
+  }
+
   @Get('kyb-applications')
   kybApplications() {
     return this.storage.query<KybApplicationRecord>('kyb_cases', { pageSize: 100, sortBy: 'createdAt', sortDirection: 'desc' });
+  }
+
+  @Patch('kyb-applications/:applicationId/approve')
+  approveKyb(@Param('applicationId') applicationId: string) {
+    return this.merchants.approveKyb(applicationId);
+  }
+
+  @Patch('kyb-applications/:applicationId/reject')
+  rejectKyb(@Param('applicationId') applicationId: string, @Body('reason') reason: string) {
+    return this.merchants.rejectKyb(applicationId, reason);
   }
 
   @Get('kyb-documents/*')

@@ -10,6 +10,19 @@ export class CreateMerchantDto {
   @IsOptional() @IsString() contactPhone?: string;
 }
 
+export class GoogleMerchantLoginDto {
+  @IsString() idToken!: string;
+}
+
+export class UpdateMerchantDto {
+  @IsOptional() @IsString() legalName?: string;
+  @IsOptional() @IsString() displayName?: string;
+  @IsOptional() @IsString() category?: string;
+  @IsOptional() @IsString() settlementIban?: string;
+  @IsOptional() @IsString() contactEmail?: string;
+  @IsOptional() @IsString() contactPhone?: string;
+}
+
 export class KybDocumentDto {
   @IsString() type!: string;
   @IsString() fileName!: string;

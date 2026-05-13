@@ -4,6 +4,31 @@ import { useCallback, useEffect, useState } from 'react';
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:4000/api/v1';
 
+async function refreshAccessToken() {
+  const refreshToken = localStorage.getItem('bnpl_refresh');
+  if (!refreshToken) return null;
+  const response = await fetch(`${apiBaseUrl}/auth/refresh`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ refreshToken }) });
+  const payload = await response.json().catch(() => null) as { accessToken?: string; refreshToken?: string; user?: unknown } | null;
+  if (!response.ok || !payload?.accessToken) return null;
+  localStorage.setItem('bnpl_token', payload.accessToken);
+  localStorage.setItem('bnpl_refresh', payload.refreshToken ?? refreshToken);
+  if (payload.user) localStorage.setItem('bnpl_user', JSON.stringify(payload.user));
+  return payload.accessToken;
+}
+
+async function fetchWithAdminAuth(input: string, init: RequestInit = {}) {
+  const token = localStorage.getItem('bnpl_token');
+  const headers = new Headers(init.headers);
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+  let response = await fetch(input, { ...init, headers });
+  if (response.status !== 401) return response;
+  const refreshed = await refreshAccessToken();
+  if (!refreshed) return response;
+  headers.set('Authorization', `Bearer ${refreshed}`);
+  response = await fetch(input, { ...init, headers });
+  return response;
+}
+
 type KybApp = {
   id: string;
   merchantId: string;
@@ -40,15 +65,33 @@ export default function AdminMerchantsPage() {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewMime, setPreviewMime] = useState<string | null>(null);
+
+  async function openPreview(url: string) {
+    const token = localStorage.getItem('bnpl_token');
+    try {
+      const res = await fetchWithAdminAuth(url);
+      if (!res.ok) throw new Error('Failed to fetch document');
+      const blob = await res.blob();
+      setPreviewMime(blob.type);
+      setPreviewUrl(URL.createObjectURL(blob));
+    } catch (err) {
+      setMessage('Could not load document preview.');
+    }
+  }
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [kybRes, merchantRes] = await Promise.all([
-        fetch(`${apiBaseUrl}/admin/kyb-applications`),
-        fetch(`${apiBaseUrl}/merchants`)
+        fetchWithAdminAuth(`${apiBaseUrl}/admin/kyb-applications`),
+        fetchWithAdminAuth(`${apiBaseUrl}/merchants`)
       ]);
-      if (!kybRes.ok || !merchantRes.ok) { setMessage(`API error`); return; }
+      if (!kybRes.ok || !merchantRes.ok) {
+        const detail = [`KYB ${kybRes.status}`, `merchants ${merchantRes.status}`].join(', ');
+        setMessage(kybRes.status === 401 ? 'Admin session expired. Please log in again with the admin account.' : kybRes.status === 403 ? 'Your account is signed in, but it is not an admin account. Log out and sign in with amira@example.tn / DemoPass123!.' : `API error: ${detail}`);
+        return;
+      }
       const kybData = await kybRes.json() as { items: KybApp[] };
       const merchantData = await merchantRes.json() as { items: Merchant[] };
       setApps(kybData.items ?? []);
@@ -67,8 +110,9 @@ export default function AdminMerchantsPage() {
 
   async function approve(appId: string) {
     setMessage(null);
+    const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/merchants/kyb-applications/${appId}/approve`, { method: 'PATCH' });
+      const res = await fetchWithAdminAuth(`${apiBaseUrl}/admin/kyb-applications/${appId}/approve`, { method: 'PATCH' });
       if (!res.ok) { const p = await res.json().catch(() => null) as { message?: string } | null; setMessage(p?.message ?? `Approve failed (${res.status})`); return; }
       setMessage('KYB approved. Merchant is now active.');
       void fetchData();
@@ -79,8 +123,15 @@ export default function AdminMerchantsPage() {
     const reason = window.prompt('Rejection reason:');
     if (!reason) return;
     setMessage(null);
+    const token = localStorage.getItem('bnpl_token');
     try {
-      const res = await fetch(`${apiBaseUrl}/merchants/kyb-applications/${appId}/reject`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ reason }) });
+      const res = await fetchWithAdminAuth(`${apiBaseUrl}/admin/kyb-applications/${appId}/reject`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ reason })
+      });
       if (!res.ok) { const p = await res.json().catch(() => null) as { message?: string } | null; setMessage(p?.message ?? `Reject failed (${res.status})`); return; }
       setMessage('KYB rejected.');
       void fetchData();
@@ -120,7 +171,7 @@ export default function AdminMerchantsPage() {
             <div className="grid gap-2 md:grid-cols-2 lg:grid-cols-3">
               {app.documents.map(doc => (
                 <button key={doc.type} className="flex items-center gap-3 rounded-xl bg-white/5 p-3 hover:bg-white/10 transition cursor-pointer text-left w-full"
-                  onClick={() => setPreviewUrl(`${apiBaseUrl}/admin/kyb-documents/${doc.storagePath ?? `merchants/${app.merchantId}/kyb/${doc.fileName}`}`)}>
+                  onClick={() => openPreview(`${apiBaseUrl}/admin/kyb-documents/${doc.storagePath ?? `merchants/${app.merchantId}/kyb/${doc.fileName}`}`)}>
                   <span className="text-lg">{doc.type === 'representative_cin' ? '\u{1FAAA}' : doc.type === 'bank_rib' ? '\u{1F3E6}' : '\u{1F4C4}'}</span>
                   <div>
                     <p className="text-sm font-bold">{docLabels[doc.type] ?? doc.type}</p>
@@ -143,13 +194,13 @@ export default function AdminMerchantsPage() {
       {!loading && !apps.length ? <p className="text-slate-400">No KYB applications yet.</p> : null}
     </section>
 
-    {previewUrl ? <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6" onClick={() => setPreviewUrl(null)}>
+    {previewUrl ? <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-6" onClick={() => { setPreviewUrl(null); setPreviewMime(null); }}>
       <div className="relative h-[90vh] w-[90vw] rounded-2xl overflow-hidden bg-[#1a1c2e]" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <span className="text-sm font-bold">Document Preview</span>
-          <button className="rounded-full bg-white/10 px-4 py-2 text-white text-sm hover:bg-white/20 transition" onClick={() => setPreviewUrl(null)}>✕ Close</button>
+          <button className="rounded-full bg-white/10 px-4 py-2 text-white text-sm hover:bg-white/20 transition" onClick={() => { setPreviewUrl(null); setPreviewMime(null); }}>✕ Close</button>
         </div>
-        {previewUrl.toLowerCase().endsWith('.pdf')
+        {previewMime === 'application/pdf'
           ? <iframe className="h-full w-full border-0" src={previewUrl} title="KYB PDF preview" />
           : <div className="flex h-full w-full items-center justify-center p-8"><img className="max-h-full max-w-full object-contain rounded-lg shadow-2xl" src={previewUrl} alt="KYB document preview" /></div>}
       </div>

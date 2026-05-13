@@ -41,7 +41,10 @@ export default function LoginPage() {
       const response = await fetch(`${apiBaseUrl}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ identifier, password }) });
       const payload = await response.json().catch(() => null) as { accessToken?: string; user?: { id: string; fullName: string }; message?: string } | null;
       if (!response.ok) { setMessage({ type: 'error', text: payload?.message ?? `Login failed (${response.status})` }); return; }
-      if (payload?.accessToken) localStorage.setItem('accessToken', payload.accessToken);
+      if (payload?.accessToken) {
+        localStorage.setItem('bnpl_token', payload.accessToken);
+        localStorage.setItem('bnpl_user', JSON.stringify(payload.user));
+      }
       setMessage({ type: 'success', text: `Welcome back, ${payload?.user?.fullName ?? identifier}.` });
       window.location.href = '/dashboard';
     } catch {
